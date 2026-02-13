@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-glass-surface: var(--glass-surface);
+  --color-glass-border: var(--glass-border);
+  --color-glass-text: var(--glass-text);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-neon-pink: #FF00CC;
+  --color-neon-cyan: #00F0FF;
+  --color-neon-yellow: #FFD700;
+
+  --radius-glass: var(--glass-radius);
+  --blur-glass: 8px;
+}
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+
+  --glass-surface: rgba(255, 255, 255, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-text: #0f172a;
+  --glass-radius: 1rem;
+
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+
+  --accent: #f0f9ff;
+  --accent-foreground: #0369a1;
+}
+
+.dark {
+  --background: #050505;
+  --foreground: #f8fafc;
+
+  --glass-surface: rgba(18, 18, 18, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-text: #f8fafc;
+
+  --primary: #FF00CC;
+  --primary-foreground: #ffffff;
+
+  --muted: #121212;
+  --muted-foreground: #94a3b8;
+
+  --accent: #00F0FF;
+  --accent-foreground: #050505;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    background-image:
+      radial-gradient(at 0% 0%, hsla(210, 100%, 94%, 1) 0, transparent 50%),
+      radial-gradient(at 50% 0%, hsla(220, 100%, 92%, 1) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(190, 100%, 94%, 1) 0, transparent 50%);
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(at 0% 0%, hsla(300, 100%, 5%, 1) 0, transparent 50%),
+      radial-gradient(at 50% 0%, hsla(320, 100%, 3%, 1) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(280, 100%, 5%, 1) 0, transparent 50%);
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-glass border border-glass-border bg-glass-surface shadow-xl;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  }
+}

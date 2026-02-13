@@ -1,0 +1,39 @@
+/* home.css */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px rgba(255, 0, 204, 0.5);
+    }
+
+    to {
+        text-shadow: 0 0 20px rgba(255, 0, 204, 0.8), 0 0 30px rgba(255, 0, 204, 0.4);
+    }
+}
+
+h1 span.text-neon-pink {
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.genre-card:hover {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+}
+
+.event-card:hover {
+    box-shadow: 0 0 40px rgba(255, 0, 204, 0.1);
+}
+
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    background: #050505;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #121212;
+    border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #222;
+}
