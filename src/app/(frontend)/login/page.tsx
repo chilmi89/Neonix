@@ -1,0 +1,168 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
+import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
+import { motion } from "framer-motion";
+import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { login } from "@/services/authService";
+
+export default function LoginPage() {
+    const router = useRouter();
+    const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+
+        try {
+            const response = await login(email, password);
+            const { token, user } = response.data;
+
+            // Store in localStorage
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", JSON.stringify(user));
+
+            // Redirect based on role
+            const roleName = user.roles && user.roles.length > 0 ? user.roles[0].name : "";
+            console.log("Logged in user role:", roleName);
+
+            if (roleName === "superadminevent") {
+                router.push("/dashboard/superadmin");
+            } else if (roleName === "admin" || roleName === "adminevent") {
+                router.push("/dashboard/admin");
+            } else {
+                router.push("/dashboard");
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-[#000000] text-white font-inter flex flex-col">
+            <NeonNavbar />
+
+            <main className="flex-1 flex items-center justify-center py-20 px-6 relative overflow-hidden">
+                {/* Background Decor */}
+                <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-neon-pink/10 blur-[120px] rounded-full -z-10" />
+                <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-neon-cyan/5 blur-[120px] rounded-full -z-10" />
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="w-full max-w-[480px] bg-[#0F0F0F] border border-white/10 rounded-[2.5rem] p-10 md:p-12 shadow-2xl relative z-10"
+                >
+                    <div className="space-y-2 mb-10">
+                        <h1 className="text-3xl font-bold tracking-tight text-white">Welcome Back</h1>
+                        <p className="text-white/40 text-sm">Enter your credentials to access your account</p>
+                    </div>
+
+                    {error && (
+                        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium">
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleLogin} className="space-y-6">
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase tracking-wider text-white/60 ml-1">Email</label>
+                            <div className="relative group">
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-neon-pink transition-colors" size={18} />
+                                <input
+                                    type="text"
+                                    placeholder="name@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm text-white outline-none focus:border-neon-pink/50 focus:bg-black/60 transition-all placeholder:text-white/10"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2 relative">
+                            <label className="text-xs font-bold uppercase tracking-wider text-white/60 ml-1">Password</label>
+                            <div className="relative group">
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-neon-pink transition-colors" size={18} />
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Enter your password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-12 text-sm text-white outline-none focus:border-neon-pink/50 focus:bg-black/60 transition-all placeholder:text-white/10"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors"
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                            <div className="flex justify-end pt-1">
+                                <Link href="#" className="text-[11px] font-bold text-[#FFD700] hover:brightness-125 transition-all">
+                                    Forgot Password?
+                                </Link>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-[#FF00FF] text-white font-bold py-4 rounded-2xl shadow-[0_0_20px_rgba(255,0,255,0.4)] hover:shadow-[0_0_30px_rgba(255,0,255,0.6)] hover:brightness-110 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                            {loading ? (
+                                <>
+                                    <Loader2 size={20} className="animate-spin" />
+                                    Logging in...
+                                </>
+                            ) : (
+                                "Log In"
+                            )}
+                        </button>
+                    </form>
+
+                    <div className="relative my-10">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-white/5"></div>
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-[#0F0F0F] px-4 text-white/20 font-medium">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <button className="flex items-center justify-center gap-3 bg-black/40 border border-white/5 rounded-2xl py-4 hover:bg-white/5 transition-all group">
+                            <i className="fab fa-google text-white/40 group-hover:text-white transition-colors"></i>
+                            <span className="text-sm font-bold text-white/60 group-hover:text-white">Google</span>
+                        </button>
+                        <button className="flex items-center justify-center gap-3 bg-black/40 border border-white/5 rounded-2xl py-4 hover:bg-white/5 transition-all group">
+                            <i className="fab fa-apple text-white/40 group-hover:text-white transition-colors text-lg"></i>
+                            <span className="text-sm font-bold text-white/60 group-hover:text-white">Apple</span>
+                        </button>
+                    </div>
+
+                    <p className="text-center text-sm text-white/40 mt-10">
+                        Don't have an account?{" "}
+                        <Link href="/register" className="text-[#FFD700] font-bold hover:brightness-125 transition-all">
+                            Register
+                        </Link>
+                    </p>
+                </motion.div>
+            </main>
+
+            <NeonFooter />
+        </div>
+    );
+}

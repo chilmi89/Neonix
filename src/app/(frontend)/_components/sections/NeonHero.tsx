@@ -18,49 +18,46 @@ export function NeonHero() {
             </div>
 
             {/* Content */}
-            <div className="max-w-5xl mx-auto text-center space-y-8">
+            <div className="max-w-5xl mx-auto text-center relative z-10 py-20 px-6">
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                     className="space-y-4"
                 >
-                    <h1 className="text-[12vw] md:text-8xl lg:text-[10rem] font-[1000] leading-[0.85] tracking-tighter text-white flex flex-col items-center">
-                        <span className="text-neon-pink drop-shadow-[0_0_15px_rgba(255,0,204,0.5)]">EXPERIENCE THE</span>
-                        <span className="relative">
-                            EXTRAORDINARy
-                            <span className="absolute -right-4 top-0 text-neon-pink">.</span>
-                        </span>
+                    <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-[900] leading-[1.1] tracking-tighter text-white uppercase">
+                        <span className="text-neon-pink drop-shadow-[0_0_20px_rgba(255,0,255,0.5)]">EXPERIENCE THE</span><br />
+                        <span>Extraordinary</span>
                     </h1>
                 </motion.div>
 
-                <p className="max-w-2xl mx-auto text-white/60 text-lg md:text-xl font-medium leading-relaxed">
+                <p className="max-w-2xl mx-auto text-white/50 text-base md:text-lg font-medium leading-relaxed mt-8">
                     Your gateway to the most electrifying live performances, exclusive gatherings, and unforgettable nights.
                 </p>
 
                 {/* Search Bar */}
-                <div className="max-w-3xl mx-auto mt-12 bg-white/5 backdrop-blur-xl border border-white/10 p-2 rounded-2xl flex flex-col md:flex-row items-center gap-2">
-                    <div className="flex-1 w-full px-4 py-3 flex items-center gap-3">
-                        <Search className="text-white/40" size={20} />
+                <div className="max-w-[750px] mx-auto mt-16 bg-white/[0.03] backdrop-blur-3xl border border-white/10 p-2 rounded-full flex flex-col md:flex-row items-center gap-2 shadow-2xl">
+                    <div className="flex-1 w-full px-6 py-3 flex items-center gap-3">
+                        <Search className="text-white/20" size={18} />
                         <input
                             type="text"
                             placeholder="Search events, artists..."
-                            className="bg-transparent border-none outline-none text-white w-full text-sm font-medium"
+                            className="bg-transparent border-none outline-none text-white w-full text-sm font-medium placeholder:text-white/20"
                         />
                     </div>
                     <div className="hidden md:block w-px h-8 bg-white/10" />
-                    <div className="w-full md:w-auto px-4 py-3 flex items-center gap-3">
-                        <MapPin className="text-white/40" size={20} />
-                        <select className="bg-transparent border-none outline-none text-white text-sm font-medium cursor-pointer appearance-none pr-6">
-                            <option value="jakarta">Jakarta</option>
-                            <option value="bali">Bali</option>
-                        </select>
+                    <div className="w-full md:w-auto px-6 py-3 flex items-center gap-3 cursor-pointer group">
+                        <MapPin className="text-white/20 group-hover:text-neon-cyan transition-colors" size={18} />
+                        <span className="text-white text-sm font-medium whitespace-nowrap">Jakarta</span>
+                        <motion.div animate={{ rotate: 180 }} className="text-white/20 flex items-center">
+                            <i className="fas fa-chevron-down text-[10px]"></i>
+                        </motion.div>
                     </div>
-                    <NeonButton variant="pink" className="w-full md:w-auto rounded-xl px-8 h-12">
+                    <button className="w-full md:w-auto bg-neon-pink text-white font-bold text-sm px-12 h-14 rounded-full shadow-[0_0_25px_rgba(255,0,255,0.4)] hover:brightness-110 transition-all">
                         Find Events
-                    </NeonButton>
+                    </button>
                 </div>
             </div>
-        </section>
+        </section >
     );
 }

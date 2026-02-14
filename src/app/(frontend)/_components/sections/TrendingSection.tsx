@@ -35,18 +35,18 @@ const featuredEvents = [
 
 export function TrendingSection() {
     return (
-        <section className="py-24 px-6 max-w-7xl mx-auto space-y-12">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div className="space-y-2">
-                    <h2 className="text-4xl font-black text-white uppercase tracking-tighter">Trending Events</h2>
-                    <p className="text-white/40 font-medium">Discover what everyone is talking about.</p>
+        <section className="py-16 px-6 max-w-7xl mx-auto space-y-10">
+            <div className="flex justify-between items-end mb-8">
+                <div>
+                    <h2 className="text-3xl font-bold text-white mb-2">Trending Events</h2>
+                    <p className="text-white/40 text-sm">Discover what everyone is talking about.</p>
                 </div>
-                <Link href="#" className="flex items-center gap-2 text-neon-pink font-bold text-sm uppercase tracking-widest hover:brightness-125 transition-all group italic">
-                    View all events <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <Link href="#" className="text-neon-pink text-xs font-bold flex items-center group">
+                    View all events <ArrowRight className="ml-2 group-hover:translate-x-1 transition-all" size={14} />
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {featuredEvents.map((event) => (
                     <NeonEventCard key={event.id} {...event} />
                 ))}

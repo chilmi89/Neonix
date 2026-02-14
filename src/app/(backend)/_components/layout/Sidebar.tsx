@@ -10,26 +10,66 @@ import {
     ChevronLeft,
     ChevronRight,
     LogOut,
-    Library
+    Library,
+    ShieldCheck,
+    UserCircle
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface SidebarProps {
     isCollapsed: boolean;
     onToggle: () => void;
 }
 
-const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-    { icon: Users, label: "Users", href: "/dashboard/users" },
-    { icon: BarChart3, label: "Analytics", href: "/dashboard/analytics" },
-    { icon: Library, label: "Library", href: "/dashboard/library" },
-    { icon: Settings, label: "Settings", href: "/dashboard/settings" },
-];
-
 export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
     const pathname = usePathname();
+    const router = useRouter();
+    const [dynamicMenuItems, setDynamicMenuItems] = useState([
+        { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
+        { icon: Users, label: "Users", href: "/dashboard/users" },
+        { icon: BarChart3, label: "Analytics", href: "/dashboard/analytics" },
+        { icon: Library, label: "Library", href: "/dashboard/library" },
+        { icon: Settings, label: "Settings", href: "/dashboard/settings" },
+    ]);
+
+    useEffect(() => {
+        const userStr = localStorage.getItem("user");
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                const roleName = user.roles && user.roles.length > 0 ? user.roles[0].name : "";
+
+                let dashboardHref = "/dashboard";
+                let dashboardLabel = "Dashboard";
+                let dashboardIcon = LayoutDashboard;
+
+                if (roleName === "superadminevent") {
+                    dashboardHref = "/dashboard/superadmin";
+                    dashboardLabel = "Superadmin Dash";
+                    dashboardIcon = ShieldCheck;
+                } else if (roleName === "admin" || roleName === "adminevent") {
+                    dashboardHref = "/dashboard/admin";
+                    dashboardLabel = "Admin Dash";
+                    dashboardIcon = UserCircle;
+                }
+
+                setDynamicMenuItems(prev => [
+                    { icon: dashboardIcon, label: dashboardLabel, href: dashboardHref },
+                    ...prev.slice(1)
+                ]);
+            } catch (e) {
+                console.error("Error parsing user from localStorage", e);
+            }
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        router.push("/");
+    };
 
     return (
         <motion.aside
@@ -58,7 +98,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
             </div>
 
             <nav className="flex-1 px-4 space-y-2 mt-4">
-                {menuItems.map((item) => {
+                {dynamicMenuItems.map((item) => {
                     const isActive = pathname === item.href;
                     const Icon = item.icon;
 
@@ -93,7 +133,10 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
             </nav>
 
             <div className="p-4 mt-auto">
-                <button className="flex items-center w-full p-3 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-colors">
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center w-full p-3 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-colors"
+                >
                     <LogOut size={24} />
                     {!isCollapsed && (
                         <motion.span
