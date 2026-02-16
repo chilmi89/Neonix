@@ -23,10 +23,16 @@ interface SidebarProps {
     onToggle: () => void;
 }
 
+interface MenuItem {
+    icon: any;
+    label: string;
+    href: string;
+}
+
 export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
     const pathname = usePathname();
     const router = useRouter();
-    const [dynamicMenuItems, setDynamicMenuItems] = useState([]);
+    const [dynamicMenuItems, setDynamicMenuItems] = useState<MenuItem[]>([]);
 
     useEffect(() => {
         const baseItems = [
