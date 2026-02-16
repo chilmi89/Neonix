@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
 import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, X } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, X, Loader2 } from "lucide-react";
+import { login } from "@/services/authService";
 
 export default function LoginPage() {
     const router = useRouter();
