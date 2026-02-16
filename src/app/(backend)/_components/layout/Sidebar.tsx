@@ -26,44 +26,39 @@ interface SidebarProps {
 export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
     const pathname = usePathname();
     const router = useRouter();
-    const [dynamicMenuItems, setDynamicMenuItems] = useState([
-        { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-        { icon: Users, label: "Users", href: "/dashboard/users" },
-        { icon: BarChart3, label: "Analytics", href: "/dashboard/analytics" },
-        { icon: Library, label: "Library", href: "/dashboard/library" },
-        { icon: Settings, label: "Settings", href: "/dashboard/settings" },
-    ]);
+    const [dynamicMenuItems, setDynamicMenuItems] = useState([]);
 
     useEffect(() => {
+        const baseItems = [
+            { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
+            { icon: Users, label: "Users", href: "/dashboard/users" },
+            { icon: BarChart3, label: "Analytics", href: "/dashboard/analytics" },
+            { icon: Library, label: "Library", href: "/dashboard/library" },
+            { icon: Settings, label: "Settings", href: "/dashboard/settings" },
+        ];
+
         const userStr = localStorage.getItem("user");
         if (userStr) {
             try {
                 const user = JSON.parse(userStr);
-                const roleName = user.roles && user.roles.length > 0 ? user.roles[0].name : "";
+                const roleNames = user.roles?.map((r: any) => r.name.toLowerCase()) || [];
 
-                let dashboardHref = "/dashboard";
-                let dashboardLabel = "Dashboard";
-                let dashboardIcon = LayoutDashboard;
+                const isSuperAdmin = roleNames.includes("superadminevent");
+                const isAdmin = roleNames.includes("admin") || roleNames.includes("adminevent");
 
-                if (roleName === "superadminevent") {
-                    dashboardHref = "/dashboard/superadmin";
-                    dashboardLabel = "Superadmin Dash";
-                    dashboardIcon = ShieldCheck;
-                } else if (roleName === "admin" || roleName === "adminevent") {
-                    dashboardHref = "/dashboard/admin";
-                    dashboardLabel = "Admin Dash";
-                    dashboardIcon = UserCircle;
+                if (isSuperAdmin) {
+                    baseItems[0] = { icon: ShieldCheck, label: "Superadmin Dash", href: "/dashboard/superadmin" };
+                    // Insert role management at index 2 (after original Dashboard and Users)
+                    baseItems.splice(2, 0, { icon: ShieldCheck, label: "Roles", href: "/dashboard/superadmin/role" });
+                } else if (isAdmin) {
+                    baseItems[0] = { icon: UserCircle, label: "Admin Dash", href: "/dashboard/admin" };
                 }
-
-                setDynamicMenuItems(prev => [
-                    { icon: dashboardIcon, label: dashboardLabel, href: dashboardHref },
-                    ...prev.slice(1)
-                ]);
             } catch (e) {
                 console.error("Error parsing user from localStorage", e);
             }
         }
-    }, []);
+        setDynamicMenuItems(baseItems);
+    }, []); // Only run once on mount
 
     const handleLogout = () => {
         localStorage.removeItem("token");

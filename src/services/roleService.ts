@@ -1,37 +1,34 @@
 import { API, apiGet, apiPost, apiPut, apiDelete } from "@/config/api.config";
+import { Role, ApiResponse } from "@/types/auth";
 
 /**
- * Role Service - Placeholder
- * TODO: Implement ketika backend API ready
+ * Role Service - handles all Role-related API interactions
  */
 
-export interface Role {
-    id?: number;
-    name: string;
-    description?: string;
+export async function getAllRoles(): Promise<ApiResponse<Role[]>> {
+    return apiGet<ApiResponse<Role[]>>(API.roles.getAll);
 }
 
-export async function getAllRoles(): Promise<any> {
-    throw new Error("Get all roles API belum diimplementasikan");
-    // return apiGet(API.roles.getAll);
+export async function getRoleById(id: number): Promise<ApiResponse<Role>> {
+    return apiGet<ApiResponse<Role>>(API.roles.getById(id));
 }
 
-export async function getRoleById(id: number): Promise<any> {
-    throw new Error("Get role by ID API belum diimplementasikan");
-    // return apiGet(API.roles.getById(id));
+export async function createRole(roleData: Partial<Role>): Promise<ApiResponse<Role>> {
+    return apiPost<ApiResponse<Role>>(API.roles.create, roleData);
 }
 
-export async function createRole(roleData: Role): Promise<any> {
-    throw new Error("Create role API belum diimplementasikan");
-    // return apiPost(API.roles.create, roleData);
+export async function updateRole(id: number, roleData: Partial<Role>): Promise<ApiResponse<Role>> {
+    return apiPut<ApiResponse<Role>>(API.roles.update(id), roleData);
 }
 
-export async function updateRole(id: number, roleData: Partial<Role>): Promise<any> {
-    throw new Error("Update role API belum diimplementasikan");
-    // return apiPut(API.roles.update(id), roleData);
+export async function deleteRole(id: number): Promise<ApiResponse<any>> {
+    return apiDelete<ApiResponse<any>>(API.roles.delete(id));
 }
 
-export async function deleteRole(id: number): Promise<any> {
-    throw new Error("Delete role API belum diimplementasikan");
-    // return apiDelete(API.roles.delete(id));
+export async function getAllPermissions(): Promise<ApiResponse<any[]>> {
+    return apiGet<ApiResponse<any[]>>(API.permissions.getAll);
+}
+
+export async function assignPermissionToRole(roleId: number, permissionId: number): Promise<ApiResponse<any>> {
+    return apiPost<ApiResponse<any>>(API.roles.assignPermission(roleId), { permissionId });
 }
