@@ -16,13 +16,12 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { containerStagger, slideUp } from "@/lib/motion";
-import { getAllRoles, deleteRole, createRole, updateRole, getAllPermissions } from "@/services/roleService";
-import { Role, Permission } from "@/types/auth";
+import { getAllRoles, deleteRole, createRole, updateRole } from "@/services/roleService";
+import { Role } from "@/types/auth";
 import { GlassCard } from "@/app/(frontend)/_components/ui/GlassCard";
 
 export default function RolePage() {
     const [roles, setRoles] = useState<Role[]>([]);
-    const [permissions, setPermissions] = useState<Permission[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
@@ -32,8 +31,7 @@ export default function RolePage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingRole, setEditingRole] = useState<Role | null>(null);
     const [formData, setFormData] = useState({
-        name: "",
-        permissionIds: [] as number[]
+        name: ""
     });
 
     const fetchRoles = async () => {
@@ -48,18 +46,8 @@ export default function RolePage() {
         }
     };
 
-    const fetchPermissions = async () => {
-        try {
-            const response = await getAllPermissions();
-            setPermissions(response.data);
-        } catch (err: any) {
-            console.error("Failed to fetch permissions", err);
-        }
-    };
-
     useEffect(() => {
         fetchRoles();
-        fetchPermissions();
     }, []);
 
     const handleDelete = async (id: number) => {
@@ -76,14 +64,12 @@ export default function RolePage() {
         if (role) {
             setEditingRole(role);
             setFormData({
-                name: role.name,
-                permissionIds: role.permissions?.map(p => p.id) || []
+                name: role.name
             });
         } else {
             setEditingRole(null);
             setFormData({
-                name: "",
-                permissionIds: []
+                name: ""
             });
         }
         setIsModalOpen(true);
@@ -108,7 +94,7 @@ export default function RolePage() {
                 setRoles([...roles, response.data]);
             }
             setIsModalOpen(false);
-            fetchRoles(); // Refresh to catch all permission changes
+            fetchRoles();
         } catch (err: any) {
             alert(err.message || "Failed to save role");
         } finally {
@@ -116,14 +102,6 @@ export default function RolePage() {
         }
     };
 
-    const togglePermission = (id: number) => {
-        setFormData(prev => ({
-            ...prev,
-            permissionIds: prev.permissionIds.includes(id)
-                ? prev.permissionIds.filter(pid => pid !== id)
-                : [...prev.permissionIds, id]
-        }));
-    };
 
     const filteredRoles = roles.filter(role =>
         role.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -191,25 +169,6 @@ export default function RolePage() {
                                             <Shield size={18} />
                                         </div>
                                         <span className="font-semibold">{item.name}</span>
-                                    </div>
-                                )
-                            },
-                            {
-                                header: "Permissions",
-                                accessor: (item) => (
-                                    <div className="flex flex-wrap gap-1.5 max-w-xs">
-                                        {item.permissions && item.permissions.length > 0 ? (
-                                            item.permissions.slice(0, 3).map((p, idx) => (
-                                                <GlassBadge key={idx} variant="info" className="text-[10px] px-2 py-0.5">
-                                                    {p.name}
-                                                </GlassBadge>
-                                            ))
-                                        ) : (
-                                            <span className="text-glass-text/20 text-xs italic">No permissions</span>
-                                        )}
-                                        {item.permissions && item.permissions.length > 3 && (
-                                            <span className="text-xs text-glass-text/40">+{item.permissions.length - 3} more</span>
-                                        )}
                                     </div>
                                 )
                             },
@@ -292,33 +251,6 @@ export default function RolePage() {
                                     />
                                 </div>
 
-                                <div className="space-y-3">
-                                    <label className="text-xs font-bold uppercase tracking-wider text-glass-text/40 ml-1">
-                                        Configure Permissions
-                                    </label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                                        {permissions.map((perm) => (
-                                            <div
-                                                key={perm.id}
-                                                onClick={() => togglePermission(perm.id)}
-                                                className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer ${formData.permissionIds.includes(perm.id)
-                                                    ? "bg-primary/10 border-primary/50 text-white"
-                                                    : "bg-white/5 border-glass-border text-glass-text/60 hover:border-white/20"
-                                                    }`}
-                                            >
-                                                <span className="text-sm font-medium">{perm.name}</span>
-                                                {formData.permissionIds.includes(perm.id) && (
-                                                    <CheckCircle2 size={16} className="text-primary" />
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    {permissions.length === 0 && (
-                                        <p className="text-xs text-glass-text/20 italic p-4 text-center border border-dashed border-glass-border rounded-xl">
-                                            No system permissions found.
-                                        </p>
-                                    )}
-                                </div>
 
                                 <div className="pt-4 flex gap-4">
                                     <button
