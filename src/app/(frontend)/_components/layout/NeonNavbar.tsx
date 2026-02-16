@@ -29,7 +29,7 @@ export function NeonNavbar() {
                 </Link>
 
                 <div className="hidden md:flex items-center gap-10">
-                    <Link href="#" className="text-sm font-medium text-neon-pink transition-all">Home</Link>
+                    <Link href="/" className="text-sm font-medium text-neon-pink transition-all">Home</Link>
                     <Link href="#" className="text-sm font-medium text-white/40 hover:text-white transition-all font-inter">Explorer</Link>
                     <Link href="#" className="text-sm font-medium text-neon-yellow hover:brightness-125 transition-all">VIP Access</Link>
                     <Link href="#" className="text-sm font-medium text-white/40 hover:text-white transition-all font-inter">About</Link>
