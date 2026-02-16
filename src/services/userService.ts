@@ -65,3 +65,10 @@ export async function deleteUser(id: number): Promise<any> {
     // Nanti implementasinya seperti ini:
     // return apiDelete(API.users.delete(id));
 }
+/**
+ * Get user roles by ID
+ * Digunakan jika login response tidak menyertakan roles
+ */
+export async function getUserRoles(id: number): Promise<any> {
+    return apiGet(API.users.getRoles(id));
+}

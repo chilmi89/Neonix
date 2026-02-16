@@ -5,9 +5,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
-import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, X, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Lock, Eye, EyeOff, X, Loader2, CheckCircle2 } from "lucide-react";
 import { login } from "@/services/authService";
+import { getUserRoles } from "@/services/userService";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -15,6 +16,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [error, setError] = useState("");
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -30,20 +32,41 @@ export default function LoginPage() {
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(user));
 
-            // Redirect based on role
-            const roleName = user.roles && user.roles.length > 0 ? user.roles[0].name : "";
-            console.log("Logged in user role:", roleName);
+            // Show success message
+            setShowSuccess(true);
 
-            if (roleName === "superadminevent") {
-                router.push("/dashboard/superadmin");
-            } else if (roleName === "admin" || roleName === "adminevent") {
-                router.push("/dashboard/admin");
+            // Fetch roles if missing or empty
+            let roleNames: string[] = [];
+            if (user.roles && user.roles.length > 0) {
+                roleNames = user.roles.map((r: any) => r.name.toLowerCase());
             } else {
-                router.push("/dashboard");
+                try {
+                    const rolesResponse = await getUserRoles(user.id);
+                    // The user's response example shows roles in "data" field
+                    const rolesData = Array.isArray(rolesResponse) ? rolesResponse : rolesResponse.data || [];
+                    roleNames = rolesData.map((r: any) => r.name.toLowerCase());
+
+                    // Update user object in storage with fetched roles
+                    user.roles = rolesData;
+                    localStorage.setItem("user", JSON.stringify(user));
+                } catch (roleErr) {
+                    console.error("Failed to fetch user roles:", roleErr);
+                }
             }
+            console.log("Logged in user roles:", roleNames);
+
+            setTimeout(() => {
+                if (roleNames.includes("superadminevent")) {
+                    router.push("/dashboard/superadmin");
+                } else if (roleNames.includes("admin") || roleNames.includes("adminevent")) {
+                    router.push("/dashboard/admin");
+                } else {
+                    router.push("/dashboard");
+                }
+            }, 1500);
+
         } catch (err: any) {
             setError(err.message);
-        } finally {
             setLoading(false);
         }
     };
@@ -87,7 +110,7 @@ export default function LoginPage() {
                     </div>
 
                     {error && (
-                        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium">
+                        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium animate-in fade-in slide-in-from-top-4">
                             {error}
                         </div>
                     )}
@@ -172,6 +195,34 @@ export default function LoginPage() {
                     </div>
                 </motion.div>
             </main>
+
+            {/* Success Message Modal */}
+            <AnimatePresence>
+                {showSuccess && (
+                    <div className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/40 backdrop-blur-md">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="bg-[#121212] border border-white/10 rounded-4xl p-10 shadow-2xl flex flex-col items-center text-center max-w-[400px] w-full"
+                        >
+                            <div className="w-20 h-20 bg-neon-pink/10 rounded-full flex items-center justify-center mb-6">
+                                <CheckCircle2 className="text-neon-pink" size={48} />
+                            </div>
+                            <h2 className="text-2xl font-bold mb-2">Login Successful!</h2>
+                            <p className="text-white/40 mb-8">Welcome back. Redirecting you to your dashboard...</p>
+                            <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: "100%" }}
+                                    transition={{ duration: 1.5, ease: "easeInOut" }}
+                                    className="h-full bg-neon-pink shadow-[0_0_10px_rgba(255,0,255,0.5)]"
+                                />
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             <NeonFooter />
         </div>
