@@ -2,13 +2,50 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, X } from "lucide-react";
 
 export default function LoginPage() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+
+        try {
+            const response = await login(email, password);
+            const { token, user } = response.data;
+
+            // Store in localStorage
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", JSON.stringify(user));
+
+            // Redirect based on role
+            const roleName = user.roles && user.roles.length > 0 ? user.roles[0].name : "";
+            console.log("Logged in user role:", roleName);
+
+            if (roleName === "superadminevent") {
+                router.push("/dashboard/superadmin");
+            } else if (roleName === "admin" || roleName === "adminevent") {
+                router.push("/dashboard/admin");
+            } else {
+                router.push("/dashboard");
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-[#000000] text-white font-inter flex flex-col relative">
@@ -48,15 +85,24 @@ export default function LoginPage() {
                         <p className="text-white/40 text-sm">Enter your credentials to access your account</p>
                     </div>
 
-                    <form className="space-y-6">
-                        <div className="space-y-2 text-left">
-                            <label className="text-xs font-bold uppercase tracking-wider text-white/60 ml-1">Email or Phone</label>
+                    {error && (
+                        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium">
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleLogin} className="space-y-6">
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase tracking-wider text-white/60 ml-1">Email</label>
                             <div className="relative group">
                                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-neon-pink transition-colors" size={18} />
                                 <input
                                     type="text"
                                     placeholder="name@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm text-white outline-none focus:border-neon-pink/50 focus:bg-black/60 transition-all placeholder:text-white/10"
+                                    required
                                 />
                             </div>
                         </div>
@@ -68,7 +114,10 @@ export default function LoginPage() {
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Enter your password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-12 text-sm text-white outline-none focus:border-neon-pink/50 focus:bg-black/60 transition-all placeholder:text-white/10"
+                                    required
                                 />
                                 <button
                                     type="button"
@@ -85,8 +134,19 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        <button className="w-full bg-[#FF00FF] text-white font-bold py-4 rounded-2xl shadow-[0_0_20px_rgba(255,0,255,0.4)] hover:shadow-[0_0_30px_rgba(255,0,255,0.6)] hover:brightness-110 transition-all mt-4">
-                            Log In
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-[#FF00FF] text-white font-bold py-4 rounded-2xl shadow-[0_0_20px_rgba(255,0,255,0.4)] hover:shadow-[0_0_30px_rgba(255,0,255,0.6)] hover:brightness-110 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                            {loading ? (
+                                <>
+                                    <Loader2 size={20} className="animate-spin" />
+                                    Logging in...
+                                </>
+                            ) : (
+                                "Log In"
+                            )}
                         </button>
                     </form>
 
