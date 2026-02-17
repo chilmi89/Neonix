@@ -5,9 +5,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
-import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Lock, Eye, EyeOff, X, Loader2, CheckCircle2 } from "lucide-react";
 import { login } from "@/services/authService";
+import { getUserRoles } from "@/services/userService";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -15,6 +16,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [error, setError] = useState("");
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -30,29 +32,53 @@ export default function LoginPage() {
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(user));
 
-            // Redirect based on role
-            const roleName = user.roles && user.roles.length > 0 ? user.roles[0].name : "";
-            console.log("Logged in user role:", roleName);
+            // Show success message
+            setShowSuccess(true);
 
-            if (roleName === "superadminevent") {
-                router.push("/dashboard/superadmin");
-            } else if (roleName === "admin" || roleName === "adminevent") {
-                router.push("/dashboard/admin");
+            // Fetch roles if missing or empty
+            let roleNames: string[] = [];
+            if (user.roles && user.roles.length > 0) {
+                roleNames = user.roles.map((r: any) => r.name.toLowerCase());
             } else {
-                router.push("/dashboard");
+                try {
+                    const rolesResponse = await getUserRoles(user.id);
+                    // The user's response example shows roles in "data" field
+                    const rolesData = Array.isArray(rolesResponse) ? rolesResponse : rolesResponse.data || [];
+                    roleNames = rolesData.map((r: any) => r.name.toLowerCase());
+
+                    // Update user object in storage with fetched roles
+                    user.roles = rolesData;
+                    localStorage.setItem("user", JSON.stringify(user));
+                } catch (roleErr) {
+                    console.error("Failed to fetch user roles:", roleErr);
+                }
             }
+            console.log("Logged in user roles:", roleNames);
+
+            setTimeout(() => {
+                if (roleNames.includes("superadminevent")) {
+                    router.push("/dashboard/superadmin");
+                } else if (roleNames.includes("admin") || roleNames.includes("adminevent")) {
+                    router.push("/dashboard/admin");
+                } else {
+                    router.push("/dashboard");
+                }
+            }, 1500);
+
         } catch (err: any) {
             setError(err.message);
-        } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-[#000000] text-white font-inter flex flex-col">
+        <div className="min-h-screen bg-[#000000] text-white font-inter flex flex-col relative">
+            {/* Modal Backdrop Overlay */}
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+
             <NeonNavbar />
 
-            <main className="flex-1 flex items-center justify-center py-20 px-6 relative overflow-hidden">
+            <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50 overflow-hidden">
                 {/* Background Decor */}
                 <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-neon-pink/10 blur-[120px] rounded-full -z-10" />
                 <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-neon-cyan/5 blur-[120px] rounded-full -z-10" />
@@ -61,15 +87,30 @@ export default function LoginPage() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
-                    className="w-full max-w-[480px] bg-[#0F0F0F] border border-white/10 rounded-[2.5rem] p-10 md:p-12 shadow-2xl relative z-10"
+                    className="w-full max-w-[480px] bg-[#121212] border border-white/[0.05] rounded-[2.5rem] p-10 md:p-12 shadow-2xl relative"
                 >
-                    <div className="space-y-2 mb-10">
+                    {/* Close Button */}
+                    <Link href="/" className="absolute top-8 right-8 text-white/20 hover:text-white transition-colors p-2">
+                        <X size={24} />
+                    </Link>
+
+                    {/* Tab Switcher */}
+                    <div className="flex gap-8 mb-10 border-b border-white/5">
+                        <Link href="/login" className="pb-4 text-sm font-bold border-b-2 border-neon-pink text-white transition-all">
+                            Login
+                        </Link>
+                        <Link href="/register" className="pb-4 text-sm font-bold text-white/20 hover:text-white transition-all border-b-2 border-transparent">
+                            Register
+                        </Link>
+                    </div>
+
+                    <div className="space-y-2 mb-8 text-left">
                         <h1 className="text-3xl font-bold tracking-tight text-white">Welcome Back</h1>
                         <p className="text-white/40 text-sm">Enter your credentials to access your account</p>
                     </div>
 
                     {error && (
-                        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium">
+                        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium animate-in fade-in slide-in-from-top-4">
                             {error}
                         </div>
                     )}
@@ -90,7 +131,7 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        <div className="space-y-2 relative">
+                        <div className="space-y-2 relative text-left">
                             <label className="text-xs font-bold uppercase tracking-wider text-white/60 ml-1">Password</label>
                             <div className="relative group">
                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-neon-pink transition-colors" size={18} />
@@ -138,7 +179,7 @@ export default function LoginPage() {
                             <div className="w-full border-t border-white/5"></div>
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-[#0F0F0F] px-4 text-white/20 font-medium">Or continue with</span>
+                            <span className="bg-[#121212] px-4 text-white/20 font-medium">Or continue with</span>
                         </div>
                     </div>
 
@@ -152,15 +193,36 @@ export default function LoginPage() {
                             <span className="text-sm font-bold text-white/60 group-hover:text-white">Apple</span>
                         </button>
                     </div>
-
-                    <p className="text-center text-sm text-white/40 mt-10">
-                        Don't have an account?{" "}
-                        <Link href="/register" className="text-[#FFD700] font-bold hover:brightness-125 transition-all">
-                            Register
-                        </Link>
-                    </p>
                 </motion.div>
             </main>
+
+            {/* Success Message Modal */}
+            <AnimatePresence>
+                {showSuccess && (
+                    <div className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/40 backdrop-blur-md">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="bg-[#121212] border border-white/10 rounded-4xl p-10 shadow-2xl flex flex-col items-center text-center max-w-[400px] w-full"
+                        >
+                            <div className="w-20 h-20 bg-neon-pink/10 rounded-full flex items-center justify-center mb-6">
+                                <CheckCircle2 className="text-neon-pink" size={48} />
+                            </div>
+                            <h2 className="text-2xl font-bold mb-2">Login Successful!</h2>
+                            <p className="text-white/40 mb-8">Welcome back. Redirecting you to your dashboard...</p>
+                            <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: "100%" }}
+                                    transition={{ duration: 1.5, ease: "easeInOut" }}
+                                    className="h-full bg-neon-pink shadow-[0_0_10px_rgba(255,0,255,0.5)]"
+                                />
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             <NeonFooter />
         </div>

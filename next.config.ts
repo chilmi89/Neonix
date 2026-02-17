@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/auth/:path*",
-        destination: "http://192.168.18.159:8080/api/auth/:path*",
+        source: "/api/:path*",
+        destination: "http://192.168.100.96:8080/api/:path*",
       },
     ];
   },
