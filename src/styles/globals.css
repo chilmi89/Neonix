@@ -26,56 +26,32 @@
 }
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #000000;
+  --foreground: #FFFFFF;
 
-  --glass-surface: rgba(255, 255, 255, 0.3);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-text: #0f172a;
+  --glass-surface: rgba(15, 15, 15, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-text: #FFFFFF;
   --glass-radius: 1rem;
 
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
+  --primary: #FF00FF;
+  --primary-foreground: #FFFFFF;
 
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
+  --muted: #0F0F0F;
+  --muted-foreground: #CCCCCC;
 
-  --accent: #f0f9ff;
-  --accent-foreground: #0369a1;
-}
+  --accent: #00FFFF;
+  --accent-foreground: #000000;
 
-.dark {
-  --background: #050505;
-  --foreground: #f8fafc;
+  --cta: #BF40BF;
+  --cta-foreground: #FFFFFF;
 
-  --glass-surface: rgba(18, 18, 18, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --glass-text: #f8fafc;
-
-  --primary: #FF00CC;
-  --primary-foreground: #ffffff;
-
-  --muted: #121212;
-  --muted-foreground: #94a3b8;
-
-  --accent: #00F0FF;
-  --accent-foreground: #050505;
+  --neon-yellow: #FFD700;
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
-    background-image:
-      radial-gradient(at 0% 0%, hsla(210, 100%, 94%, 1) 0, transparent 50%),
-      radial-gradient(at 50% 0%, hsla(220, 100%, 92%, 1) 0, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(190, 100%, 94%, 1) 0, transparent 50%);
-  }
-
-  .dark body {
-    background-image:
-      radial-gradient(at 0% 0%, hsla(300, 100%, 5%, 1) 0, transparent 50%),
-      radial-gradient(at 50% 0%, hsla(320, 100%, 3%, 1) 0, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(280, 100%, 5%, 1) 0, transparent 50%);
+    @apply bg-background text-foreground transition-colors duration-500;
   }
 }
 

@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
-import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, X, Loader2, CheckCircle2 } from "lucide-react";
 import { login } from "@/services/authService";
@@ -61,7 +59,7 @@ export default function LoginPage() {
                 } else if (roleNames.includes("admin") || roleNames.includes("adminevent")) {
                     router.push("/dashboard/admin");
                 } else {
-                    router.push("/dashboard");
+                    router.push("/member");
                 }
             }, 1500);
 
@@ -76,7 +74,6 @@ export default function LoginPage() {
             {/* Modal Backdrop Overlay */}
             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
 
-            <NeonNavbar />
 
             <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50 overflow-hidden">
                 {/* Background Decor */}
@@ -209,7 +206,7 @@ export default function LoginPage() {
                             <div className="w-20 h-20 bg-neon-pink/10 rounded-full flex items-center justify-center mb-6">
                                 <CheckCircle2 className="text-neon-pink" size={48} />
                             </div>
-                            <h2 className="text-2xl font-bold mb-2">Login Successful!</h2>
+                            <h2 className="text-2xl font-bold mb-2 text-white">Login Successful!</h2>
                             <p className="text-white/40 mb-8">Welcome back. Redirecting you to your dashboard...</p>
                             <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
                                 <motion.div
@@ -224,7 +221,6 @@ export default function LoginPage() {
                 )}
             </AnimatePresence>
 
-            <NeonFooter />
         </div>
     );
 }
