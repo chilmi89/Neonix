@@ -49,6 +49,9 @@ export const API = {
     permissions: {
         getAll: `${API_BASE_URL}/permissions`,
         getById: (id: number) => `${API_BASE_URL}/permissions/${id}`,
+        create: `${API_BASE_URL}/permissions`,
+        update: (id: number) => `${API_BASE_URL}/permissions/${id}`,
+        delete: (id: number) => `${API_BASE_URL}/permissions/${id}`,
     },
 
     // Products
