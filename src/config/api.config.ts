@@ -34,6 +34,9 @@ export const API = {
         update: (id: number) => `${API_BASE_URL}/users/${id}`,
         delete: (id: number) => `${API_BASE_URL}/users/${id}`,
         getRoles: (id: number) => `${API_BASE_URL}/users/${id}/roles`,
+        addRole: (id: number, roleId: number) => `${API_BASE_URL}/users/${id}/roles/${roleId}`,
+        removeRole: (id: number, roleId: number) => `${API_BASE_URL}/users/${id}/roles/${roleId}`,
+        updateRoles: (id: number) => `${API_BASE_URL}/users/${id}/roles`,
     },
 
     // Roles & Permissions
@@ -43,12 +46,18 @@ export const API = {
         create: `${API_BASE_URL}/roles`,
         update: (id: number) => `${API_BASE_URL}/roles/${id}`,
         delete: (id: number) => `${API_BASE_URL}/roles/${id}`,
-        assignPermission: (id: number) => `${API_BASE_URL}/roles/${id}/permissions`,
+        getPermissions: (id: number) => `${API_BASE_URL}/roles/${id}/permissions`,
+        addPermission: (id: number, permissionId: number) => `${API_BASE_URL}/roles/${id}/permissions/${permissionId}`,
+        removePermission: (id: number, permissionId: number) => `${API_BASE_URL}/roles/${id}/permissions/${permissionId}`,
+        updatePermissions: (id: number) => `${API_BASE_URL}/roles/${id}/permissions`,
     },
 
     permissions: {
         getAll: `${API_BASE_URL}/permissions`,
         getById: (id: number) => `${API_BASE_URL}/permissions/${id}`,
+        create: `${API_BASE_URL}/permissions`,
+        update: (id: number) => `${API_BASE_URL}/permissions/${id}`,
+        delete: (id: number) => `${API_BASE_URL}/permissions/${id}`,
     },
 
     // Products

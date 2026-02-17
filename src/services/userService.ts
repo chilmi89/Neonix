@@ -21,9 +21,7 @@ export interface User {
  * TODO: Implement ketika backend API ready
  */
 export async function getAllUsers(): Promise<any> {
-    throw new Error("Get all users API belum diimplementasikan");
-    // Nanti implementasinya seperti ini:
-    // return apiGet(API.users.getAll);
+    return apiGet(API.users.getAll);
 }
 
 /**
@@ -67,8 +65,28 @@ export async function deleteUser(id: number): Promise<any> {
 }
 /**
  * Get user roles by ID
- * Digunakan jika login response tidak menyertakan roles
  */
 export async function getUserRoles(id: number): Promise<any> {
     return apiGet(API.users.getRoles(id));
+}
+
+/**
+ * Add role to user
+ */
+export async function addRoleToUser(userId: number, roleId: number): Promise<any> {
+    return apiPost(API.users.addRole(userId, roleId), {});
+}
+
+/**
+ * Remove role from user
+ */
+export async function removeRoleFromUser(userId: number, roleId: number): Promise<any> {
+    return apiDelete(API.users.removeRole(userId, roleId));
+}
+
+/**
+ * Update user roles (Bulk)
+ */
+export async function updateUserRoles(userId: number, roleIds: number[]): Promise<any> {
+    return apiPut(API.users.updateRoles(userId), roleIds);
 }
