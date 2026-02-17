@@ -11,6 +11,7 @@ export function NeonNavbar() {
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
         window.addEventListener("scroll", handleScroll);
+
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
@@ -38,7 +39,10 @@ export function NeonNavbar() {
                 </div>
 
                 <div className="flex items-center gap-6 shrink-0">
-                    <Link href="/member" className="text-sm font-bold text-foreground hover:text-neon-pink transition-colors uppercase tracking-wider">Account</Link>
+                    <ThemeToggle />
+                    <Link href="/login" className="text-sm font-bold text-foreground hover:text-neon-pink transition-colors uppercase tracking-wider">
+                        Sign In
+                    </Link>
                 </div>
             </div>
         </nav>
