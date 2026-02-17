@@ -13,7 +13,7 @@ export function NeonBadge({ children, variant = "glass", className }: NeonBadgeP
         pink: "bg-neon-pink/10 text-neon-pink border-neon-pink/20",
         cyan: "bg-neon-cyan/10 text-neon-cyan border-neon-cyan/20",
         yellow: "bg-neon-yellow/10 text-neon-yellow border-neon-yellow/20",
-        glass: "bg-white/5 text-white/70 border-white/10 backdrop-blur-sm",
+        glass: "bg-muted text-muted-foreground border-glass-border backdrop-blur-sm",
     };
 
     return (

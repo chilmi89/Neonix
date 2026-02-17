@@ -11,13 +11,13 @@ interface GenreCardProps {
 export function GenreCard({ icon: Icon, label }: GenreCardProps) {
     return (
         <motion.div
-            whileHover={{ backgroundColor: "#1a1a1a", borderColor: "#FF00FF" }}
-            className="flex flex-col items-center justify-center gap-3 bg-[#111111] border border-white/5 rounded-lg py-6 px-4 cursor-pointer transition-all duration-300 group"
+            whileHover={{ y: -5, borderColor: "#FF00FF" }}
+            className="flex flex-col items-center justify-center gap-4 bg-background border border-glass-border dark:bg-muted rounded-2xl py-8 px-6 cursor-pointer transition-all duration-300 group shadow-lg hover:shadow-neon-pink/10"
         >
-            <div className="text-white group-hover:text-neon-pink transition-colors duration-300 mb-1">
-                <Icon size={24} />
+            <div className="text-foreground group-hover:text-neon-pink transition-all duration-300 transform group-hover:scale-110 mb-2">
+                <Icon size={32} strokeWidth={1.5} />
             </div>
-            <span className="text-[10px] font-semibold text-white uppercase tracking-[0.1em]">{label}</span>
+            <span className="text-[11px] font-bold text-muted-foreground group-hover:text-foreground uppercase tracking-[0.2em] transition-colors">{label}</span>
         </motion.div>
     );
 }

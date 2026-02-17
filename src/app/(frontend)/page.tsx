@@ -11,10 +11,12 @@ import { GenreSection } from "@/app/(frontend)/_components/sections/GenreSection
 import { TrendingSection } from "@/app/(frontend)/_components/sections/TrendingSection";
 import { VipSection } from "@/app/(frontend)/_components/sections/VipSection";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
+import { LiquidBackground } from "@/app/(frontend)/_components/ui/LiquidBackground";
 
 export default function Homepage() {
     return (
-        <div className="min-h-screen bg-[#050505] text-white selection:bg-neon-pink/30 overflow-x-hidden font-inter">
+        <div className="min-h-screen bg-background text-foreground selection:bg-neon-pink/30 overflow-x-hidden font-inter relative">
+            <LiquidBackground />
             <NeonNavbar />
 
             <main>

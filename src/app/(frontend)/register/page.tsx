@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
-import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
 import { motion } from "framer-motion";
 import { User, Mail, Lock, Check, Eye, EyeOff, X } from "lucide-react";
 
@@ -15,7 +13,6 @@ export default function RegisterPage() {
             {/* Modal Backdrop Overlay */}
             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
 
-            <NeonNavbar />
 
             <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50 overflow-hidden">
                 {/* Background Decor */}
@@ -127,7 +124,6 @@ export default function RegisterPage() {
                 </motion.div>
             </main>
 
-            <NeonFooter />
         </div>
     );
 }

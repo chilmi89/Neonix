@@ -13,13 +13,15 @@ interface NeonEventCardProps {
     date: string;
     price: string;
     tag?: "trending" | "hot";
+    onClick?: () => void;
 }
 
-export function NeonEventCard({ image, title, location, date, price, tag }: NeonEventCardProps) {
+export function NeonEventCard({ image, title, location, date, price, tag, onClick }: NeonEventCardProps) {
     return (
         <motion.div
             whileHover={{ y: -5 }}
-            className="group bg-[#111111] rounded-xl overflow-hidden border border-white/5 hover:border-neon-cyan/30 transition-all duration-500"
+            onClick={onClick}
+            className="group bg-background rounded-xl overflow-hidden border border-glass-border hover:border-neon-cyan/30 transition-all duration-500 shadow-lg dark:bg-muted cursor-pointer"
         >
             <div className="relative aspect-[4/3] overflow-hidden">
                 <img
@@ -30,7 +32,7 @@ export function NeonEventCard({ image, title, location, date, price, tag }: Neon
                 {tag && (
                     <div className={cn(
                         "absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase backdrop-blur-md border border-white/10",
-                        tag === "trending" ? "bg-black/60 text-white" : "bg-pink-600 text-white"
+                        tag === "trending" ? "bg-black/60 text-white" : "bg-neon-pink text-white"
                     )}>
                         {tag}
                     </div>
@@ -38,14 +40,14 @@ export function NeonEventCard({ image, title, location, date, price, tag }: Neon
             </div>
 
             <div className="p-5 space-y-4">
-                <h3 className="text-lg font-bold text-white line-clamp-1">{title}</h3>
+                <h3 className="text-lg font-bold text-foreground line-clamp-1 group-hover:text-neon-pink transition-colors">{title}</h3>
 
                 <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-white/40 text-xs">
+                    <div className="flex items-center gap-2 text-muted-foreground text-xs">
                         <MapPin size={12} />
                         {location}
                     </div>
-                    <div className="flex items-center gap-2 text-white/40 text-xs">
+                    <div className="flex items-center gap-2 text-muted-foreground text-xs">
                         <Calendar size={12} />
                         {date}
                     </div>
@@ -53,11 +55,11 @@ export function NeonEventCard({ image, title, location, date, price, tag }: Neon
 
                 <div className="flex items-center justify-between pt-2">
                     <div>
-                        <p className="text-[10px] uppercase text-white/50 font-bold tracking-wider">Price from</p>
-                        <p className="text-xl font-bold text-[#FFD700]">${price}</p>
+                        <p className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">Price from</p>
+                        <p className="text-xl font-bold text-neon-yellow">${price}</p>
                     </div>
-                    <button className="bg-[#00FFFF] text-black font-bold text-[11px] px-8 py-2.5 rounded-lg shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:brightness-110 transition-all">
-                        BUY
+                    <button className="bg-neon-cyan text-black font-bold text-[11px] px-8 py-2.5 rounded-lg shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:brightness-110 transition-all uppercase tracking-wider">
+                        DETAIL
                     </button>
                 </div>
             </div>

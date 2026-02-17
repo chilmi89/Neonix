@@ -14,46 +14,50 @@ export function NeonHero() {
                     alt="Hero Music"
                     className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-black" />
+                {/* Content-Aware Overlay: more transparent to let Liquid Background show through */}
+                <div className="absolute inset-0 bg-black dark:opacity-60 opacity-0" />
+                <div className="absolute inset-0 bg-white/40 dark:opacity-0 opacity-100" />
             </div>
 
             {/* Content */}
-            <div className="max-w-5xl mx-auto text-center relative z-10 py-20 px-6">
+            <div className="w-full text-center relative z-10 py-20 px-8 md:px-12 lg:px-16">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                     className="space-y-4"
                 >
-                    <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-[900] leading-[1.1] tracking-tighter text-white uppercase">
-                        <span className="text-neon-pink drop-shadow-[0_0_20px_rgba(255,0,255,0.5)]">EXPERIENCE THE</span><br />
-                        <span>Extraordinary</span>
+                    <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-[950] leading-[0.85] tracking-tighter uppercase text-white">
+                        EXPERIENCE THE<br />
+                        <span className="text-neon-pink drop-shadow-[0_0_30px_rgba(255,0,255,0.4)]">Extraordinary</span>
                     </h1>
                 </motion.div>
 
-                <p className="max-w-2xl mx-auto text-white/50 text-base md:text-lg font-medium leading-relaxed mt-8">
+                <p className="max-w-2xl mx-auto text-white/60 text-base md:text-lg font-medium leading-relaxed mt-8">
                     Your gateway to the most electrifying live performances, exclusive gatherings, and unforgettable nights.
                 </p>
 
                 {/* Search Bar */}
-                <div className="max-w-[750px] mx-auto mt-16 bg-white/[0.03] backdrop-blur-3xl border border-white/10 p-2 rounded-full flex flex-col md:flex-row items-center gap-2 shadow-2xl">
-                    <div className="flex-1 w-full px-6 py-3 flex items-center gap-3">
-                        <Search className="text-white/20" size={18} />
+                <div className="max-w-[800px] mx-auto mt-20 bg-black/60 backdrop-blur-3xl border border-white/10 p-2.5 rounded-full flex flex-col md:flex-row items-center gap-2 shadow-2xl">
+                    <div className="flex-1 w-full px-8 py-3 flex items-center gap-4 border-r border-white/5">
+                        <Search className="text-white/40" size={20} />
                         <input
                             type="text"
                             placeholder="Search events, artists..."
-                            className="bg-transparent border-none outline-none text-white w-full text-sm font-medium placeholder:text-white/20"
+                            className="bg-transparent border-none outline-none text-white w-full text-sm font-bold placeholder:text-white/20"
                         />
                     </div>
-                    <div className="hidden md:block w-px h-8 bg-white/10" />
-                    <div className="w-full md:w-auto px-6 py-3 flex items-center gap-3 cursor-pointer group">
-                        <MapPin className="text-white/20 group-hover:text-neon-cyan transition-colors" size={18} />
-                        <span className="text-white text-sm font-medium whitespace-nowrap">Jakarta</span>
-                        <motion.div animate={{ rotate: 180 }} className="text-white/20 flex items-center">
-                            <i className="fas fa-chevron-down text-[10px]"></i>
-                        </motion.div>
+                    <div className="w-full md:w-auto px-8 py-3 flex items-center gap-4 cursor-pointer group">
+                        <MapPin className="text-white/40 group-hover:text-neon-cyan transition-colors" size={20} />
+                        <div className="flex flex-col items-start">
+                            <span className="text-[10px] text-white/40 font-black uppercase tracking-widest">Location</span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-white text-sm font-black uppercase tracking-wider">Jakarta, ID</span>
+                                <i className="fas fa-chevron-down text-[10px] text-white/20 group-hover:translate-y-0.5 transition-transform"></i>
+                            </div>
+                        </div>
                     </div>
-                    <button className="w-full md:w-auto bg-neon-pink text-white font-bold text-sm px-12 h-14 rounded-full shadow-[0_0_25px_rgba(255,0,255,0.4)] hover:brightness-110 transition-all">
+                    <button className="w-full md:w-auto bg-neon-pink text-white font-black text-sm px-10 h-14 rounded-full shadow-lg shadow-neon-pink/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest">
                         Find Events
                     </button>
                 </div>
