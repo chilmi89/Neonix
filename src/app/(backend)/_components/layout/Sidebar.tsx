@@ -13,7 +13,8 @@ import {
     Library,
     ShieldCheck,
     UserCircle,
-    Key
+    Key,
+    Lock
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -58,7 +59,9 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                     // Insert role and permission management
                     baseItems.splice(2, 0,
                         { icon: ShieldCheck, label: "Roles", href: "/dashboard/superadmin/role" },
-                        { icon: Key, label: "Permissions", href: "/dashboard/superadmin/permission" }
+                        { icon: Key, label: "Permissions", href: "/dashboard/superadmin/permission" },
+                        { icon: UserCircle, label: "Give Role", href: "/dashboard/superadmin/users-role" },
+                        { icon: Lock, label: "Give Permission", href: "/dashboard/superadmin/role-permission" }
                     );
                 } else if (isAdmin) {
                     baseItems[0] = { icon: UserCircle, label: "Admin Dash", href: "/dashboard/admin" };
