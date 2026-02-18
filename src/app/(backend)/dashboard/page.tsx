@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { containerStagger, slideUp } from "@/lib/motion";
+import { useState, useEffect } from "react";
+import { useUser } from "@/context/UserContext";
 
 const stats = [
   { label: "Total Revenue", value: "$45,231.89", trend: 20.1, icon: DollarSign, description: "+$2k from last month", color: "blue" },
@@ -30,6 +32,13 @@ const recentOrders = [
 ];
 
 export default function DashboardPage() {
+  const { user } = useUser();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
 
     <motion.div
@@ -40,7 +49,9 @@ export default function DashboardPage() {
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-glass-text">Welcome back, John!</h1>
+          <h1 className="text-3xl font-bold text-glass-text capitalize">
+            Welcome back, {mounted ? (user?.name || "User") : "User"}!
+          </h1>
           <p className="text-glass-text/60">Here&apos;s what&apos;s happening with your projects today.</p>
         </div>
         <button className="bg-primary text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg shadow-primary/30 flex items-center gap-2 hover:brightness-110 mb-transition">

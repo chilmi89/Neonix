@@ -152,16 +152,15 @@ export default function UsersRolePage() {
                         <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30 group-focus-within:text-primary transition-colors" size={18} />
                         <input
                             type="text"
-                            placeholder="Cari pengguna berdasarkan nama atau email..."
+                            placeholder="Cari nama atau email pengguna..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-black/40 border-none rounded-xl py-3 pl-12 pr-4 text-sm text-white font-medium outline-none focus:bg-black/60 transition-all placeholder:text-glass-text/20"
+                            className="w-full bg-white/40 dark:bg-black/40 border-none rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-medium outline-none focus:bg-white/60 dark:focus:bg-black/60 transition-all placeholder:text-glass-text/20"
                         />
                     </div>
                     <button
                         onClick={fetchData}
                         className="p-3 bg-white/5 hover:bg-white/10 rounded-xl text-primary transition-all border border-white/5 shadow-inner"
-                        title="Segarkan Data"
                     >
                         <RefreshCw className={cn("transition-transform duration-500", loading && "animate-spin")} size={18} />
                     </button>
@@ -217,7 +216,7 @@ export default function UsersRolePage() {
                                         accessor: (item) => (
                                             <button
                                                 onClick={() => handleOpenAssignment(item)}
-                                                className="flex items-center gap-3 px-5 py-2.5 bg-white/5 hover:bg-primary/20 hover:text-primary rounded-2xl text-glass-text/40 transition-all border border-white/5 shadow-sm active:scale-95 group"
+                                                className="flex items-center gap-3 px-5 py-2.5 bg-white/10 dark:bg-white/5 hover:bg-primary/20 hover:text-primary rounded-2xl text-glass-text/40 transition-all border border-glass-border shadow-sm active:scale-95 group"
                                             >
                                                 <ShieldCheck size={16} className="group-hover:scale-110 transition-transform" />
                                                 <span className="text-xs font-black uppercase tracking-tight">Atur Peran</span>

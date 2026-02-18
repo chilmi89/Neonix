@@ -149,7 +149,7 @@ export default function RolePermissionPage() {
                             placeholder="Cari peran..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-black/40 border-none rounded-xl py-3 pl-12 pr-4 text-sm text-white font-medium outline-none focus:bg-black/60 transition-all placeholder:text-glass-text/20"
+                            className="w-full bg-white/40 dark:bg-black/40 border-none rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-medium outline-none focus:bg-white/60 dark:focus:bg-black/60 transition-all placeholder:text-glass-text/20"
                         />
                     </div>
                     <button
@@ -215,7 +215,7 @@ export default function RolePermissionPage() {
                                         accessor: (item) => (
                                             <button
                                                 onClick={() => handleOpenAssignment(item)}
-                                                className="flex items-center gap-3 px-5 py-2.5 bg-white/5 hover:bg-primary/20 hover:text-primary rounded-2xl text-glass-text/40 transition-all border border-white/5 shadow-sm active:scale-95 group"
+                                                className="flex items-center gap-3 px-5 py-2.5 bg-white/10 dark:bg-white/5 hover:bg-primary/20 hover:text-primary rounded-2xl text-glass-text/40 transition-all border border-glass-border shadow-sm active:scale-95 group"
                                             >
                                                 <Key size={16} className="group-hover:scale-110 transition-transform" />
                                                 <span className="text-xs font-black uppercase tracking-tight">Atur Izin</span>

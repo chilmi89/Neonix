@@ -42,7 +42,7 @@ export function DataTable<T extends { id: string | number }>({ title, columns, d
                         {data.map((item) => (
                             <tr
                                 key={item.id}
-                                className="hover:bg-white/5 transition-colors group"
+                                className="hover:bg-glass-hover transition-colors group"
                             >
                                 {columns.map((col, i) => (
                                     <td
