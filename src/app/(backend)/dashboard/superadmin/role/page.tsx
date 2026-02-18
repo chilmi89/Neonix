@@ -176,7 +176,7 @@ export default function RolePage() {
                                         placeholder="CONTOH: MODERATOR_ACARA"
                                         value={newRoleName}
                                         onChange={(e) => setNewRoleName(e.target.value.toUpperCase())}
-                                        className="w-full bg-black/60 border border-white/10 rounded-2xl py-4 px-5 text-white font-bold outline-none focus:border-primary/50 focus:bg-black/80 transition-all placeholder:text-white/5 shadow-inner text-lg"
+                                        className="w-full bg-white/50 dark:bg-black/60 border border-glass-border rounded-2xl py-4 px-5 text-glass-text font-bold outline-none focus:border-primary/50 focus:bg-white/80 dark:focus:bg-black/80 transition-all placeholder:text-glass-text/20 shadow-inner text-lg"
                                         required
                                     />
                                     <Users className="absolute right-5 top-1/2 -translate-y-1/2 text-primary/20" size={20} />
@@ -222,7 +222,7 @@ export default function RolePage() {
                                 placeholder="Cari nama peran dalam sistem..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full bg-black/40 border-none rounded-xl py-3 pl-12 pr-4 text-sm text-white font-medium outline-none focus:bg-black/60 transition-all placeholder:text-glass-text/20"
+                                className="w-full bg-white/40 dark:bg-black/40 border-none rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-medium outline-none focus:bg-white/60 dark:focus:bg-black/60 transition-all placeholder:text-glass-text/20"
                             />
                         </div>
                         <button
@@ -267,7 +267,7 @@ export default function RolePage() {
                                                 <div className="flex items-center gap-3">
                                                     <button
                                                         onClick={() => handleEditOpen(item)}
-                                                        className="h-10 w-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-xl text-glass-text/40 hover:text-primary transition-all border border-white/5 shadow-sm active:scale-90"
+                                                        className="h-10 w-10 flex items-center justify-center bg-white/10 dark:bg-white/5 hover:bg-glass-hover rounded-xl text-glass-text/40 hover:text-primary transition-all border border-glass-border shadow-sm active:scale-90"
                                                         title="Ubah Peran"
                                                     >
                                                         <Edit2 size={16} />
@@ -333,7 +333,7 @@ export default function RolePage() {
                                         type="text"
                                         value={editFormData.name}
                                         onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value.toUpperCase() })}
-                                        className="w-full bg-black/60 border border-white/10 rounded-2xl py-4 px-6 text-white font-black text-xl outline-none focus:border-primary/50 transition-all text-center shadow-inner"
+                                        className="w-full bg-white/50 dark:bg-black/60 border border-glass-border rounded-2xl py-4 px-6 text-glass-text font-black text-xl outline-none focus:border-primary/50 transition-all text-center shadow-inner"
                                         required
                                         autoFocus
                                     />

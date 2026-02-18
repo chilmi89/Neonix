@@ -7,6 +7,7 @@
   --color-glass-surface: var(--glass-surface);
   --color-glass-border: var(--glass-border);
   --color-glass-text: var(--glass-text);
+  --color-glass-hover: var(--glass-hover);
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
@@ -27,20 +28,22 @@
 }
 
 :root {
-<<<<<<< Updated upstream
   --background: #000000;
   --foreground: #FFFFFF;
 
-  --glass-surface: rgba(15, 15, 15, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-text: #FFFFFF;
+  --glass-surface: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-text: #1e293b;
+  /* Slate 800 */
   --glass-radius: 1rem;
 
   --primary: #FF00FF;
   --primary-foreground: #FFFFFF;
 
-  --muted: #0F0F0F;
-  --muted-foreground: #CCCCCC;
+  --muted: #f1f5f9;
+  /* Slate 100 */
+  --muted-foreground: #64748b;
+  /* Slate 500 */
 
   --accent: #00FFFF;
   --accent-foreground: #000000;
@@ -88,6 +91,19 @@
 >>>>>>> Stashed changes
 }
 
+.dark {
+  --background: #000000;
+  --foreground: #FFFFFF;
+
+  --glass-surface: rgba(15, 15, 15, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-text: #FFFFFF;
+  --glass-hover: rgba(255, 255, 255, 0.1);
+
+  --muted: #0F0F0F;
+  --muted-foreground: #CCCCCC;
+}
+
 @layer base {
   body {
 <<<<<<< Updated upstream
@@ -109,14 +125,7 @@
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-glass border border-glass-border bg-glass-surface shadow-lg transition-all duration-300;
-  }
-
-  .neon-glow-pink {
-    box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
-  }
-
-  .neon-glow-cyan {
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    @apply backdrop-blur-glass border border-glass-border bg-glass-surface shadow-xl;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   }
 }

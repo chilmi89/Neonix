@@ -3,7 +3,7 @@
 import { ReactNode, useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Navbar } from "./Navbar";
-import { cn } from "@/lib/utils";
+import { useUser } from "@/context/UserContext";
 
 interface AppLayoutProps {
     children: ReactNode;
@@ -11,6 +11,7 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const { user, loading } = useUser();
 
     return (
         <div className="min-h-screen flex bg-transparent">
