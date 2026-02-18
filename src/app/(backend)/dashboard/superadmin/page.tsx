@@ -48,10 +48,10 @@ export default function SuperAdminDashboardPage() {
                     <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest leading-none">
                         <Zap size={12} fill="currentColor" /> Inti Sistem
                     </motion.div>
-                    <h1 className="text-5xl font-black text-white tracking-tighter">
+                    <h1 className="text-5xl font-black text-glass-text tracking-tighter">
                         Nexus <span className="text-primary italic">Command</span>
                     </h1>
-                    <p className="text-glass-text/50 max-w-xl text-lg leading-relaxed">
+                    <p className="text-glass-text/70 max-w-xl text-lg leading-relaxed">
                         Pengawasan global dan konfigurasi infrastruktur. Pantau performa, keamanan, dan operasi administratif secara real-time.
                     </p>
                 </div>
@@ -83,12 +83,12 @@ export default function SuperAdminDashboardPage() {
                 <motion.div variants={slideUp} className="group">
                     <div className="flex items-center justify-between mb-6 px-2">
                         <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center text-primary border border-white/10 shadow-lg group-hover:scale-110 transition-transform">
+                            <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-lg group-hover:scale-110 transition-transform">
                                 <History size={20} />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white tracking-tight">Aliran Log Sistem</h3>
-                                <p className="text-xs text-glass-text/30">Log audit langsung dari inti platform</p>
+                                <h3 className="text-xl font-bold text-glass-text tracking-tight">Aliran Log Sistem</h3>
+                                <p className="text-xs text-glass-text/60">Log audit langsung dari inti platform</p>
                             </div>
                         </div>
                         <button className="text-xs font-bold text-primary/60 hover:text-primary transition-colors flex items-center gap-1.5 uppercase tracking-widest">
@@ -104,7 +104,7 @@ export default function SuperAdminDashboardPage() {
                                 {
                                     header: "OPERASI",
                                     accessor: (item) => (
-                                        <span className="font-bold text-white tracking-wide">{item.action}</span>
+                                        <span className="font-bold text-glass-text tracking-wide">{item.action}</span>
                                     )
                                 },
                                 {

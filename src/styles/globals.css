@@ -28,6 +28,30 @@
 }
 
 :root {
+  /* Light Mode (Blue/Black Premium) - Default */
+  --background: #F8FAFC;
+  --foreground: #020617;
+
+  --glass-surface: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(15, 23, 42, 0.08);
+  --glass-text: #020617;
+  /* Solid Black for better visibility */
+  --glass-radius: 1.5rem;
+  --glass-hover: rgba(59, 130, 246, 0.1);
+
+  --primary: #2563EB;
+  --primary-foreground: #ffffff;
+
+  --muted: #F1F5F9;
+  --muted-foreground: #334155;
+  /* Darker gray for readability */
+
+  --accent: #3B82F6;
+  --accent-foreground: #020617;
+}
+
+.dark {
+  /* Dark Mode (Neon-Black) */
   --background: #000000;
   --foreground: #FFFFFF;
 
@@ -38,21 +62,26 @@
   --glass-hover: rgba(255, 255, 255, 0.1);
 
   --primary: #FF00FF;
+  /* Neon Pink */
   --primary-foreground: #ffffff;
 
   --muted: #0F0F0F;
   --muted-foreground: #CCCCCC;
 
   --accent: #00FFFF;
+  /* Neon Cyan */
   --accent-foreground: #050505;
-
-  --cta: #BF40BF;
-  --cta-foreground: #FFFFFF;
 }
 
 @layer base {
   body {
     @apply bg-background text-foreground transition-colors duration-500 font-sans antialiased;
+    background-image:
+      radial-gradient(at 0% 0%, hsla(215, 100%, 95%, 0.4) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(215, 100%, 90%, 0.4) 0, transparent 50%);
+  }
+
+  .dark body {
     background-image:
       radial-gradient(at 0% 0%, hsla(300, 100%, 5%, 0.3) 0, transparent 50%),
       radial-gradient(at 100% 0%, hsla(180, 100%, 5%, 0.3) 0, transparent 50%);

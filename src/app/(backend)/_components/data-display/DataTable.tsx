@@ -24,12 +24,12 @@ export function DataTable<T extends { id: string | number }>({ title, columns, d
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
-                        <tr className="bg-white/5">
+                        <tr className="bg-muted/50">
                             {columns.map((col, i) => (
                                 <th
                                     key={i}
                                     className={cn(
-                                        "px-6 py-4 text-sm font-semibold text-glass-text/60 uppercase tracking-wider",
+                                        "px-6 py-4 text-xs font-black text-glass-text/80 uppercase tracking-[0.1em]",
                                         col.className
                                     )}
                                 >

@@ -47,9 +47,9 @@ export function StatisticCard({
             </div>
 
             <div>
-                <p className="text-glass-text/60 text-sm font-medium">{label}</p>
-                <h3 className="text-2xl font-bold text-glass-text mt-1">{value}</h3>
-                <p className="text-xs text-glass-text/40 mt-2">{description}</p>
+                <p className="text-glass-text/70 text-sm font-bold uppercase tracking-wide">{label}</p>
+                <h3 className="text-3xl font-black text-glass-text mt-1 tracking-tight">{value}</h3>
+                <p className="text-sm font-medium text-glass-text/50 mt-2 leading-relaxed">{description}</p>
             </div>
         </GlassCard>
     );

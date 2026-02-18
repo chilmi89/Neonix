@@ -55,7 +55,7 @@ export default function UsersPage() {
                     {
                         header: "Role",
                         accessor: (user) => (
-                            <span className="text-xs font-semibold px-2 py-1 bg-white/5 rounded-lg border border-glass-border">
+                            <span className="text-xs font-semibold px-2 py-1 bg-muted rounded-lg border border-glass-border">
                                 {user.role}
                             </span>
                         )

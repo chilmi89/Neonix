@@ -123,10 +123,10 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                             <div className={cn(
                                 "flex items-center p-3 rounded-xl transition-all duration-200 group relative",
                                 isActive
-                                    ? "bg-primary text-white shadow-lg shadow-primary/20"
+                                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                                     : "text-glass-text hover:bg-glass-hover"
                             )}>
-                                <Icon size={24} className={cn(isActive ? "text-white" : "opacity-70 group-hover:opacity-100 transition-opacity")} />
+                                <Icon size={24} className={cn(isActive ? "text-primary-foreground" : "opacity-70 group-hover:opacity-100 transition-opacity")} />
                                 {!isCollapsed && (
                                     <motion.span
                                         initial={{ opacity: 0, width: 0 }}

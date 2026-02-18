@@ -113,27 +113,27 @@ export default function RolePermissionPage() {
             className="space-y-8 pb-20"
         >
             {/* Header & Deskripsi */}
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-white/5 pb-8">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-sky-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_rgba(var(--color-primary),0.5)]">
+                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-sky-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_var(--color-primary)]">
                         <Lock size={32} />
                     </div>
                     <div>
-                        <h1 className="text-4xl font-black text-white tracking-tighter leading-none">
+                        <h1 className="text-4xl font-black text-glass-text tracking-tighter leading-none">
                             Kelola <span className="text-primary italic">Izin Peran</span>
                         </h1>
-                        <p className="text-glass-text/40 text-lg mt-2 font-medium">Pemetaan Hak Akses Sistem</p>
+                        <p className="text-glass-text/60 text-lg mt-2 font-medium">Pemetaan Hak Akses Sistem</p>
                     </div>
                 </div>
 
                 <div className="flex gap-4">
-                    <div className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex flex-col items-center min-w-[120px]">
+                    <div className="px-6 py-3 rounded-2xl bg-muted border border-glass-border backdrop-blur-md flex flex-col items-center min-w-[120px]">
                         <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Total Peran</p>
-                        <h3 className="text-2xl font-black text-white leading-none">{roles.length}</h3>
+                        <h3 className="text-2xl font-black text-glass-text leading-none">{roles.length}</h3>
                     </div>
-                    <div className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex flex-col items-center min-w-[120px]">
+                    <div className="px-6 py-3 rounded-2xl bg-muted border border-glass-border backdrop-blur-md flex flex-col items-center min-w-[120px]">
                         <p className="text-[10px] font-black uppercase tracking-widest text-sky-400 mb-1">Izin Tersedia</p>
-                        <h3 className="text-2xl font-black text-white leading-none">{allPermissions.length}</h3>
+                        <h3 className="text-2xl font-black text-glass-text leading-none">{allPermissions.length}</h3>
                     </div>
                 </div>
             </div>
@@ -141,7 +141,7 @@ export default function RolePermissionPage() {
             {/* Layout Utama */}
             <div className="space-y-6">
                 {/* Bar Kontrol Kompak */}
-                <div className="flex items-center gap-4 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-2 shadow-2xl">
+                <div className="flex items-center gap-4 bg-muted border border-glass-border rounded-3xl p-2 shadow-2xl">
                     <div className="relative flex-1 group">
                         <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30 group-focus-within:text-primary transition-colors" size={18} />
                         <input
@@ -149,12 +149,12 @@ export default function RolePermissionPage() {
                             placeholder="Cari peran..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/40 dark:bg-black/40 border-none rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-medium outline-none focus:bg-white/60 dark:focus:bg-black/60 transition-all placeholder:text-glass-text/20"
+                            className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none focus:bg-white dark:focus:bg-black/60 transition-all placeholder:text-glass-text/30"
                         />
                     </div>
                     <button
                         onClick={fetchData}
-                        className="p-3 bg-white/5 hover:bg-white/10 rounded-xl text-primary transition-all border border-white/5 shadow-inner"
+                        className="p-3 bg-glass-surface hover:bg-glass-hover rounded-xl text-primary transition-all border border-glass-border shadow-inner"
                         title="Segarkan Data"
                     >
                         <RefreshCw className={cn("transition-transform duration-500", loading && "animate-spin")} size={18} />
@@ -164,12 +164,12 @@ export default function RolePermissionPage() {
                 {/* Tabel Peran */}
                 <motion.div variants={slideUp}>
                     {loading && roles.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-32 bg-white/5 rounded-4xl border border-white/10 shadow-2xl">
+                        <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-4xl border border-glass-border shadow-2xl">
                             <Loader2 className="animate-spin mb-6 text-primary" size={48} />
-                            <p className="text-lg font-bold text-white/40 tracking-tight">Menghubungkan ke Pusat Data...</p>
+                            <p className="text-lg font-bold text-glass-text/40 tracking-tight">Menghubungkan ke Pusat Data...</p>
                         </div>
                     ) : (
-                        <div className="glass-card overflow-hidden border-white/10 rounded-4xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)]">
+                        <div className="glass-card overflow-hidden border-glass-border rounded-4xl shadow-2xl">
                             <DataTable
                                 title="Registri Izin Peran"
                                 data={filteredRoles}
@@ -182,8 +182,8 @@ export default function RolePermissionPage() {
                                                     <ShieldCheck size={18} />
                                                 </div>
                                                 <div>
-                                                    <span className="font-black text-white text-base tracking-tight leading-none block uppercase">{item.name}</span>
-                                                    <span className="text-[10px] font-medium text-glass-text/40 block mt-1 tracking-widest">ID: #{item.id}</span>
+                                                    <span className="font-black text-glass-text text-base tracking-tight leading-none block uppercase">{item.name}</span>
+                                                    <span className="text-[10px] font-bold text-glass-text/60 block mt-1 tracking-widest">ID: #{item.id}</span>
                                                 </div>
                                             </div>
                                         )
@@ -192,8 +192,8 @@ export default function RolePermissionPage() {
                                         header: "JUMLAH IZIN",
                                         accessor: (item) => (
                                             <div className="flex items-center gap-3">
-                                                <div className="h-8 min-w-[32px] px-2 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
-                                                    <span className="text-xs font-black text-white">{item.permissions?.length || 0}</span>
+                                                <div className="h-8 min-w-[32px] px-2 rounded-lg bg-muted border border-glass-border flex items-center justify-center">
+                                                    <span className="text-xs font-black text-glass-text">{item.permissions?.length || 0}</span>
                                                 </div>
                                                 <div className="flex -space-x-2">
                                                     {[...Array(Math.min(3, item.permissions?.length || 0))].map((_, i) => (
@@ -202,7 +202,7 @@ export default function RolePermissionPage() {
                                                         </div>
                                                     ))}
                                                     {(item.permissions?.length || 0) > 3 && (
-                                                        <div className="h-6 w-6 rounded-full border border-black bg-white/10 flex items-center justify-center text-[8px] font-black text-white/40">
+                                                        <div className="h-6 w-6 rounded-full border border-black bg-muted flex items-center justify-center text-[8px] font-black text-glass-text/40">
                                                             +{(item.permissions?.length || 0) - 3}
                                                         </div>
                                                     )}
@@ -238,21 +238,21 @@ export default function RolePermissionPage() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsAssignmentModalOpen(false)}
-                            className="absolute inset-0 bg-black/95 backdrop-blur-xl"
+                            className="absolute inset-0 bg-background/80 backdrop-blur-xl"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="relative w-full max-w-sm glass-card rounded-[2.5rem] p-0 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] border-white/10 overflow-hidden"
+                            className="relative w-full max-w-sm bg-background border border-glass-border rounded-[2.5rem] p-0 shadow-2xl overflow-hidden"
                         >
                             {/* Header Modal */}
-                            <div className="p-6 border-b border-white/5 relative">
+                            <div className="p-6 border-b border-glass-border relative">
                                 <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-primary via-sky-500 to-transparent" />
 
                                 <button
                                     onClick={() => setIsAssignmentModalOpen(false)}
-                                    className="absolute top-6 right-6 text-glass-text/30 hover:text-white transition-all"
+                                    className="absolute top-6 right-6 text-glass-text/30 hover:text-glass-text transition-all"
                                 >
                                     <X size={18} />
                                 </button>
@@ -262,7 +262,7 @@ export default function RolePermissionPage() {
                                         <Key size={24} />
                                     </div>
                                     <div>
-                                        <h2 className="text-xl font-black text-white tracking-tight leading-none">Hak Akses</h2>
+                                        <h2 className="text-xl font-black text-glass-text tracking-tight leading-none">Hak Akses</h2>
                                         <p className="text-[10px] text-glass-text/40 font-bold uppercase tracking-wider mt-1.5">{selectedRole.name}</p>
                                     </div>
                                 </div>
@@ -281,7 +281,7 @@ export default function RolePermissionPage() {
                                             </span>
                                         </div>
 
-                                        <div className="bg-white/5 border border-white/5 rounded-2xl overflow-hidden max-h-[320px] overflow-y-auto custom-scrollbar">
+                                        <div className="bg-muted border border-glass-border rounded-2xl overflow-hidden max-h-[320px] overflow-y-auto custom-scrollbar">
                                             {allPermissions.length > 0 ? (
                                                 allPermissions.map((perm) => {
                                                     const isSelected = roleAssignedPermissionIds.includes(perm.id);
@@ -290,16 +290,16 @@ export default function RolePermissionPage() {
                                                             key={perm.id}
                                                             onClick={() => togglePermission(perm.id)}
                                                             className={cn(
-                                                                "px-5 py-4 flex items-center justify-between cursor-pointer transition-all border-b border-white/5 last:border-0",
+                                                                "px-5 py-4 flex items-center justify-between cursor-pointer transition-all border-b border-glass-border last:border-0",
                                                                 isSelected
                                                                     ? "bg-primary/5 text-primary"
-                                                                    : "text-white/40 hover:bg-white/5"
+                                                                    : "text-glass-text/40 hover:bg-glass-hover"
                                                             )}
                                                         >
                                                             <div className="flex items-center gap-3">
                                                                 <div className={cn(
                                                                     "h-7 w-7 rounded-xl flex items-center justify-center transition-all",
-                                                                    isSelected ? "bg-primary/20 text-primary" : "bg-white/5 text-transparent"
+                                                                    isSelected ? "bg-primary/20 text-primary" : "bg-muted text-transparent"
                                                                 )}>
                                                                     <Key size={14} />
                                                                 </div>
@@ -312,18 +312,18 @@ export default function RolePermissionPage() {
                                                     );
                                                 })
                                             ) : (
-                                                <div className="p-10 text-center text-white/10 italic text-xs">Registri Izin Kosong.</div>
+                                                <div className="p-10 text-center text-glass-text/10 italic text-xs">Registri Izin Kosong.</div>
                                             )}
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Footer Modal */}
-                                <div className="p-6 bg-black/40 border-t border-white/5 flex gap-3">
+                                <div className="p-6 bg-muted/30 border-t border-glass-border flex gap-3">
                                     <button
                                         type="button"
                                         onClick={() => setIsAssignmentModalOpen(false)}
-                                        className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl transition-all border border-white/5 text-[10px] uppercase tracking-widest"
+                                        className="flex-1 bg-muted hover:bg-glass-hover text-glass-text font-bold py-4 rounded-xl transition-all border border-glass-border text-[10px] uppercase tracking-widest"
                                     >
                                         Batal
                                     </button>

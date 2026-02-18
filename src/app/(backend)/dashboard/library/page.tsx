@@ -85,19 +85,19 @@ export default function LibraryPage() {
                 code={`<input 
   type="text" 
   placeholder="Enter something..." 
-  className="bg-white/5 border border-glass-border rounded-xl px-4 py-2 outline-none focus:border-primary transition-all text-glass-text" 
+  className="bg-background/50 border border-glass-border rounded-xl px-4 py-2 outline-none focus:border-primary transition-all text-glass-text" 
 />`}
             >
                 <div className="w-full max-w-md space-y-4">
                     <input
                         type="text"
                         placeholder="Username"
-                        className="w-full bg-white/5 border border-glass-border rounded-xl px-4 py-3 outline-none focus:border-primary transition-all text-glass-text"
+                        className="w-full bg-background/50 border border-glass-border rounded-xl px-4 py-3 outline-none focus:border-primary transition-all text-glass-text"
                     />
                     <input
                         type="password"
                         placeholder="Password"
-                        className="w-full bg-white/5 border border-glass-border rounded-xl px-4 py-3 outline-none focus:border-primary transition-all text-glass-text"
+                        className="w-full bg-background/50 border border-glass-border rounded-xl px-4 py-3 outline-none focus:border-primary transition-all text-glass-text"
                     />
                 </div>
             </ComponentShowcase>
