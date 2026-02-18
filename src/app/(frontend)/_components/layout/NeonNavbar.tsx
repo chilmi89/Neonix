@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Search, MapPin, ChevronDown } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
 
 export function NeonNavbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -49,7 +48,6 @@ export function NeonNavbar() {
                 </div>
 
                 <div className="flex items-center gap-6 shrink-0">
-                    <ThemeToggle />
                     {isLoggedIn ? (
                         <Link href="/member" className="flex items-center gap-3 group">
                             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neon-pink to-neon-cyan p-0.5 group-hover:shadow-[0_0_15px_rgba(255,0,255,0.4)] transition-all">

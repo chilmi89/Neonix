@@ -28,28 +28,6 @@
 }
 
 :root {
-  --background: #FAFAFA;
-  --foreground: #1A1A1A;
-
-  --glass-surface: #FFFFFF;
-  --glass-border: #E5E7EB;
-  --glass-text: #1A1A1A;
-  --glass-radius: 1.5rem;
-
-  --primary: #FF00FF;
-  --primary-foreground: #ffffff;
-
-  --muted: #F5F7FA;
-  --muted-foreground: #666666;
-
-  --accent: #00FFFF;
-  --accent-foreground: #1A1A1A;
-
-  --cta: #BF40BF;
-  --cta-foreground: #FFFFFF;
-}
-
-.dark {
   --background: #000000;
   --foreground: #FFFFFF;
 
@@ -75,12 +53,6 @@
 @layer base {
   body {
     @apply bg-background text-foreground transition-colors duration-500 font-sans antialiased;
-    background-image:
-      radial-gradient(at 0% 0%, hsla(300, 100%, 98%, 1) 0, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(180, 100%, 98%, 1) 0, transparent 50%);
-  }
-
-  .dark body {
     background-image:
       radial-gradient(at 0% 0%, hsla(300, 100%, 5%, 0.3) 0, transparent 50%),
       radial-gradient(at 100% 0%, hsla(180, 100%, 5%, 0.3) 0, transparent 50%);
