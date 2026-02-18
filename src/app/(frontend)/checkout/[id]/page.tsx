@@ -15,12 +15,13 @@ import {
     Ticket
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { LiquidBackground } from "@/app/(frontend)/_components/ui/LiquidBackground";
+import { PlasmaBackground } from "@/app/(frontend)/_components/ui/PlasmaBackground";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 
-export default function CheckoutPage({ params }: { params: { id: string } }) {
+export default function CheckoutPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
+    const params = use(paramsPromise);
     const router = useRouter();
     const [regularCount, setRegularCount] = useState(2);
     const [vipCount, setVipCount] = useState(0);
@@ -46,9 +47,10 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
 
     return (
         <div className="min-h-screen bg-black text-white selection:bg-neon-pink/30 overflow-x-hidden font-inter relative">
-            <LiquidBackground />
+            <PlasmaBackground />
+            <NeonNavbar />
 
-            <main className="relative z-10 pt-12 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
+            <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
                 {/* Back Link */}
                 <Link href="/" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8 group">
                     <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
