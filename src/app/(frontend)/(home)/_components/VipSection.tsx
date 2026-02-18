@@ -1,7 +1,7 @@
 "use client";
 
 import { Crown } from "lucide-react";
-import { NeonButton } from "../ui/NeonButton";
+import { NeonButton } from "@/app/(frontend)/_components/ui/NeonButton";
 import { motion } from "framer-motion";
 
 export function VipSection() {

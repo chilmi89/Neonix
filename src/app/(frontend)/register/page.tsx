@@ -6,6 +6,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { User, Mail, Lock, Check, Eye, EyeOff, X, Loader2 } from "lucide-react";
 import * as authService from "@/services/authService";
+import { PlasmaBackground } from "@/app/(frontend)/_components/ui/PlasmaBackground";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -68,15 +69,10 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#000000] text-white font-inter flex flex-col relative">
-            {/* Modal Backdrop Overlay */}
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
-
+        <div className="min-h-screen text-white font-inter flex flex-col relative">
+            <PlasmaBackground />
 
             <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50 overflow-hidden">
-                {/* Background Decor */}
-                <div className="absolute top-1/4 -right-20 w-[400px] h-[400px] bg-neon-yellow/5 blur-[120px] rounded-full -z-10" />
-                <div className="absolute bottom-1/4 -left-20 w-[400px] h-[400px] bg-neon-pink/10 blur-[120px] rounded-full -z-10" />
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}

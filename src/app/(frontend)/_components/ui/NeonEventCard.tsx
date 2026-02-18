@@ -21,7 +21,7 @@ export function NeonEventCard({ image, title, location, date, price, tag, onClic
         <motion.div
             whileHover={{ y: -5 }}
             onClick={onClick}
-            className="group bg-background rounded-xl overflow-hidden border border-glass-border hover:border-neon-cyan/30 transition-all duration-500 shadow-lg dark:bg-muted cursor-pointer"
+            className="group h-full flex flex-col bg-background rounded-xl overflow-hidden border border-glass-border hover:border-neon-cyan/30 transition-all duration-500 shadow-lg dark:bg-muted cursor-pointer"
         >
             <div className="relative aspect-[4/3] overflow-hidden">
                 <img
@@ -39,17 +39,19 @@ export function NeonEventCard({ image, title, location, date, price, tag, onClic
                 )}
             </div>
 
-            <div className="p-5 space-y-4">
-                <h3 className="text-lg font-bold text-foreground line-clamp-1 group-hover:text-neon-pink transition-colors">{title}</h3>
+            <div className="p-5 flex flex-col flex-1 space-y-4">
+                <div className="flex-1 space-y-4">
+                    <h3 className="text-lg font-bold text-foreground line-clamp-1 group-hover:text-neon-pink transition-colors">{title}</h3>
 
-                <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-muted-foreground text-xs">
-                        <MapPin size={12} />
-                        {location}
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground text-xs">
-                        <Calendar size={12} />
-                        {date}
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-muted-foreground text-xs">
+                            <MapPin size={12} />
+                            {location}
+                        </div>
+                        <div className="flex items-center gap-2 text-muted-foreground text-xs">
+                            <Calendar size={12} />
+                            {date}
+                        </div>
                     </div>
                 </div>
 

@@ -6,10 +6,10 @@ export const metadata: Metadata = {
 };
 
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
-import { NeonHero } from "@/app/(frontend)/_components/sections/NeonHero";
-import { GenreSection } from "@/app/(frontend)/_components/sections/GenreSection";
-import { TrendingSection } from "@/app/(frontend)/_components/sections/TrendingSection";
-import { VipSection } from "@/app/(frontend)/_components/sections/VipSection";
+import { NeonHero } from "./_components/NeonHero";
+import { GenreSection } from "./_components/GenreSection";
+import { TrendingSection } from "./_components/TrendingSection";
+import { VipSection } from "./_components/VipSection";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
 import { LiquidBackground } from "@/app/(frontend)/_components/ui/LiquidBackground";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { Music2, Mic2, Piano, Disc, Theater, Trophy } from "lucide-react";
-import { GenreCard } from "../ui/GenreCard";
+import { GenreCard } from "@/app/(frontend)/_components/ui/GenreCard";
 
 const genres = [
     { icon: Music2, label: "Electronic" },

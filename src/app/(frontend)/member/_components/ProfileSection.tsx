@@ -1,9 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { User, Mail, Shield, Zap, Edit2, CheckCircle2 } from "lucide-react";
 
 export function ProfileSection() {
+    const [user, setUser] = useState<any>(null);
+
+    useEffect(() => {
+        const userData = localStorage.getItem("user");
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
+    }, []);
+
     return (
         <div className="space-y-8">
             <div className="grid md:grid-cols-2 gap-8">
@@ -22,19 +32,19 @@ export function ProfileSection() {
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <label className="text-[10px] uppercase font-black tracking-widest text-white/40">Full Name</label>
-                            <p className="text-lg font-bold">Alex Morgan</p>
+                            <p className="text-lg font-bold">{user?.name || 'Alex Morgan'}</p>
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] uppercase font-black tracking-widest text-white/40">Email Address</label>
                             <div className="flex items-center gap-2">
-                                <p className="text-lg font-bold">alex.morgan@neonix.com</p>
+                                <p className="text-lg font-bold">{user?.email || 'alex.morgan@neonix.com'}</p>
                                 <CheckCircle2 size={16} className="text-green-500" />
                             </div>
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] uppercase font-black tracking-widest text-white/40">Bio</label>
                             <p className="text-sm text-white/60 leading-relaxed">
-                                Music enthusiast, night owl, and regular attendee of Jakarta's most exclusive neon events. Always chasing the perfect beat.
+                                {user?.bio || "Music enthusiast, night owl, and regular attendee of Jakarta's most exclusive neon events. Always chasing the perfect beat."}
                             </p>
                         </div>
                     </div>

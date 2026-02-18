@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, X, Loader2, CheckCircle2 } from "lucide-react";
 import { login } from "@/services/authService";
 import { getUserRoles } from "@/services/userService";
+import { PlasmaBackground } from "@/app/(frontend)/_components/ui/PlasmaBackground";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -35,8 +36,8 @@ export default function LoginPage() {
 
             // Fetch roles if missing or empty
             let roleNames: string[] = [];
-            if (user.roles && user.roles.length > 0) {
-                roleNames = user.roles.map((r: any) => r.name.toLowerCase());
+            if ((user as any).roles && (user as any).roles.length > 0) {
+                roleNames = (user as any).roles.map((r: any) => r.name.toLowerCase());
             } else {
                 try {
                     const rolesResponse = await getUserRoles(user.id);
@@ -45,7 +46,7 @@ export default function LoginPage() {
                     roleNames = rolesData.map((r: any) => r.name.toLowerCase());
 
                     // Update user object in storage with fetched roles
-                    user.roles = rolesData;
+                    (user as any).roles = rolesData;
                     localStorage.setItem("user", JSON.stringify(user));
                 } catch (roleErr) {
                     console.error("Failed to fetch user roles:", roleErr);
@@ -70,15 +71,10 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#000000] text-white font-inter flex flex-col relative">
-            {/* Modal Backdrop Overlay */}
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
-
+        <div className="min-h-screen text-white font-inter flex flex-col relative">
+            <PlasmaBackground />
 
             <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50 overflow-hidden">
-                {/* Background Decor */}
-                <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-neon-pink/10 blur-[120px] rounded-full -z-10" />
-                <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-neon-cyan/5 blur-[120px] rounded-full -z-10" />
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}

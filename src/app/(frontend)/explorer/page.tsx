@@ -211,7 +211,7 @@ export default function ExplorerPage() {
                                             ? "bg-neon-cyan text-black hover:bg-neon-pink hover:text-white shadow-[0_0_20px_rgba(0,255,255,0.2)]"
                                             : "bg-muted text-foreground hover:bg-foreground hover:text-background border border-glass-border"
                                     )}>
-                                        {event.isVip ? "Buy VIP" : "Buy"}
+                                        Detail
                                     </button>
                                 </div>
                             </motion.div>

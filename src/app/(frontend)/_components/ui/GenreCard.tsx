@@ -12,7 +12,7 @@ export function GenreCard({ icon: Icon, label }: GenreCardProps) {
     return (
         <motion.div
             whileHover={{ y: -5, borderColor: "#FF00FF" }}
-            className="flex flex-col items-center justify-center gap-4 bg-background border border-glass-border dark:bg-muted rounded-2xl py-8 px-6 cursor-pointer transition-all duration-300 group shadow-lg hover:shadow-neon-pink/10"
+            className="flex flex-col items-center justify-center gap-4 bg-background border border-glass-border dark:bg-muted rounded-2xl py-8 px-6 cursor-pointer transition-all duration-300 group shadow-lg hover:shadow-neon-pink/10 h-full"
         >
             <div className="text-foreground group-hover:text-neon-pink transition-all duration-300 transform group-hover:scale-110 mb-2">
                 <Icon size={32} strokeWidth={1.5} />
