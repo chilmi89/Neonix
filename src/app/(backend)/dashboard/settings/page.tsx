@@ -38,7 +38,7 @@ export default function SettingsPage() {
                         <input
                             type="text"
                             defaultValue="John Doe"
-                            className="w-full bg-white/5 border border-glass-border rounded-xl px-4 py-2.5 outline-none focus:border-primary transition-colors"
+                            className="w-full bg-background/50 border border-glass-border rounded-xl px-4 py-2.5 outline-none focus:border-primary transition-colors"
                         />
                     </div>
                     <div className="space-y-2">
@@ -46,7 +46,7 @@ export default function SettingsPage() {
                         <input
                             type="email"
                             defaultValue="john@example.com"
-                            className="w-full bg-white/5 border border-glass-border rounded-xl px-4 py-2.5 outline-none focus:border-primary transition-colors"
+                            className="w-full bg-background/50 border border-glass-border rounded-xl px-4 py-2.5 outline-none focus:border-primary transition-colors"
                         />
                     </div>
                 </div>
@@ -69,13 +69,13 @@ export default function SettingsPage() {
                         <div className="flex items-center justify-between">
                             <span className="text-sm">Email Notifications</span>
                             <div className="h-6 w-11 bg-primary rounded-full relative p-1 cursor-pointer">
-                                <div className="h-4 w-4 bg-white rounded-full absolute right-1" />
+                                <div className="h-4 w-4 bg-white dark:bg-black rounded-full absolute right-1" />
                             </div>
                         </div>
                         <div className="flex items-center justify-between">
                             <span className="text-sm">Push Notifications</span>
-                            <div className="h-6 w-11 bg-white/10 rounded-full relative p-1 cursor-pointer">
-                                <div className="h-4 w-4 bg-white rounded-full absolute left-1" />
+                            <div className="h-6 w-11 bg-glass-surface rounded-full relative p-1 cursor-pointer border border-glass-border">
+                                <div className="h-4 w-4 bg-glass-text/20 rounded-full absolute left-1" />
                             </div>
                         </div>
                     </div>

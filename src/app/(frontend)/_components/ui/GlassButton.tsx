@@ -17,8 +17,8 @@ export function GlassButton({
 }: GlassButtonProps) {
     const variants = {
         primary: "bg-primary text-primary-foreground hover:brightness-110",
-        outline: "border border-glass-border bg-glass-surface text-glass-text hover:bg-white/10",
-        ghost: "text-glass-text hover:bg-white/5",
+        outline: "border border-glass-border bg-glass-surface text-glass-text hover:bg-primary/10 hover:border-primary/20",
+        ghost: "text-glass-text hover:bg-primary/5",
     };
 
     const sizes = {

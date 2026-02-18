@@ -55,7 +55,7 @@ export function Navbar({ isSidebarCollapsed, onToggleSidebar }: NavbarProps) {
                         <input
                             type="text"
                             placeholder="Search anything..."
-                            className="bg-black/5 dark:bg-white/5 border border-glass-border rounded-xl pl-10 pr-4 py-2 w-64 focus:w-80 transition-all outline-none focus:border-primary text-glass-text"
+                            className="bg-muted border border-glass-border rounded-xl pl-10 pr-4 py-2 w-64 focus:w-80 transition-all outline-none focus:border-primary text-glass-text"
                         />
                     </div>
                 </div>
