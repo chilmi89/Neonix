@@ -5,8 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, X, Loader2, CheckCircle2 } from "lucide-react";
-import { login } from "@/services/authService";
-import { getUserRoles } from "@/services/userService";
+import { login, getCurrentUser } from "@/services/authService";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -24,41 +23,62 @@ export default function LoginPage() {
 
         try {
             const response = await login(email, password);
-            const { token, user } = response.data;
+            console.log("Login full response:", response);
 
-            // Store in localStorage
-            localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(user));
+            const { token, user } = response.data;
+            console.log("Token received:", token ? "(exists)" : "(missing)");
+
+            // Simpan token lagi di sini untuk memastikan localStorage benar-benar terisi
+            if (token) localStorage.setItem("token", token);
+            if (user) localStorage.setItem("user", JSON.stringify(user));
 
             // Show success message
             setShowSuccess(true);
 
             // Fetch roles if missing or empty
             let roleNames: string[] = [];
-            if (user.roles && user.roles.length > 0) {
-                roleNames = user.roles.map((r: any) => r.name.toLowerCase());
-            } else {
-                try {
-                    const rolesResponse = await getUserRoles(user.id);
-                    // The user's response example shows roles in "data" field
-                    const rolesData = Array.isArray(rolesResponse) ? rolesResponse : rolesResponse.data || [];
-                    roleNames = rolesData.map((r: any) => r.name.toLowerCase());
 
-                    // Update user object in storage with fetched roles
-                    user.roles = rolesData;
-                    localStorage.setItem("user", JSON.stringify(user));
-                } catch (roleErr) {
-                    console.error("Failed to fetch user roles:", roleErr);
+            // 1. Ambil role dari response login (UserDTO)
+            if (user && user.roles && Array.isArray(user.roles)) {
+                roleNames = user.roles.map((r: string) => r.toLowerCase());
+                console.log("Roles from login response:", roleNames);
+            }
+
+            // 2. Coba fetch /me untuk data lebih lengkap, tapi jangan block jika gagal
+            try {
+                // Gunakan token langsung untuk menghindari masalah async localStorage
+                const meResponse = await getCurrentUser(token);
+                const freshUser = meResponse.data;
+                if (freshUser && freshUser.roles && Array.isArray(freshUser.roles)) {
+                    const freshRoleNames = freshUser.roles.map((r: string) => r.toLowerCase());
+                    if (freshRoleNames.length > 0) {
+                        roleNames = freshRoleNames;
+                        console.log("Roles refreshed from /me:", roleNames);
+                    }
+                }
+            } catch (roleErr: any) {
+                console.warn("Could not refresh profile via /me (using login roles):", roleErr.message);
+                // Jika login response tadi juga tidak memberikan role, baru kita error
+                if (roleNames.length === 0) {
+                    throw new Error("Akun anda tidak memiliki role yang valid. Silahkan hubungi admin.");
                 }
             }
-            console.log("Logged in user roles:", roleNames);
+
+            console.log("Final detected roles for redirection:", roleNames);
 
             setTimeout(() => {
-                if (roleNames.includes("superadminevent")) {
+                // Flexible role matching: check if any role name contains the target string
+                const hasRole = (target: string) =>
+                    roleNames.some(rn => rn.toLowerCase().includes(target.toLowerCase()));
+
+                if (hasRole("superadminevent")) {
+                    console.log("Redirecting to Superadmin Dashboard");
                     router.push("/dashboard/superadmin");
-                } else if (roleNames.includes("admin") || roleNames.includes("adminevent")) {
+                } else if (hasRole("admin")) {
+                    console.log("Redirecting to Admin Dashboard");
                     router.push("/dashboard/admin");
                 } else {
+                    console.log("Redirecting to Member Page");
                     router.push("/member");
                 }
             }, 1500);

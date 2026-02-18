@@ -1,7 +1,10 @@
+"use client";
+
 import { Bell, Search, Menu, User, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { GlassButton } from "@/app/(frontend)/_components/ui/GlassButton";
 import { useState, useEffect } from "react";
+import { useUser } from "@/context/UserContext";
 
 interface NavbarProps {
     isSidebarCollapsed: boolean;
@@ -10,8 +13,11 @@ interface NavbarProps {
 
 export function Navbar({ isSidebarCollapsed, onToggleSidebar }: NavbarProps) {
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    const { user } = useUser();
 
     useEffect(() => {
+        setMounted(true);
         const savedTheme = localStorage.getItem("theme");
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
@@ -39,7 +45,7 @@ export function Navbar({ isSidebarCollapsed, onToggleSidebar }: NavbarProps) {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={onToggleSidebar}
-                        className="md:hidden p-2 hover:bg-white/10 rounded-lg text-glass-text"
+                        className="md:hidden p-2 hover:bg-glass-hover rounded-lg text-glass-text transition-colors"
                     >
                         <Menu size={24} />
                     </button>
@@ -49,7 +55,7 @@ export function Navbar({ isSidebarCollapsed, onToggleSidebar }: NavbarProps) {
                         <input
                             type="text"
                             placeholder="Search anything..."
-                            className="bg-white/5 border border-glass-border rounded-xl pl-10 pr-4 py-2 w-64 focus:w-80 transition-all outline-none focus:border-primary text-glass-text"
+                            className="bg-black/5 dark:bg-white/5 border border-glass-border rounded-xl pl-10 pr-4 py-2 w-64 focus:w-80 transition-all outline-none focus:border-primary text-glass-text"
                         />
                     </div>
                 </div>
@@ -75,8 +81,12 @@ export function Navbar({ isSidebarCollapsed, onToggleSidebar }: NavbarProps) {
 
                     <div className="flex items-center gap-3 pl-2">
                         <div className="hidden md:block text-right">
-                            <p className="text-sm font-semibold text-glass-text leading-tight">John Doe</p>
-                            <p className="text-xs text-glass-text/60 leading-tight">Administrator</p>
+                            <p className="text-sm font-semibold text-glass-text leading-tight">
+                                {mounted ? (user?.name || "User") : "User"}
+                            </p>
+                            <p className="text-xs text-glass-text/60 leading-tight">
+                                {mounted ? (user?.roles?.[0] || "Member") : "Member"}
+                            </p>
                         </div>
                         <div className="h-10 w-10 rounded-xl bg-linear-to-br from-primary to-sky-400 flex items-center justify-center text-white shadow-lg border border-white/20">
                             <User size={20} />

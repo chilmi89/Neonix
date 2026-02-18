@@ -24,6 +24,7 @@ export const API = {
         login: `${API_BASE_URL}/auth/login`,
         register: `${API_BASE_URL}/auth/register`,
         logout: `${API_BASE_URL}/auth/logout`,
+        me: `${API_BASE_URL}/auth/me`,
     },
 
     // Users
@@ -87,15 +88,23 @@ export const API = {
  * Get headers untuk API request
  * Otomatis include token JWT jika ada
  */
-export function getHeaders(includeAuth = true): HeadersInit {
-    const headers: HeadersInit = {
+/**
+ * Get headers untuk API request
+ * @param includeAuth - Apakah menyertakan token
+ * @param tokenOverride - Gunakan token ini daripada yang ada di localStorage
+ */
+export function getHeaders(includeAuth = true, tokenOverride?: string): Record<string, string> {
+    const headers: Record<string, string> = {
         "Content-Type": "application/json",
     };
 
-    if (includeAuth && typeof window !== "undefined") {
-        const token = localStorage.getItem("token");
+    if (includeAuth) {
+        const token = tokenOverride || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
         if (token) {
             headers["Authorization"] = `Bearer ${token}`;
+            console.log("Using Token for Auth:", token.substring(0, 10) + "...");
+        } else {
+            console.warn("No token found for auth request");
         }
     }
 
@@ -105,15 +114,25 @@ export function getHeaders(includeAuth = true): HeadersInit {
 /**
  * Helper untuk GET request
  */
-export async function apiGet<T>(url: string, withAuth = true): Promise<T> {
+export async function apiGet<T>(url: string, withAuth = true, tokenOverride?: string): Promise<T> {
+    const headers = getHeaders(withAuth, tokenOverride);
+    console.log(`FETCHING GET: ${url}`, { headers });
+
     const response = await fetch(url, {
         method: "GET",
-        headers: getHeaders(withAuth),
+        headers: headers,
     });
 
     if (!response.ok) {
-        const error = await response.json().catch(() => ({ message: "Request failed" }));
-        throw new Error(error.message || `HTTP ${response.status}`);
+        let errorData = {};
+        try {
+            errorData = await response.json();
+        } catch (e) {
+            errorData = { message: "Failed to parse error response" };
+        }
+
+        console.error(`API Error [${url}] Status: ${response.status}:`, errorData);
+        throw new Error((errorData as any).message || `HTTP ${response.status}`);
     }
 
     return response.json();
@@ -122,10 +141,10 @@ export async function apiGet<T>(url: string, withAuth = true): Promise<T> {
 /**
  * Helper untuk POST request
  */
-export async function apiPost<T>(url: string, data: any, withAuth = true): Promise<T> {
+export async function apiPost<T>(url: string, data: any, withAuth = true, tokenOverride?: string): Promise<T> {
     const response = await fetch(url, {
         method: "POST",
-        headers: getHeaders(withAuth),
+        headers: getHeaders(withAuth, tokenOverride),
         body: JSON.stringify(data),
     });
 

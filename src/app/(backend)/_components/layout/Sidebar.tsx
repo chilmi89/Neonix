@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useUser } from "@/context/UserContext";
 
 interface SidebarProps {
     isCollapsed: boolean;
@@ -35,6 +36,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
     const pathname = usePathname();
     const router = useRouter();
     const [dynamicMenuItems, setDynamicMenuItems] = useState<MenuItem[]>([]);
+    const { user } = useUser();
 
     useEffect(() => {
         const baseItems = [
@@ -45,16 +47,22 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
             { icon: Settings, label: "Settings", href: "/dashboard/settings" },
         ];
 
-        const userStr = localStorage.getItem("user");
-        if (userStr) {
+        if (user) {
             try {
-                const user = JSON.parse(userStr);
-                const roleNames = user.roles?.map((r: any) => r.name.toLowerCase()) || [];
+                const permissions: string[] = user.permissions || [];
+                const roleNames: string[] = (user.roles || []).map((r: any) => {
+                    if (typeof r === 'string') return r.toLowerCase();
+                    if (typeof r === 'object' && r !== null) return (r.name || r.roleName || "").toLowerCase();
+                    return "";
+                }).filter((r: string) => r.length > 0);
 
-                const isSuperAdmin = roleNames.includes("superadminevent");
-                const isAdmin = roleNames.includes("admin") || roleNames.includes("adminevent");
+                const hasSuperAccess = permissions.includes("view dashboard superadmin") ||
+                    roleNames.some((r: string) => r === "superadmin" || r === "superadminevent" || r.includes("superadmin"));
 
-                if (isSuperAdmin) {
+                const hasAdminAccess = permissions.includes("view dashboard admin") ||
+                    roleNames.some((r: string) => r === "admin" || r.includes("admin"));
+
+                if (hasSuperAccess) {
                     baseItems[0] = { icon: ShieldCheck, label: "Superadmin Dash", href: "/dashboard/superadmin" };
                     // Insert role and permission management
                     baseItems.splice(2, 0,
@@ -63,15 +71,15 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                         { icon: UserCircle, label: "Give Role", href: "/dashboard/superadmin/users-role" },
                         { icon: Lock, label: "Give Permission", href: "/dashboard/superadmin/role-permission" }
                     );
-                } else if (isAdmin) {
+                } else if (hasAdminAccess) {
                     baseItems[0] = { icon: UserCircle, label: "Admin Dash", href: "/dashboard/admin" };
                 }
             } catch (e) {
-                console.error("Error parsing user from localStorage", e);
+                console.error("Error setting menu items based on user", e);
             }
         }
         setDynamicMenuItems(baseItems);
-    }, []); // Only run once on mount
+    }, [user]); // Re-run when user prop changes
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -99,7 +107,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                 )}
                 <button
                     onClick={onToggle}
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-glass-text"
+                    className="p-2 hover:bg-glass-hover rounded-lg transition-colors text-glass-text"
                 >
                     {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                 </button>
@@ -116,9 +124,9 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                                 "flex items-center p-3 rounded-xl transition-all duration-200 group relative",
                                 isActive
                                     ? "bg-primary text-white shadow-lg shadow-primary/20"
-                                    : "text-glass-text hover:bg-white/10"
+                                    : "text-glass-text hover:bg-glass-hover"
                             )}>
-                                <Icon size={24} className={cn(isActive ? "text-white" : "text-glass-text/70 group-hover:text-glass-text")} />
+                                <Icon size={24} className={cn(isActive ? "text-white" : "opacity-70 group-hover:opacity-100 transition-opacity")} />
                                 {!isCollapsed && (
                                     <motion.span
                                         initial={{ opacity: 0, width: 0 }}
