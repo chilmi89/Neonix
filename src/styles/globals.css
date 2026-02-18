@@ -106,9 +106,6 @@
 
 @layer base {
   body {
-<<<<<<< Updated upstream
-    @apply bg-background text-foreground transition-colors duration-500;
-=======
     @apply bg-background text-foreground transition-colors duration-500 font-sans antialiased;
     background-image:
       radial-gradient(at 0% 0%, hsla(300, 100%, 98%, 1) 0, transparent 50%),
@@ -119,7 +116,6 @@
     background-image:
       radial-gradient(at 0% 0%, hsla(300, 100%, 5%, 0.3) 0, transparent 50%),
       radial-gradient(at 100% 0%, hsla(180, 100%, 5%, 0.3) 0, transparent 50%);
->>>>>>> Stashed changes
   }
 }
 
