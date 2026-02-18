@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, X, Loader2, CheckCircle2 } from "lucide-react";
 import * as authService from "@/services/authService";
-import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { PlasmaBackground } from "@/app/(frontend)/_components/ui/PlasmaBackground";
 
 export default function LoginPage() {
@@ -83,7 +82,6 @@ export default function LoginPage() {
     return (
         <div className="min-h-screen text-white font-inter flex flex-col relative overflow-hidden">
             <PlasmaBackground />
-            <NeonNavbar />
 
             <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50">
 
