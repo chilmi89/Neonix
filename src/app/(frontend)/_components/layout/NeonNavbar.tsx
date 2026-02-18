@@ -65,9 +65,6 @@ export function NeonNavbar() {
                             <Link href="/login" className="text-sm font-bold text-foreground hover:text-neon-pink transition-colors uppercase tracking-wider border border-white/10 px-6 py-2 rounded-full hover:border-neon-pink/50">
                                 Sign In
                             </Link>
-                            <Link href="/register" className="hidden sm:block text-sm font-bold text-foreground hover:text-neon-pink transition-colors uppercase tracking-wider">
-                                Sign Up
-                            </Link>
                         </div>
                     )}
                 </div>
