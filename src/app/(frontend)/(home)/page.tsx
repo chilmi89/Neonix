@@ -15,12 +15,8 @@ import { LiquidBackground } from "@/app/(frontend)/_components/ui/LiquidBackgrou
 
 export default function Homepage() {
     return (
-<<<<<<< Updated upstream:src/app/(frontend)/(home)/page.tsx
         <div className="min-h-screen bg-background text-foreground selection:bg-neon-pink/30 overflow-x-hidden font-inter relative">
             <LiquidBackground />
-=======
-        <div className="min-h-screen bg-background text-foreground selection:bg-neon-pink/30 overflow-x-hidden font-inter transition-colors duration-500">
->>>>>>> Stashed changes:src/app/(frontend)/page.tsx
             <NeonNavbar />
 
             <main>

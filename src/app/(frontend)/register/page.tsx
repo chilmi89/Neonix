@@ -69,19 +69,8 @@ export default function RegisterPage() {
     };
 
     return (
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
         <div className="min-h-screen text-white font-inter flex flex-col relative">
             <PlasmaBackground />
-=======
-=======
->>>>>>> Stashed changes
-        <div className="min-h-screen bg-background text-foreground font-inter flex flex-col relative transition-colors duration-500">
-            {/* Modal Backdrop Overlay */}
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
-
-            <NeonNavbar />
->>>>>>> Stashed changes
 
             <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50 overflow-hidden">
 
@@ -155,7 +144,7 @@ export default function RegisterPage() {
                                     onChange={handleChange}
                                     required
                                     placeholder="name@example.com"
-                                    className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm text-white outline-none focus:border-[#FFD700]/50 focus:bg-black/60 transition-all placeholder:text-white/10"
+                                    className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
                                 />
                             </div>
                         </div>
@@ -195,7 +184,7 @@ export default function RegisterPage() {
                                         onChange={handleChange}
                                         required
                                         placeholder="••••••••"
-                                        className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm text-white outline-none focus:border-[#FFD700]/50 focus:bg-black/60 transition-all placeholder:text-white/10 font-mono"
+                                        className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30 font-mono"
                                     />
                                 </div>
                             </div>
