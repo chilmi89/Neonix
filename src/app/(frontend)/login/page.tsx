@@ -71,8 +71,16 @@ export default function LoginPage() {
     };
 
     return (
+<<<<<<< Updated upstream
         <div className="min-h-screen text-white font-inter flex flex-col relative">
             <PlasmaBackground />
+=======
+        <div className="min-h-screen bg-background text-foreground font-inter flex flex-col relative transition-colors duration-500">
+            {/* Modal Backdrop Overlay */}
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+
+            <NeonNavbar />
+>>>>>>> Stashed changes
 
             <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50 overflow-hidden">
 
@@ -80,7 +88,7 @@ export default function LoginPage() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
-                    className="w-full max-w-[480px] bg-[#121212] border border-white/[0.05] rounded-[2.5rem] p-10 md:p-12 shadow-2xl relative"
+                    className="w-full max-w-[480px] bg-glass-surface border border-glass-border rounded-[2.5rem] p-10 md:p-12 shadow-2xl relative transition-colors duration-500"
                 >
                     {/* Close Button */}
                     <Link href="/" className="absolute top-8 right-8 text-white/20 hover:text-white transition-colors p-2">
@@ -98,8 +106,8 @@ export default function LoginPage() {
                     </div>
 
                     <div className="space-y-2 mb-8 text-left">
-                        <h1 className="text-3xl font-bold tracking-tight text-white">Welcome Back</h1>
-                        <p className="text-white/40 text-sm">Enter your credentials to access your account</p>
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground">Welcome Back</h1>
+                        <p className="text-muted-foreground text-sm">Enter your credentials to access your account</p>
                     </div>
 
                     {error && (
@@ -118,7 +126,7 @@ export default function LoginPage() {
                                     placeholder="name@example.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm text-white outline-none focus:border-neon-pink/50 focus:bg-black/60 transition-all placeholder:text-white/10"
+                                    className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground outline-none focus:border-neon-pink/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
                                     required
                                 />
                             </div>
@@ -133,7 +141,7 @@ export default function LoginPage() {
                                     placeholder="Enter your password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-12 text-sm text-white outline-none focus:border-neon-pink/50 focus:bg-black/60 transition-all placeholder:text-white/10"
+                                    className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-12 text-sm text-foreground outline-none focus:border-neon-pink/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
                                     required
                                 />
                                 <button

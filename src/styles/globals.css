@@ -17,15 +17,17 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
 
-  --color-neon-pink: #FF00CC;
-  --color-neon-cyan: #00F0FF;
+  --color-neon-pink: #FF00FF;
+  --color-neon-cyan: #00FFFF;
   --color-neon-yellow: #FFD700;
+  --color-neon-green: #39FF14;
 
   --radius-glass: var(--glass-radius);
-  --blur-glass: 8px;
+  --blur-glass: 12px;
 }
 
 :root {
+<<<<<<< Updated upstream
   --background: #000000;
   --foreground: #FFFFFF;
 
@@ -47,17 +49,74 @@
   --cta-foreground: #FFFFFF;
 
   --neon-yellow: #FFD700;
+=======
+  --background: #FAFAFA;
+  --foreground: #1A1A1A;
+
+  --glass-surface: #FFFFFF;
+  --glass-border: #E5E7EB;
+  --glass-text: #1A1A1A;
+  --glass-radius: 1.5rem;
+
+  --primary: #FF00FF;
+  --primary-foreground: #ffffff;
+
+  --muted: #F5F7FA;
+  --muted-foreground: #666666;
+
+  --accent: #00FFFF;
+  --accent-foreground: #1A1A1A;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #FFFFFF;
+
+  --glass-surface: rgba(15, 15, 15, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-text: #FFFFFF;
+  --glass-radius: 1.5rem;
+
+  --primary: #FF00FF;
+  --primary-foreground: #ffffff;
+
+  --muted: #0F0F0F;
+  --muted-foreground: #CCCCCC;
+
+  --accent: #00FFFF;
+  --accent-foreground: #050505;
+>>>>>>> Stashed changes
 }
 
 @layer base {
   body {
+<<<<<<< Updated upstream
     @apply bg-background text-foreground transition-colors duration-500;
+=======
+    @apply bg-background text-foreground transition-colors duration-500 font-sans antialiased;
+    background-image:
+      radial-gradient(at 0% 0%, hsla(300, 100%, 98%, 1) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(180, 100%, 98%, 1) 0, transparent 50%);
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(at 0% 0%, hsla(300, 100%, 5%, 0.3) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(180, 100%, 5%, 0.3) 0, transparent 50%);
+>>>>>>> Stashed changes
   }
 }
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-glass border border-glass-border bg-glass-surface shadow-xl;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    @apply backdrop-blur-glass border border-glass-border bg-glass-surface shadow-lg transition-all duration-300;
+  }
+
+  .neon-glow-pink {
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+  }
+
+  .neon-glow-cyan {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
   }
 }
