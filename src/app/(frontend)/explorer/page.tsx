@@ -6,6 +6,7 @@ import { NeonNavbar } from "../_components/layout/NeonNavbar";
 import { NeonFooter } from "../_components/layout/NeonFooter";
 import { NeonEventDetailModal } from "../_components/ui/NeonEventDetailModal";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const events = [
     {
@@ -14,7 +15,7 @@ const events = [
         date: "Fri, 25 Oct - 21:00",
         type: "Konser",
         status: "Limited Seats",
-        price: "$320.00",
+        price: "320.00",
         image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
         isVip: true
     },
@@ -24,7 +25,7 @@ const events = [
         date: "Sat, 02 Nov - 19:30",
         type: "Sport",
         status: "Kategori: Standard",
-        price: "$75.00",
+        price: "75.00",
         image: "https://images.unsplash.com/photo-1540575861501-7ad058bf3efb?auto=format&fit=crop&q=80&w=800",
         isVip: false
     },
@@ -34,7 +35,7 @@ const events = [
         date: "Sun, 10 Nov - 20:00",
         type: "Theater",
         status: "Includes Backstage Tour",
-        price: "$540.00",
+        price: "540.00",
         image: "https://images.unsplash.com/photo-1514525253344-a8135a43cf3e?auto=format&fit=crop&q=80&w=800",
         isVip: true
     },
@@ -44,7 +45,7 @@ const events = [
         date: "Thu, 05 Dec - 09:00",
         type: "Konferensi",
         status: "All Access Pass",
-        price: "$260.00",
+        price: "260.00",
         image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=800",
         isVip: false
     }
@@ -145,12 +146,12 @@ export default function ExplorerPage() {
                 {/* Results Section */}
                 <div className="space-y-12">
                     <div className="flex items-center justify-between border-b border-white/5 pb-6">
-                        <p className="text-xs font-bold text-white/40 uppercase tracking-widest">Menampilkan 24 event untuk filter saat ini</p>
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Menampilkan 24 event untuk filter saat ini</p>
                         <div className="flex items-center gap-3 cursor-pointer group">
-                            <span className="text-[10px] font-bold text-white/40 group-hover:text-white transition-colors uppercase tracking-widest">Sort by</span>
-                            <div className="bg-[#111] px-4 py-2 rounded-lg flex items-center gap-2 border border-white/5">
+                            <span className="text-[10px] font-bold text-muted-foreground group-hover:text-foreground transition-colors uppercase tracking-widest">Sort by</span>
+                            <div className="bg-muted px-4 py-2 rounded-lg flex items-center gap-2 border border-glass-border">
                                 <span className="text-[10px] font-bold uppercase tracking-widest">Trending</span>
-                                <ChevronDown size={12} className="text-white/20" />
+                                <ChevronDown size={12} className="text-muted-foreground" />
                             </div>
                         </div>
                     </div>
@@ -203,7 +204,7 @@ export default function ExplorerPage() {
                                 <div className="text-right px-6 flex flex-col items-end gap-3 shrink-0">
                                     <div className="space-y-1">
                                         <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest leading-none">Mulai dari</p>
-                                        <div className="text-2xl font-black tracking-tighter text-neon-yellow dark:text-neon-yellow light:text-neon-pink">{event.price}</div>
+                                        <div className="text-2xl font-black tracking-tighter text-neon-yellow dark:text-neon-yellow light:text-neon-pink">${event.price}</div>
                                     </div>
                                     <button className={cn(
                                         "px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all",
@@ -211,7 +212,7 @@ export default function ExplorerPage() {
                                             ? "bg-neon-cyan text-black hover:bg-neon-pink hover:text-white shadow-[0_0_20px_rgba(0,255,255,0.2)]"
                                             : "bg-muted text-foreground hover:bg-foreground hover:text-background border border-glass-border"
                                     )}>
-                                        {event.isVip ? "Buy VIP" : "Buy"}
+                                        Detail
                                     </button>
                                 </div>
                             </motion.div>
@@ -225,11 +226,8 @@ export default function ExplorerPage() {
                 onClose={() => setIsModalOpen(false)}
                 event={selectedEvent}
             />
+
             <NeonFooter />
         </div>
     );
-}
-
-function cn(...inputs: any[]) {
-    return inputs.filter(Boolean).join(" ");
 }

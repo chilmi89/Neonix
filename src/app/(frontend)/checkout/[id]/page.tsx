@@ -15,13 +15,23 @@ import {
     Ticket
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { LiquidBackground } from "@/app/(frontend)/_components/ui/LiquidBackground";
+import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 
 export default function CheckoutPage({ params }: { params: { id: string } }) {
+    const router = useRouter();
     const [regularCount, setRegularCount] = useState(2);
     const [vipCount, setVipCount] = useState(0);
     const [paymentMethod, setPaymentMethod] = useState("card");
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            router.push("/login?redirect=/checkout/" + params.id);
+        }
+    }, [router, params.id]);
 
     const prices = {
         regular: 50000,

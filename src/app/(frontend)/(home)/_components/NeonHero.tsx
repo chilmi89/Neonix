@@ -2,23 +2,11 @@
 
 import { motion } from "framer-motion";
 import { Search, MapPin } from "lucide-react";
-import { NeonButton } from "../ui/NeonButton";
+import { NeonButton } from "@/app/(frontend)/_components/ui/NeonButton";
 
 export function NeonHero() {
     return (
         <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 pt-20 overflow-hidden">
-            {/* Background Image with Overlay */}
-            <div className="absolute inset-0 -z-10">
-                <img
-                    src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=2000"
-                    alt="Hero Music"
-                    className="w-full h-full object-cover"
-                />
-                {/* Content-Aware Overlay: more transparent to let Liquid Background show through */}
-                <div className="absolute inset-0 bg-black dark:opacity-60 opacity-0" />
-                <div className="absolute inset-0 bg-white/40 dark:opacity-0 opacity-100" />
-            </div>
-
             {/* Content */}
             <div className="w-full text-center relative z-10 py-20 px-8 md:px-12 lg:px-16">
                 <motion.div

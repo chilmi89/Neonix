@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { NeonEventCard } from "../ui/NeonEventCard";
-import { NeonEventDetailModal } from "../ui/NeonEventDetailModal";
+import { NeonEventCard } from "@/app/(frontend)/_components/ui/NeonEventCard";
+import { NeonEventDetailModal } from "@/app/(frontend)/_components/ui/NeonEventDetailModal";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -12,7 +12,7 @@ const featuredEvents = [
         title: "Neon Lights Festival 2024",
         date: "Aug 12 - 14, 2024",
         location: "GBK Stadium, Jakarta",
-        image: "https://images.unsplash.com/photo-1540575861501-7ad058bf3efb?auto=format&fit=crop&q=80&w=800",
+        image: "/fototiket1.png",
         price: "150",
         tag: "trending" as const,
         description: "Experience the most electrifying weekend of the year. The Neon Lights Festival returns to Jakarta with a lineup that defies expectations.",
@@ -23,7 +23,7 @@ const featuredEvents = [
         title: "Midnight Jazz Session",
         date: "Sep 05, 2024",
         location: "Blue Note, Tokyo",
-        image: "https://images.unsplash.com/photo-1514525253361-bee243870eb2?auto=format&fit=crop&q=80&w=800",
+        image: "/fototiker2.png",
         price: "45",
         description: "A cozy evening of world-class jazz in the heart of Tokyo. Featuring intimate performances and classic jazz standards.",
         genres: ["Jazz", "Acoustic"]

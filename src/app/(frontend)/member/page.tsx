@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import {
     User,
     Ticket,
@@ -18,12 +19,28 @@ import { ProfileSection } from "./_components/ProfileSection";
 import { TicketsHistory } from "./_components/TicketsHistory";
 
 export default function DashboardPage() {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState<"profile" | "tickets">("tickets");
+    const [user, setUser] = useState<any>(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const userData = localStorage.getItem("user");
+
+        if (!token || !userData) {
+            router.push("/login");
+            return;
+        }
+
+        setUser(JSON.parse(userData));
+    }, [router]);
 
     const menuItems = [
         { id: "profile", label: "Profile", icon: User },
         { id: "tickets", label: "My Tickets", icon: Ticket },
     ];
+
+    if (!user) return null; // Avoid flicker before redirect
 
     return (
         <div className="min-h-screen bg-black text-white selection:bg-neon-pink/30 overflow-x-hidden font-inter relative">
@@ -38,14 +55,14 @@ export default function DashboardPage() {
                             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-neon-pink to-neon-cyan p-0.5">
                                 <div className="w-full h-full rounded-[14px] bg-black flex items-center justify-center overflow-hidden">
                                     <img
-                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex"
+                                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'Alex'}`}
                                         alt="Avatar"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <h2 className="font-black text-lg uppercase tracking-tight">Alex Morgan</h2>
+                                <h2 className="font-black text-lg uppercase tracking-tight">{user?.name || 'Alex Morgan'}</h2>
                                 <p className="text-[10px] text-neon-cyan font-bold uppercase tracking-widest">VIP Member</p>
                             </div>
                         </div>
