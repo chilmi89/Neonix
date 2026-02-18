@@ -1,12 +1,71 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { User, Mail, Lock, Check, Eye, EyeOff, X } from "lucide-react";
+import { User, Mail, Lock, Check, Eye, EyeOff, X, Loader2 } from "lucide-react";
+import * as authService from "@/services/authService";
 
 export default function RegisterPage() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        if (error) setError(null);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        setSuccess(null);
+
+        // Validation
+        if (!formData.name || !formData.email || !formData.password) {
+            setError("Tolong isi semua field");
+            return;
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+            setError("Password tidak cocok");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const response = await authService.register({
+                name: formData.name,
+                email: formData.email,
+                password: formData.password
+            });
+
+            if (response.status === "success") {
+                setSuccess("Registrasi berhasil! Mengalihkan ke halaman login...");
+                setTimeout(() => {
+                    router.push("/login");
+                }, 2000);
+            } else {
+                setError(response.message || "Registrasi gagal");
+            }
+        } catch (err: any) {
+            setError(err.message || "Terjadi kesalahan saat registrasi");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-[#000000] text-white font-inter flex flex-col relative">
@@ -45,7 +104,21 @@ export default function RegisterPage() {
                         <p className="text-white/40 text-sm font-medium leading-relaxed">Create your account to get started</p>
                     </div>
 
-                    <form className="space-y-6">
+                    {error && (
+                        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-2xl text-red-500 text-sm flex items-center gap-2">
+                            <X size={18} />
+                            {error}
+                        </div>
+                    )}
+
+                    {success && (
+                        <div className="mb-6 p-4 bg-green-500/10 border border-green-500/50 rounded-2xl text-green-500 text-sm flex items-center gap-2">
+                            <Check size={18} />
+                            {success}
+                        </div>
+                    )}
+
+                    <form className="space-y-6" onSubmit={handleSubmit}>
                         {/* Full Name */}
                         <div className="space-y-2 text-left">
                             <label className="text-xs font-bold uppercase tracking-widest text-white/60 ml-1 font-inter">Full Name</label>
@@ -53,6 +126,10 @@ export default function RegisterPage() {
                                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FFD700] transition-colors" size={18} />
                                 <input
                                     type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    required
                                     placeholder="John Doe"
                                     className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm text-white outline-none focus:border-[#FFD700]/50 focus:bg-black/60 transition-all placeholder:text-white/10"
                                 />
@@ -61,11 +138,15 @@ export default function RegisterPage() {
 
                         {/* Email or Phone */}
                         <div className="space-y-2 text-left">
-                            <label className="text-xs font-bold uppercase tracking-widest text-white/60 ml-1 font-inter">Email or Phone</label>
+                            <label className="text-xs font-bold uppercase tracking-widest text-white/60 ml-1 font-inter">Email</label>
                             <div className="relative group">
                                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FFD700] transition-colors" size={18} />
                                 <input
-                                    type="text"
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
                                     placeholder="name@example.com"
                                     className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm text-white outline-none focus:border-[#FFD700]/50 focus:bg-black/60 transition-all placeholder:text-white/10"
                                 />
@@ -80,9 +161,20 @@ export default function RegisterPage() {
                                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FFD700] transition-colors" size={18} />
                                     <input
                                         type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required
                                         placeholder="••••••••"
                                         className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm text-white outline-none focus:border-[#FFD700]/50 focus:bg-black/60 transition-all placeholder:text-white/10 font-mono"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors"
+                                    >
+                                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                    </button>
                                 </div>
                             </div>
                             <div className="space-y-2 text-left">
@@ -91,6 +183,10 @@ export default function RegisterPage() {
                                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FFD700] transition-colors" size={18} />
                                     <input
                                         type={showPassword ? "text" : "password"}
+                                        name="confirmPassword"
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
+                                        required
                                         placeholder="••••••••"
                                         className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm text-white outline-none focus:border-[#FFD700]/50 focus:bg-black/60 transition-all placeholder:text-white/10 font-mono"
                                     />
@@ -109,8 +205,19 @@ export default function RegisterPage() {
                         </div>
 
                         {/* Register Button */}
-                        <button className="w-full bg-[#FFD700] text-black font-bold py-4 rounded-2xl shadow-[0_0_25px_rgba(255,215,0,0.3)] hover:shadow-[0_0_35px_rgba(255,215,0,0.5)] hover:brightness-110 transition-all mt-4 text-sm active:scale-[0.98] font-inter">
-                            Register Now
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-[#FFD700] text-black font-bold py-4 rounded-2xl shadow-[0_0_25px_rgba(255,215,0,0.3)] hover:shadow-[0_0_35px_rgba(255,215,0,0.5)] hover:brightness-110 transition-all mt-4 text-sm active:scale-[0.98] font-inter flex items-center justify-center gap-2"
+                        >
+                            {loading ? (
+                                <>
+                                    <Loader2 className="animate-spin" size={18} />
+                                    Processing...
+                                </>
+                            ) : (
+                                "Register Now"
+                            )}
                         </button>
                     </form>
 

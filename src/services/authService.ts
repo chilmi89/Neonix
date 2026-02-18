@@ -8,7 +8,7 @@ import { API, apiPost } from "@/config/api.config";
 
 // ========== TYPES ==========
 export interface LoginResponse {
-    success: boolean;
+    status: string; // Adjusted to match the API response structure provided in the prompt
     message: string;
     data: {
         token: string;
@@ -16,8 +16,20 @@ export interface LoginResponse {
             id: number;
             name: string;
             email: string;
-            roles: Array<{ id: number; name: string }>;
+            // roles might be empty or specific if return changed
         };
+    };
+}
+
+export interface RegisterResponse {
+    status: string;
+    message: string;
+    data: {
+        id: number;
+        name: string;
+        email: string;
+        createdAt: string;
+        updatedAt: string;
     };
 }
 
@@ -62,10 +74,11 @@ export async function logout(): Promise<void> {
 
 /**
  * Register user baru
- * TODO: Implement ketika backend API ready
  */
-export async function register(userData: any): Promise<any> {
-    throw new Error("Register API belum diimplementasikan");
-    // Nanti implementasinya seperti ini:
-    // return apiPost(API.auth.register, userData, false);
+export async function register(userData: any): Promise<RegisterResponse> {
+    try {
+        return await apiPost<RegisterResponse>(API.auth.register, userData, false);
+    } catch (error: any) {
+        throw new Error(error.message || "Registration failed");
+    }
 }
