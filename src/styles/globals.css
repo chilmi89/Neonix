@@ -28,6 +28,7 @@
 }
 
 :root {
+<<<<<<< Updated upstream
   --background: #000000;
   --foreground: #FFFFFF;
 
@@ -68,6 +69,23 @@
   --muted-foreground: #666666;
 
   --accent: #00FFFF;
+=======
+  --background: #FAFAFA;
+  --foreground: #1A1A1A;
+
+  --glass-surface: #FFFFFF;
+  --glass-border: #E5E7EB;
+  --glass-text: #1A1A1A;
+  --glass-radius: 1.5rem;
+
+  --primary: #FF00FF;
+  --primary-foreground: #ffffff;
+
+  --muted: #F5F7FA;
+  --muted-foreground: #666666;
+
+  --accent: #00FFFF;
+>>>>>>> Stashed changes
   --accent-foreground: #1A1A1A;
 }
 
@@ -121,7 +139,14 @@
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-glass border border-glass-border bg-glass-surface shadow-xl;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    @apply backdrop-blur-glass border border-glass-border bg-glass-surface shadow-lg transition-all duration-300;
+  }
+
+  .neon-glow-pink {
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+  }
+
+  .neon-glow-cyan {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
   }
 }

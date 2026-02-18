@@ -1,6 +1,7 @@
 "use client";
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { ChevronDown, Mail, MapPin, MessageSquare, ArrowRight, UserPlus, BarChart3, Award } from "lucide-react";
@@ -15,6 +16,8 @@ const stats = [
 
 const faqs = [
 =======
+=======
+>>>>>>> Stashed changes
 import { useState } from "react";
 import { ChevronDown, Mail, MapPin, MessageSquare, Users, TrendingUp, ShieldCheck } from "lucide-react";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
@@ -36,6 +39,9 @@ const AVATARS = [
 ];
 
 const FAQS = [
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     {
         question: "How do I get VIP Access?",
@@ -43,6 +49,7 @@ const FAQS = [
     },
     {
         question: "What payment methods are accepted?",
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         answer: "We accept all major credit cards, as well as popular cryptocurrencies like Bitcoin, Ethereum, and USDC."
     },
@@ -54,6 +61,8 @@ const FAQS = [
         question: "Can I cancel my subscription anytime?",
         answer: "Absolutely. You can manage your subscription from your account settings and cancel whenever you wish."
 =======
+=======
+>>>>>>> Stashed changes
         answer: "We accept all major credit cards, PayPal, and various cryptocurrencies including BTC, ETH, and USDT."
     },
     {
@@ -63,6 +72,9 @@ const FAQS = [
     {
         question: "Can I cancel my subscription anytime?",
         answer: "Yes, you can cancel your subscription at any time from your account settings. You will continue to have access until the end of your billing cycle."
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 ];
@@ -71,6 +83,7 @@ export default function AboutPage() {
     const [openFaq, setOpenFaq] = useState<number | null>(0);
 
     return (
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         <div className="min-h-screen bg-background text-foreground font-inter">
             <NeonNavbar />
@@ -111,6 +124,8 @@ export default function AboutPage() {
                                 <span className="text-4xl md:text-5xl font-black text-neon-yellow tracking-tighter">{stat.value}</span>
                                 <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{stat.label}</span>
 =======
+=======
+>>>>>>> Stashed changes
         <div className="min-h-screen bg-background text-foreground font-inter transition-colors duration-500">
             <NeonNavbar />
 
@@ -159,11 +174,15 @@ export default function AboutPage() {
                                 </div>
                                 <h2 className={cn("text-5xl font-black mb-3 tracking-tighter", stat.color)}>{stat.value}</h2>
                                 <p className="text-[11px] font-black uppercase tracking-widest text-white/20">{stat.label}</p>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                             </motion.div>
                         ))}
                     </div>
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     {/* Trusted by Section */}
                     <div className="mt-20 flex flex-col items-center gap-6">
@@ -179,6 +198,8 @@ export default function AboutPage() {
                         </div>
                         <p className="text-[10px] text-muted-foreground/30 font-bold uppercase tracking-widest">
 =======
+=======
+>>>>>>> Stashed changes
                     {/* Trust Group */}
                     <div className="mt-16 flex flex-col items-center gap-4">
                         <div className="flex -space-x-4">
@@ -190,12 +211,16 @@ export default function AboutPage() {
                             </div>
                         </div>
                         <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest leading-relaxed">
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                             Trusted by thousands of traders worldwide
                         </p>
                     </div>
                 </section>
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                 <section className="py-40 px-8 md:px-12 lg:px-16 bg-muted">
                     <div className="max-w-4xl mx-auto space-y-20">
@@ -252,6 +277,8 @@ export default function AboutPage() {
                                 </h2>
                                 <p className="text-muted-foreground max-w-md text-sm leading-relaxed font-medium">
 =======
+=======
+>>>>>>> Stashed changes
                 <div className="w-full h-px bg-white/5 mb-32" />
 
                 {/* FAQ Section */}
@@ -319,12 +346,16 @@ export default function AboutPage() {
                             <div>
                                 <h2 className="text-4xl font-black tracking-tighter text-neon-pink mb-6 uppercase">Get In Touch</h2>
                                 <p className="text-white/40 text-sm font-medium leading-relaxed max-w-sm">
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                                     Have questions or need support? Our team is here to help you navigate the future of finance.
                                 </p>
                             </div>
 
                             <div className="space-y-8">
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                                 <div className="flex items-center gap-5 group">
                                     <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center text-neon-pink group-hover:bg-neon-pink group-hover:text-white transition-all">
@@ -344,6 +375,8 @@ export default function AboutPage() {
                                     </div>
                                     <span className="text-sm font-bold text-muted-foreground group-hover:text-foreground transition-colors">Live Chat Available 24/7</span>
 =======
+=======
+>>>>>>> Stashed changes
                                 <div className="flex items-center gap-6 group">
                                     <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-neon-pink group-hover:bg-neon-pink group-hover:text-white transition-all">
                                         <Mail size={20} />
@@ -361,11 +394,15 @@ export default function AboutPage() {
                                         <MessageSquare size={20} />
                                     </div>
                                     <span className="text-sm font-black text-white/80">Live Chat Available 24/7</span>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                                 </div>
                             </div>
                         </div>
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         <div className="bg-muted border border-glass-border rounded-[2.5rem] p-8 md:p-12 space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -386,6 +423,8 @@ export default function AboutPage() {
                                 SEND MESSAGE
                             </button>
 =======
+=======
+>>>>>>> Stashed changes
                         {/* Form Column */}
                         <div className="bg-muted border border-white/5 rounded-[3rem] p-10 md:p-14 relative group">
                             <div className="space-y-4">
@@ -416,6 +455,9 @@ export default function AboutPage() {
                                     Send Message
                                 </button>
                             </div>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                         </div>
                     </div>
@@ -427,9 +469,12 @@ export default function AboutPage() {
     );
 }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 function cn(...inputs: any[]) {
     return inputs.filter(Boolean).join(" ");
 }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

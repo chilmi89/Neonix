@@ -15,9 +15,14 @@ const genres = [
 export function GenreSection() {
     return (
 <<<<<<< Updated upstream:src/app/(frontend)/(home)/_components/GenreSection.tsx
+<<<<<<< Updated upstream:src/app/(frontend)/(home)/_components/GenreSection.tsx
         <section className="py-20 px-8 md:px-12 lg:px-16 w-full space-y-12">
             <h2 className="text-3xl font-black text-foreground text-center uppercase tracking-tighter">Browse by Genre</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+=======
+        <section className="py-24 px-8 md:px-12 lg:px-16 w-full">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-y-12 gap-x-8">
+>>>>>>> Stashed changes:src/app/(frontend)/_components/sections/GenreSection.tsx
 =======
         <section className="py-24 px-8 md:px-12 lg:px-16 w-full">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-y-12 gap-x-8">

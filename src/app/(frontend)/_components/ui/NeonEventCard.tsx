@@ -21,8 +21,12 @@ export function NeonEventCard({ image, title, location, date, price, tag, onClic
         <motion.div
             whileHover={{ y: -5 }}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             onClick={onClick}
             className="group h-full flex flex-col bg-background rounded-xl overflow-hidden border border-glass-border hover:border-neon-cyan/30 transition-all duration-500 shadow-lg dark:bg-muted cursor-pointer"
+=======
+            className="group bg-muted rounded-xl overflow-hidden border border-glass-border hover:border-neon-cyan/30 transition-all duration-500"
+>>>>>>> Stashed changes
 =======
             className="group bg-muted rounded-xl overflow-hidden border border-glass-border hover:border-neon-cyan/30 transition-all duration-500"
 >>>>>>> Stashed changes
@@ -77,6 +81,7 @@ export function NeonEventCard({ image, title, location, date, price, tag, onClic
                     <div>
                         <p className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">Price from</p>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         <p className="text-xl font-bold text-neon-yellow">${price}</p>
                     </div>
                     <button className="bg-neon-cyan text-black font-bold text-[11px] px-8 py-2.5 rounded-lg shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:brightness-110 transition-all uppercase tracking-wider">
@@ -84,6 +89,10 @@ export function NeonEventCard({ image, title, location, date, price, tag, onClic
 =======
                         <p className="text-xl font-bold text-neon-yellow tracking-tighter">${price}</p>
                     </div>
+=======
+                        <p className="text-xl font-bold text-neon-yellow tracking-tighter">${price}</p>
+                    </div>
+>>>>>>> Stashed changes
                     <button className="bg-neon-cyan text-black font-bold text-[11px] px-8 py-2.5 rounded-lg shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:brightness-110 active:scale-95 transition-all">
                         BUY
 >>>>>>> Stashed changes

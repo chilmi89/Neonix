@@ -70,9 +70,12 @@ export default function RegisterPage() {
 
     return (
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <div className="min-h-screen text-white font-inter flex flex-col relative">
             <PlasmaBackground />
 =======
+=======
+>>>>>>> Stashed changes
         <div className="min-h-screen bg-background text-foreground font-inter flex flex-col relative transition-colors duration-500">
             {/* Modal Backdrop Overlay */}
             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />

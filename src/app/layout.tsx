@@ -31,6 +31,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} font-sans antialiased`}
       >
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         <ThemeProvider
           attribute="class"

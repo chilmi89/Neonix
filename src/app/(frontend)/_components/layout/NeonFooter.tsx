@@ -6,7 +6,11 @@ import { Facebook, Instagram, Twitter } from "lucide-react";
 export function NeonFooter() {
     return (
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <footer className="pt-20 pb-10 px-8 md:px-12 lg:px-16 border-t border-glass-border bg-white dark:bg-background w-full">
+=======
+        <footer className="pt-20 pb-10 px-8 md:px-12 lg:px-16 border-t border-glass-border bg-background transition-colors duration-500 w-full">
+>>>>>>> Stashed changes
 =======
         <footer className="pt-20 pb-10 px-8 md:px-12 lg:px-16 border-t border-glass-border bg-background transition-colors duration-500 w-full">
 >>>>>>> Stashed changes
@@ -18,7 +22,11 @@ export function NeonFooter() {
                                 <i className="fas fa-bolt text-white text-xs"></i>
                             </div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                             <span className="text-2xl font-black tracking-tighter text-foreground">
+=======
+                            <span className="text-xl font-bold tracking-tighter text-foreground">
+>>>>>>> Stashed changes
 =======
                             <span className="text-xl font-bold tracking-tighter text-foreground">
 >>>>>>> Stashed changes
@@ -37,7 +45,11 @@ export function NeonFooter() {
 
                     <div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         <h4 className="text-foreground font-bold text-sm mb-6">Discover</h4>
+=======
+                        <h4 className="text-foreground font-bold text-sm mb-6 uppercase tracking-wider">Discover</h4>
+>>>>>>> Stashed changes
 =======
                         <h4 className="text-foreground font-bold text-sm mb-6 uppercase tracking-wider">Discover</h4>
 >>>>>>> Stashed changes
@@ -51,7 +63,11 @@ export function NeonFooter() {
 
                     <div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         <h4 className="text-foreground font-bold text-sm mb-6">Support</h4>
+=======
+                        <h4 className="text-foreground font-bold text-sm mb-6 uppercase tracking-wider">Support</h4>
+>>>>>>> Stashed changes
 =======
                         <h4 className="text-foreground font-bold text-sm mb-6 uppercase tracking-wider">Support</h4>
 >>>>>>> Stashed changes
@@ -65,7 +81,11 @@ export function NeonFooter() {
 
                     <div className="space-y-6">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         <h4 className="text-foreground font-bold text-sm">Stay Updated</h4>
+=======
+                        <h4 className="text-foreground font-bold text-sm uppercase tracking-wider">Stay Updated</h4>
+>>>>>>> Stashed changes
 =======
                         <h4 className="text-foreground font-bold text-sm uppercase tracking-wider">Stay Updated</h4>
 >>>>>>> Stashed changes
@@ -75,9 +95,15 @@ export function NeonFooter() {
                                 type="email"
                                 placeholder="Enter your email"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                                 className="bg-gray-50 dark:bg-muted border border-glass-border rounded-xl px-4 py-3 text-xs text-foreground outline-none focus:border-neon-pink/50 transition-colors font-medium"
                             />
                             <button className="bg-[#FFF0FF] dark:bg-neon-pink text-neon-pink dark:text-white font-black text-xs py-3.5 rounded-xl hover:brightness-95 transition-all">
+=======
+                                className="bg-muted border border-glass-border rounded-lg px-4 py-3 text-xs text-foreground outline-none focus:border-neon-pink/50 transition-colors font-medium placeholder:text-muted-foreground/30"
+                            />
+                            <button className="bg-gradient-to-r from-pink-900 to-pink-600 text-white font-bold text-xs py-3 rounded-lg hover:brightness-110 active:scale-95 transition-all">
+>>>>>>> Stashed changes
 =======
                                 className="bg-muted border border-glass-border rounded-lg px-4 py-3 text-xs text-foreground outline-none focus:border-neon-pink/50 transition-colors font-medium placeholder:text-muted-foreground/30"
                             />
@@ -91,10 +117,17 @@ export function NeonFooter() {
 
                 <div className="pt-8 border-t border-glass-border flex flex-col md:flex-row items-center justify-between gap-6">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     <p className="text-muted-foreground/30 text-[10px] font-bold uppercase tracking-widest">
                         © 2024 NEONTIX INC. ALL RIGHTS RESERVED.
                     </p>
                     <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/30">
+=======
+                    <p className="text-muted-foreground/40 text-[10px] font-bold uppercase tracking-widest">
+                        © 2024 NEONTIX INC. ALL RIGHTS RESERVED.
+                    </p>
+                    <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
+>>>>>>> Stashed changes
 =======
                     <p className="text-muted-foreground/40 text-[10px] font-bold uppercase tracking-widest">
                         © 2024 NEONTIX INC. ALL RIGHTS RESERVED.

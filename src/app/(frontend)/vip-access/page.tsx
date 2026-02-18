@@ -1,6 +1,7 @@
 "use client";
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { motion } from "framer-motion";
 import { Check, X, Shield, BarChart3, Users, Zap, Terminal } from "lucide-react";
 import { NeonNavbar } from "../_components/layout/NeonNavbar";
@@ -17,6 +18,8 @@ export default function VipAccessPage() {
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-pink/10 rounded-full blur-[120px] -z-10" />
 
 =======
+=======
+>>>>>>> Stashed changes
 import { useState } from "react";
 import { Check, X, BarChart3, PlusCircle, Settings2, Map as MapIcon, ArrowUpRight, TrendingUp, Users, DollarSign } from "lucide-react";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
@@ -71,6 +74,9 @@ export default function VipAccessPage() {
             <main className="w-full px-8 md:px-12 lg:px-16 pb-20">
                 {/* VIP Hero - Full Screen */}
                 <section className="min-h-screen flex flex-col justify-center items-center text-center max-w-5xl mx-auto py-32">
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -78,9 +84,14 @@ export default function VipAccessPage() {
                         className="inline-block px-4 py-1.5 rounded-full bg-neon-pink/10 border border-neon-pink/20 text-[10px] font-black uppercase tracking-[0.2em] text-neon-pink mb-10"
                     >
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         EXCLUSIVE FOR CREATORS
                     </motion.div>
 
+=======
+                        Exclusive for Creators
+                    </motion.div>
+>>>>>>> Stashed changes
 =======
                         Exclusive for Creators
                     </motion.div>
@@ -90,7 +101,11 @@ export default function VipAccessPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 tracking-tighter leading-[0.9] uppercase"
+=======
+                        className="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-none"
+>>>>>>> Stashed changes
 =======
                         className="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-none"
 >>>>>>> Stashed changes
@@ -99,7 +114,10 @@ export default function VipAccessPage() {
                         <span className="text-neon-pink drop-shadow-[0_0_30px_rgba(255,0,255,0.4)]">VIP EXPERIENCE</span>
                     </motion.h1>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
                     <motion.p
@@ -107,7 +125,11 @@ export default function VipAccessPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-lg font-medium leading-relaxed"
+=======
+                        className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg font-medium leading-relaxed"
+>>>>>>> Stashed changes
 =======
                         className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg font-medium leading-relaxed"
 >>>>>>> Stashed changes
@@ -116,6 +138,7 @@ export default function VipAccessPage() {
                     </motion.p>
                 </section>
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                 {/* Pricing Section */}
                 <section className="py-20 px-8 md:px-12 lg:px-16 flex justify-center">
@@ -267,6 +290,8 @@ export default function VipAccessPage() {
                                             </div>
                                         </div>
 =======
+=======
+>>>>>>> Stashed changes
                 {/* Pricing Cards */}
                 <section className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 mb-40">
                     {PRICING_PLANS.map((plan, idx) => (
@@ -312,11 +337,15 @@ export default function VipAccessPage() {
                                         <span className={cn("text-xs font-bold", feature.included ? "text-white/80" : "text-white/20")}>
                                             {feature.text}
                                         </span>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                                     </div>
                                 ))}
                             </div>
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                             {/* Dashboard Preview */}
                             <div className="lg:col-span-8 bg-background border border-glass-border rounded-[2.5rem] p-10 relative group">
@@ -351,6 +380,8 @@ export default function VipAccessPage() {
                                 </div>
                             </div>
 =======
+=======
+>>>>>>> Stashed changes
                             <button className={cn(
                                 "w-full py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all",
                                 plan.isVip
@@ -468,6 +499,9 @@ export default function VipAccessPage() {
 
                             {/* Decor elements */}
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-neon-pink/5 blur-[120px] -z-10 group-hover:bg-neon-pink/10 transition-colors duration-1000" />
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                         </div>
                     </div>
@@ -479,9 +513,12 @@ export default function VipAccessPage() {
     );
 }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 function cn(...inputs: any[]) {
     return inputs.filter(Boolean).join(" ");
 }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

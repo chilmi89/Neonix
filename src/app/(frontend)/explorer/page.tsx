@@ -1,6 +1,7 @@
 "use client";
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { motion } from "framer-motion";
 import { Search, MapPin, Calendar, DollarSign, Layers, ChevronDown, Filter, SlidersHorizontal } from "lucide-react";
 import { NeonNavbar } from "../_components/layout/NeonNavbar";
@@ -49,6 +50,8 @@ const events = [
         image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=800",
         isVip: false
 =======
+=======
+>>>>>>> Stashed changes
 import { useState } from "react";
 import { ChevronDown, Search, Calendar, MapPin, DollarSign, SlidersHorizontal } from "lucide-react";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
@@ -104,11 +107,15 @@ const EVENTS = [
         price: "260.00",
         isVip: false,
         image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=1000&auto=format&fit=crop"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 ];
 
 export default function ExplorerPage() {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -166,6 +173,8 @@ export default function ExplorerPage() {
                                 <span className="text-xs font-bold">Jakarta, ID</span>
                                 <ChevronDown size={14} className="text-muted-foreground" />
 =======
+=======
+>>>>>>> Stashed changes
     return (
         <div className="min-h-screen bg-background text-foreground font-inter transition-colors duration-500">
             <NeonNavbar />
@@ -220,11 +229,15 @@ export default function ExplorerPage() {
                                     <option>Bandung</option>
                                 </select>
                                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" size={12} />
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                             </div>
                         </div>
 
                         {/* Date */}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         <div className="flex-1 min-w-[150px] bg-background border border-glass-border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer hover:border-glass-border transition-all">
                             <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest px-1">Date</span>
@@ -232,6 +245,8 @@ export default function ExplorerPage() {
                                 <span className="text-xs font-bold">This month</span>
                                 <ChevronDown size={14} className="text-muted-foreground" />
 =======
+=======
+>>>>>>> Stashed changes
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase text-white/40 ml-1">Date</label>
                             <div className="relative group">
@@ -242,11 +257,15 @@ export default function ExplorerPage() {
                                     <option>Tomorrow</option>
                                 </select>
                                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" size={12} />
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                             </div>
                         </div>
 
                         {/* Price */}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         <div className="flex-1 min-w-[150px] bg-background border border-glass-border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer hover:border-glass-border transition-all">
                             <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest px-1">Price</span>
@@ -254,6 +273,8 @@ export default function ExplorerPage() {
                                 <span className="text-xs font-bold">$25 - $500</span>
                                 <ChevronDown size={14} className="text-muted-foreground" />
 =======
+=======
+>>>>>>> Stashed changes
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase text-white/40 ml-1">Price</label>
                             <div className="relative group">
@@ -265,11 +286,15 @@ export default function ExplorerPage() {
                                     <option>$200+</option>
                                 </select>
                                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" size={12} />
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                             </div>
                         </div>
 
                         {/* Category */}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         <div className="flex-1 min-w-[180px] bg-black border border-neon-pink/50 rounded-2xl p-4 flex flex-col gap-1 cursor-pointer shadow-[0_0_20px_rgba(255,0,255,0.1)]">
                             <span className="text-[8px] font-bold text-neon-pink uppercase tracking-widest px-1">Category</span>
@@ -277,6 +302,8 @@ export default function ExplorerPage() {
                                 <span className="text-xs font-bold text-neon-pink">All (VIP & Standard)</span>
                                 <ChevronDown size={14} className="text-neon-pink/40" />
 =======
+=======
+>>>>>>> Stashed changes
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase text-white/40 ml-1">Category</label>
                             <div className="relative group">
@@ -305,11 +332,15 @@ export default function ExplorerPage() {
                             <div className="bg-muted border border-glass-border rounded-full px-4 py-2 flex items-center gap-2 cursor-pointer hover:bg-muted/80 transition-colors">
                                 <span className="text-xs font-bold">Trending</span>
                                 <ChevronDown size={14} className="text-muted-foreground" />
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                             </div>
                         </div>
                     </div>
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     <button className="text-[10px] font-bold text-muted-foreground hover:text-foreground transition-colors uppercase tracking-widest px-8">
                         Reset filter
@@ -387,6 +418,8 @@ export default function ExplorerPage() {
                                     )}>
                                         Detail
 =======
+=======
+>>>>>>> Stashed changes
                     {/* Event List */}
                     <div className="grid grid-cols-1 gap-4">
                         {[...EVENTS, ...EVENTS, ...EVENTS].map((event, idx) => (
@@ -441,12 +474,16 @@ export default function ExplorerPage() {
                                     <span className="text-2xl font-black text-neon-yellow tracking-tighter">${event.price}</span>
                                     <button className="mt-2 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest bg-neon-cyan text-black shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:brightness-110 active:scale-95 transition-all">
                                         {event.isVip ? "Buy VIP" : "Buy"}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                                     </button>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                 </div>
             </main>
@@ -457,6 +494,8 @@ export default function ExplorerPage() {
                 event={selectedEvent}
             />
 =======
+=======
+>>>>>>> Stashed changes
 
                     {/* Load More Option */}
                     <div className="mt-16 flex justify-center">
@@ -467,15 +506,21 @@ export default function ExplorerPage() {
                 </section>
             </main>
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             <NeonFooter />
         </div>
     );
 }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 function cn(...inputs: any[]) {
     return inputs.filter(Boolean).join(" ");
 }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

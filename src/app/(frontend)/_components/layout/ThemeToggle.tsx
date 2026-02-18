@@ -1,6 +1,7 @@
 "use client";
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -12,6 +13,8 @@ export function ThemeToggle() {
 
     React.useEffect(() => {
 =======
+=======
+>>>>>>> Stashed changes
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
@@ -22,6 +25,9 @@ export function ThemeToggle() {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         setMounted(true);
     }, []);
@@ -29,7 +35,11 @@ export function ThemeToggle() {
     if (!mounted) {
         return (
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10" />
+=======
+            <div className="w-10 h-10 rounded-full bg-white/5 border border-white/5 animate-pulse" />
+>>>>>>> Stashed changes
 =======
             <div className="w-10 h-10 rounded-full bg-white/5 border border-white/5 animate-pulse" />
 >>>>>>> Stashed changes
@@ -37,6 +47,7 @@ export function ThemeToggle() {
     }
 
     return (
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         <motion.button
             whileHover={{ scale: 1.05 }}
@@ -51,6 +62,8 @@ export function ThemeToggle() {
             <span className="sr-only">Toggle theme</span>
         </motion.button>
 =======
+=======
+>>>>>>> Stashed changes
         <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="relative w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-white/5 hover:border-neon-pink/50 hover:bg-neon-pink/5 transition-all duration-300 group overflow-hidden"
@@ -75,6 +88,9 @@ export function ThemeToggle() {
             {/* Decorative aura */}
             <div className="absolute inset-0 bg-neon-pink/10 opacity-0 group-hover:opacity-100 blur-md transition-opacity" />
         </button>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     );
 }
