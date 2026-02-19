@@ -27,6 +27,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    tenantId?: number;
     roles: Role[];
     createdAt: string;
     updatedAt: string;
