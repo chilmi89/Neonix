@@ -15,7 +15,8 @@ import {
     UserCircle,
     Key,
     Lock,
-    Building2
+    Building2,
+    Layers
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -66,6 +67,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                     baseItems.splice(1, 0,
                         { icon: Building2, label: "Tenants", href: "/dashboard/superadmin/tenant" },
                         { icon: Users, label: "Users Management", href: "/dashboard/superadmin/users" },
+                        { icon: Layers, label: "Event Categories", href: "/dashboard/superadmin/event-category" },
                         { icon: ShieldCheck, label: "Roles", href: "/dashboard/superadmin/role" },
                         { icon: Key, label: "Permissions", href: "/dashboard/superadmin/permission" },
                         { icon: UserCircle, label: "Give Role", href: "/dashboard/superadmin/users-role" },

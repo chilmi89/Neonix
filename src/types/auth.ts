@@ -42,3 +42,8 @@ export interface ApiResponse<T> {
     message: string;
     data: T;
 }
+
+export interface EventCategory {
+    id: number;
+    name: string;
+}
