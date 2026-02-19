@@ -3,6 +3,7 @@
 import { Crown } from "lucide-react";
 import { NeonButton } from "@/app/(frontend)/_components/ui/NeonButton";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export function VipSection() {
     return (
@@ -26,9 +27,12 @@ export function VipSection() {
                 </div>
 
                 <div className="relative z-10">
-                    <button className="px-10 py-5 rounded-full border-2 border-neon-pink/30 text-neon-pink font-black uppercase tracking-widest hover:bg-neon-pink hover:text-white transition-all shadow-lg shadow-neon-pink/10 group bg-white dark:bg-transparent">
+                    <Link
+                        href="/vip-access"
+                        className="px-10 py-5 rounded-full border-2 border-neon-pink/30 text-neon-pink font-black uppercase tracking-widest hover:bg-neon-pink hover:text-white transition-all shadow-lg shadow-neon-pink/10 group bg-white dark:bg-transparent inline-block"
+                    >
                         <span className="group-hover:scale-110 transition-transform inline-block">Unlocked VIP</span>
-                    </button>
+                    </Link>
                 </div>
             </div>
         </section>
