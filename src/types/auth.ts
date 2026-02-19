@@ -8,9 +8,19 @@ export interface Permission {
 export interface Role {
     id: number;
     name: string;
+    tenantId?: number;
+    tenantName?: string;
     permissions?: Permission[];
     createdAt: string;
     updatedAt: string;
+}
+
+export interface Tenant {
+    id: number;
+    name: string;
+    slug: string;
+    isActive: boolean;
+    createdAt?: string;
 }
 
 export interface User {

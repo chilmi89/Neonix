@@ -14,7 +14,8 @@ import {
     ShieldCheck,
     UserCircle,
     Key,
-    Lock
+    Lock,
+    Building2
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -41,9 +42,6 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
     useEffect(() => {
         const baseItems = [
             { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-            { icon: Users, label: "Users", href: "/dashboard/users" },
-            { icon: BarChart3, label: "Analytics", href: "/dashboard/analytics" },
-            { icon: Library, label: "Library", href: "/dashboard/library" },
             { icon: Settings, label: "Settings", href: "/dashboard/settings" },
         ];
 
@@ -65,7 +63,9 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                 if (hasSuperAccess) {
                     baseItems[0] = { icon: ShieldCheck, label: "Superadmin Dash", href: "/dashboard/superadmin" };
                     // Insert role and permission management
-                    baseItems.splice(2, 0,
+                    baseItems.splice(1, 0,
+                        { icon: Building2, label: "Tenants", href: "/dashboard/superadmin/tenant" },
+                        { icon: Users, label: "Users Management", href: "/dashboard/superadmin/users" },
                         { icon: ShieldCheck, label: "Roles", href: "/dashboard/superadmin/role" },
                         { icon: Key, label: "Permissions", href: "/dashboard/superadmin/permission" },
                         { icon: UserCircle, label: "Give Role", href: "/dashboard/superadmin/users-role" },

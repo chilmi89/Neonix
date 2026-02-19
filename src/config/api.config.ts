@@ -35,9 +35,9 @@ export const API = {
         update: (id: number) => `${API_BASE_URL}/users/${id}`,
         delete: (id: number) => `${API_BASE_URL}/users/${id}`,
         getRoles: (id: number) => `${API_BASE_URL}/users/${id}/roles`,
-        addRole: (id: number, roleId: number) => `${API_BASE_URL}/users/${id}/roles/${roleId}`,
-        removeRole: (id: number, roleId: number) => `${API_BASE_URL}/users/${id}/roles/${roleId}`,
-        updateRoles: (id: number) => `${API_BASE_URL}/users/${id}/roles`,
+        addRole: (id: number, roleId: number, tenantId?: number) => `${API_BASE_URL}/users/${id}/roles/${roleId}${tenantId ? `?tenantId=${tenantId}` : ""}`,
+        removeRole: (id: number, roleId: number, tenantId?: number) => `${API_BASE_URL}/users/${id}/roles/${roleId}${tenantId ? `?tenantId=${tenantId}` : ""}`,
+        updateRoles: (id: number, tenantId?: number) => `${API_BASE_URL}/users/${id}/roles${tenantId ? `?tenantId=${tenantId}` : ""}`,
     },
 
     // Roles & Permissions
@@ -79,6 +79,16 @@ export const API = {
         delete: (id: number) => `${API_BASE_URL}/events/${id}`,
         upcoming: `${API_BASE_URL}/events/upcoming`,
         past: `${API_BASE_URL}/events/past`,
+    },
+
+    // Tenants
+    tenants: {
+        getAll: `${API_BASE_URL}/tenants`,
+        getById: (id: number) => `${API_BASE_URL}/tenants/${id}`,
+        create: `${API_BASE_URL}/tenants`,
+        update: (id: number) => `${API_BASE_URL}/tenants/${id}`,
+        delete: (id: number) => `${API_BASE_URL}/tenants/${id}`,
+        getBySlug: (slug: string) => `${API_BASE_URL}/tenants/slug/${slug}`,
     },
 };
 
