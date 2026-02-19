@@ -14,19 +14,22 @@ import {
     UserPlus,
     CheckCircle2,
     Circle,
-    UserCircle2
+    UserCircle2,
+    Building2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { containerStagger, slideUp, fadeIn } from "@/lib/motion";
 import { getAllUsers, getUserRoles, updateUserRoles } from "@/services/userService";
 import { getAllRoles } from "@/services/roleService";
-import { User, Role } from "@/types/auth";
+import { getAllTenants } from "@/services/tenantService";
+import { User, Role, Tenant } from "@/types/auth";
 import { GlassCard } from "@/app/(frontend)/_components/ui/GlassCard";
 import { cn } from "@/lib/utils";
 
 export default function UsersRolePage() {
     const [users, setUsers] = useState<User[]>([]);
     const [allRoles, setAllRoles] = useState<Role[]>([]);
+    const [tenants, setTenants] = useState<Tenant[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
@@ -36,18 +39,21 @@ export default function UsersRolePage() {
     const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [userAssignedRoleIds, setUserAssignedRoleIds] = useState<number[]>([]);
+    const [selectedTenantId, setSelectedTenantId] = useState<string>("");
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [usersRes, rolesRes] = await Promise.all([
+            const [usersRes, rolesRes, tenantsRes] = await Promise.all([
                 getAllUsers(),
-                getAllRoles()
+                getAllRoles(),
+                getAllTenants()
             ]);
 
             const rawUsers = usersRes.data || [];
             const allAvailableRoles = rolesRes.data || [];
             setAllRoles(allAvailableRoles);
+            setTenants(tenantsRes.data || []);
 
             // Enrich users with their roles fetching them in parallel
             // This fixes "Status Peran" being empty if not included in user list
@@ -79,6 +85,7 @@ export default function UsersRolePage() {
         setSelectedUser(user);
         setIsAssignmentModalOpen(true);
         setUserAssignedRoleIds(user.roles?.map(r => r.id) || []);
+        setSelectedTenantId(""); // Reset tenant selection when opening
     };
 
     const toggleRole = (roleId: number) => {
@@ -95,7 +102,8 @@ export default function UsersRolePage() {
 
         setSubmitting(true);
         try {
-            await updateUserRoles(selectedUser.id, userAssignedRoleIds);
+            const tenantId = selectedTenantId ? parseInt(selectedTenantId) : undefined;
+            await updateUserRoles(selectedUser.id, userAssignedRoleIds, tenantId);
             setIsAssignmentModalOpen(false);
             // Refresh users to show updated roles if included in user list
             fetchData();
@@ -272,8 +280,29 @@ export default function UsersRolePage() {
                             {/* Body Modal */}
                             <form onSubmit={handleAssignmentSubmit}>
                                 <div className="p-6 space-y-6">
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between px-1">
+                                    <div className="space-y-4 px-1">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70">
+                                                Pilih Tenant
+                                            </label>
+                                            <div className="relative">
+                                                <select
+                                                    value={selectedTenantId}
+                                                    onChange={(e) => setSelectedTenantId(e.target.value)}
+                                                    className="w-full bg-muted border border-glass-border rounded-xl py-3 px-4 text-xs font-bold text-glass-text outline-none appearance-none focus:border-primary/50 transition-all"
+                                                >
+                                                    <option value="">Global (Tanpa Tenant)</option>
+                                                    {tenants.map(tenant => (
+                                                        <option key={tenant.id} value={tenant.id.toString()}>
+                                                            {tenant.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <Building2 size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-glass-text/20 pointer-events-none" />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center justify-between">
                                             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70">
                                                 Konfigurasi Peran
                                             </label>
@@ -304,7 +333,12 @@ export default function UsersRolePage() {
                                                                 )}>
                                                                     <ShieldCheck size={14} />
                                                                 </div>
-                                                                <span className="font-bold text-xs tracking-tight uppercase">{role.name}</span>
+                                                                <div className="flex flex-col">
+                                                                    <span className="font-bold text-xs tracking-tight uppercase">{role.name}</span>
+                                                                    {role.tenantName && (
+                                                                        <span className="text-[8px] font-black text-primary/40 uppercase tracking-tighter">Tenant: {role.tenantName}</span>
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                             {isSelected && <CheckCircle2 size={18} className="text-primary animate-in fade-in zoom-in duration-300" />}
                                                         </div>

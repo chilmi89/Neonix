@@ -6,132 +6,117 @@ import {
     Plus,
     Edit2,
     Trash2,
-    Shield,
-    Calendar,
+    Globe,
     Search,
     Loader2,
     X,
     Activity,
-    Users,
     Info,
     ArrowRight,
-    Zap,
     RefreshCw,
-    ShieldCheck,
-    Building2
+    Building2,
+    CheckCircle2,
+    XCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { containerStagger, slideUp, fadeIn } from "@/lib/motion";
-import { getAllRoles, deleteRole, createRole, updateRole } from "@/services/roleService";
-import { getAllTenants } from "@/services/tenantService";
-import { Role, Tenant } from "@/types/auth";
+import { getAllTenants, deleteTenant, createTenant, updateTenant } from "@/services/tenantService";
+import { Tenant } from "@/types/auth";
 import { GlassCard } from "@/app/(frontend)/_components/ui/GlassCard";
 import { cn } from "@/lib/utils";
 
-export default function RolePage() {
-    const [roles, setRoles] = useState<Role[]>([]);
+export default function TenantPage() {
     const [tenants, setTenants] = useState<Tenant[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
 
-    // State untuk Edit Modal (Hanya untuk Edit)
+    // State untuk Modal
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [editingRole, setEditingRole] = useState<Role | null>(null);
+    const [editingTenant, setEditingTenant] = useState<Tenant | null>(null);
 
     // State untuk Form
-    const [newRoleData, setNewRoleData] = useState({ name: "", tenantId: "" });
-    const [editFormData, setEditFormData] = useState({ name: "", tenantId: "" });
+    const [newTenantData, setNewTenantData] = useState({ name: "", slug: "" });
+    const [editFormData, setEditFormData] = useState({ name: "", slug: "", isActive: true });
 
-    const fetchRoles = async () => {
+    const fetchTenants = async () => {
         try {
             setLoading(true);
-            const response = await getAllRoles();
-            setRoles(response.data);
+            const response = await getAllTenants();
+            setTenants(response.data);
             setError("");
         } catch (err: any) {
-            setError(err.message || "Gagal mengambil data peran");
+            setError(err.message || "Gagal mengambil data tenant");
         } finally {
             setLoading(false);
         }
     };
 
-    const fetchTenants = async () => {
-        try {
-            const response = await getAllTenants();
-            setTenants(response.data);
-        } catch (err: any) {
-            console.error("Gagal mengambil data tenant", err);
-        }
-    };
-
     useEffect(() => {
-        fetchRoles();
         fetchTenants();
     }, []);
 
     const handleDelete = async (id: number) => {
-        if (!confirm("Apakah Anda yakin ingin menghapus peran ini?")) return;
+        if (!confirm("Apakah Anda yakin ingin menghapus tenant ini?")) return;
         try {
-            await deleteRole(id);
-            setRoles(roles.filter(r => r.id !== id));
+            await deleteTenant(id);
+            setTenants(tenants.filter(t => t.id !== id));
         } catch (err: any) {
-            alert(err.message || "Gagal menghapus peran");
+            alert(err.message || "Gagal menghapus tenant");
         }
     };
 
     const handleCreateSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!newRoleData.name.trim()) return;
+        if (!newTenantData.name.trim() || !newTenantData.slug.trim()) return;
         setSubmitting(true);
         try {
-            const dataToSubmit: any = { name: newRoleData.name };
-            if (newRoleData.tenantId) {
-                dataToSubmit.tenantId = parseInt(newRoleData.tenantId);
-            }
-            const response = await createRole(dataToSubmit);
-            setRoles([...roles, response.data]);
-            setNewRoleData({ name: "", tenantId: "" });
-            fetchRoles();
+            const response = await createTenant(newTenantData);
+            setTenants([...tenants, response.data]);
+            setNewTenantData({ name: "", slug: "" });
+            fetchTenants();
         } catch (err: any) {
-            alert(err.message || "Gagal membuat peran");
+            alert(err.message || "Gagal membuat tenant");
         } finally {
             setSubmitting(false);
         }
     };
 
-    const handleEditOpen = (role: Role) => {
-        setEditingRole(role);
+    const handleEditOpen = (tenant: Tenant) => {
+        setEditingTenant(tenant);
         setEditFormData({
-            name: role.name,
-            tenantId: role.tenantId?.toString() || ""
+            name: tenant.name,
+            slug: tenant.slug,
+            isActive: tenant.isActive ?? true
         });
         setIsEditModalOpen(true);
     };
 
     const handleEditSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!editingRole) return;
+        if (!editingTenant) return;
         setSubmitting(true);
         try {
-            const dataToSubmit: any = { name: editFormData.name };
-            dataToSubmit.tenantId = editFormData.tenantId ? parseInt(editFormData.tenantId) : null;
-
-            const response = await updateRole(editingRole.id, dataToSubmit);
-            setRoles(roles.map(r => r.id === editingRole.id ? response.data : r));
+            const response = await updateTenant(editingTenant.id, editFormData);
+            setTenants(tenants.map(t => t.id === editingTenant.id ? response.data : t));
             setIsEditModalOpen(false);
-            fetchRoles();
+            fetchTenants();
         } catch (err: any) {
-            alert(err.message || "Gagal memperbarui peran");
+            alert(err.message || "Gagal memperbarui tenant");
         } finally {
             setSubmitting(false);
         }
     };
 
-    const filteredRoles = roles.filter(role =>
-        role.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredTenants = tenants.filter(tenant =>
+        tenant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tenant.slug.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const generateSlug = (name: string) => {
+        return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    };
 
     return (
         <motion.div
@@ -143,102 +128,102 @@ export default function RolePage() {
             {/* Header & Deskripsi */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-[2rem] bg-linear-to-br from-primary to-emerald-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_var(--color-primary)]">
-                        <ShieldCheck size={32} />
+                    <div className="h-16 w-16 rounded-[2rem] bg-linear-to-br from-indigo-600 to-blue-400 flex items-center justify-center text-white shadow-[0_0_30px_-5px_rgba(79,70,229,0.5)]">
+                        <Building2 size={32} />
                     </div>
                     <div>
                         <h1 className="text-4xl font-black text-glass-text tracking-tighter leading-none">
-                            Manajemen <span className="text-primary italic">Peran</span>
+                            Manajemen <span className="text-primary italic">Tenant</span>
                         </h1>
-                        <p className="text-glass-text/60 text-lg mt-2 font-medium">Pengaturan Tingkat Otoritas Sistem</p>
+                        <p className="text-glass-text/60 text-lg mt-2 font-medium">Pengaturan Entitas Bisnis & Organisasi</p>
                     </div>
                 </div>
 
                 <div className="flex gap-4">
                     <div className="px-6 py-3 rounded-2xl bg-muted border border-glass-border backdrop-blur-md flex flex-col items-center min-w-[120px]">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Total Peran</p>
-                        <h3 className="text-2xl font-black text-glass-text leading-none">{roles.length}</h3>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Total Tenant</p>
+                        <h3 className="text-2xl font-black text-glass-text leading-none">{tenants.length}</h3>
                     </div>
                     <div className="px-6 py-3 rounded-2xl bg-muted border border-glass-border backdrop-blur-md flex flex-col items-center min-w-[120px]">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-1">Status</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-1">Infrastruktur</p>
                         <h3 className="text-sm font-black text-glass-text leading-none uppercase tracking-tighter flex items-center gap-2">
-                            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" /> Aktif
+                            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" /> Cloud
                         </h3>
                     </div>
                 </div>
             </div>
 
-            {/* Layout Utama: Horizontal Rapi & Estetik */}
+            {/* Layout Utama */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-                {/* Bagian Kiri: Form Input Langsung Peran */}
+                {/* Bagian Kiri: Form Input Tenant */}
                 <div className="lg:col-span-4 space-y-4">
                     <GlassCard className="p-8 border-glass-border shadow-2xl relative overflow-hidden group">
-                        {/* Background Decoration */}
                         <div className="absolute -top-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none text-glass-text">
-                            <Shield size={200} />
+                            <Building2 size={200} />
                         </div>
 
                         <div className="flex items-center gap-3 mb-8">
                             <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
                                 <Plus size={18} />
                             </div>
-                            <h3 className="text-xl font-bold text-glass-text tracking-tight">Peran Baru</h3>
+                            <h3 className="text-xl font-bold text-glass-text tracking-tight">Tambah Tenant</h3>
                         </div>
 
-                        <form onSubmit={handleCreateSubmit} className="space-y-8">
-                            <div className="space-y-6">
-                                <div className="space-y-3">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
-                                        Nama Peran
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            type="text"
-                                            placeholder="CONTOH: MODERATOR_ACARA"
-                                            value={newRoleData.name}
-                                            onChange={(e) => setNewRoleData({ ...newRoleData, name: e.target.value.toUpperCase() })}
-                                            className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-2xl py-4 px-5 text-glass-text font-bold outline-none focus:border-primary/50 focus:bg-white dark:focus:bg-black/60 transition-all placeholder:text-glass-text/30 shadow-xs text-lg"
-                                            required
-                                        />
-                                        <Users className="absolute right-5 top-1/2 -translate-y-1/2 text-primary/60" size={20} />
-                                    </div>
+                        <form onSubmit={handleCreateSubmit} className="space-y-6">
+                            <div className="space-y-3">
+                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
+                                    Nama Perusahaan / Organisasi
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Contoh: PT. Maju Jaya"
+                                        value={newTenantData.name}
+                                        onChange={(e) => {
+                                            const name = e.target.value;
+                                            setNewTenantData({
+                                                ...newTenantData,
+                                                name,
+                                                slug: generateSlug(name)
+                                            });
+                                        }}
+                                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-2xl py-4 px-5 text-glass-text font-bold outline-none focus:border-primary/50 focus:bg-white dark:focus:bg-black/60 transition-all placeholder:text-glass-text/30 shadow-xs text-lg"
+                                        required
+                                    />
+                                    <Building2 className="absolute right-5 top-1/2 -translate-y-1/2 text-primary/60" size={20} />
                                 </div>
+                            </div>
 
-                                <div className="space-y-3">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
-                                        Pilih Tenant
-                                    </label>
-                                    <div className="relative">
-                                        <select
-                                            value={newRoleData.tenantId}
-                                            onChange={(e) => setNewRoleData({ ...newRoleData, tenantId: e.target.value })}
-                                            className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-2xl py-4 px-5 text-glass-text font-bold outline-none focus:border-primary/50 focus:bg-white dark:focus:bg-black/60 transition-all appearance-none shadow-xs text-lg"
-                                        >
-                                            <option value="">Global (Tanpa Tenant)</option>
-                                            {tenants.map((tenant) => (
-                                                <option key={tenant.id} value={tenant.id.toString()}>
-                                                    {tenant.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <Building2 className="absolute right-5 top-1/2 -translate-y-1/2 text-primary/60 pointer-events-none" size={20} />
-                                    </div>
-                                    <p className="text-[10px] text-glass-text/40 italic leading-relaxed px-1">
-                                        * Pilih tenant jika peran ini spesifik untuk tenant tertentu.
-                                    </p>
+                            <div className="space-y-3">
+                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
+                                    Tenant Slug (Domain Identifier)
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="maju-jaya"
+                                        value={newTenantData.slug}
+                                        onChange={(e) => setNewTenantData({ ...newTenantData, slug: e.target.value.toLowerCase() })}
+                                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-2xl py-4 px-5 text-glass-text font-bold outline-none focus:border-primary/50 focus:bg-white dark:focus:bg-black/60 transition-all placeholder:text-glass-text/30 shadow-xs text-lg"
+                                        required
+                                    />
+                                    <Globe className="absolute right-5 top-1/2 -translate-y-1/2 text-primary/60" size={20} />
                                 </div>
+                                <p className="text-[10px] text-glass-text/40 italic leading-relaxed px-1">
+                                    * Slug akan digunakan sebagai identitas unik di URL atau subdomain.
+                                </p>
                             </div>
 
                             <button
                                 type="submit"
-                                disabled={submitting || !newRoleData.name}
+                                disabled={submitting || !newTenantData.name || !newTenantData.slug}
                                 className="w-full bg-primary text-white font-black py-4 rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-base tracking-tight"
                             >
                                 {submitting ? (
                                     <Loader2 size={24} className="animate-spin" />
                                 ) : (
-                                    <>Inisialisasi Peran <ArrowRight size={20} /></>
+                                    <>Buat Tenant Baru <ArrowRight size={20} /></>
                                 )}
                             </button>
                         </form>
@@ -247,30 +232,30 @@ export default function RolePage() {
                     <div className="p-6 bg-muted rounded-[2rem] border border-glass-border flex items-start gap-4 shadow-xl">
                         <Info size={20} className="text-primary shrink-0 mt-1" />
                         <div>
-                            <p className="text-sm font-black text-glass-text mb-1">Sistem Otoritas</p>
+                            <p className="text-sm font-black text-glass-text mb-1">Arsitektur Multi-Tenant</p>
                             <p className="text-xs text-glass-text/60 leading-relaxed font-bold">
-                                Peran digunakan untuk mengelompokkan izin akses. Setiap peran dapat memiliki beberapa izin untuk mengontrol fungsionalitas aplikasi.
+                                Setiap tenant memiliki ekosistem data yang terisolasi. Tenant slug harus unik dalam sistem.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                {/* Bagian Kanan: Pencarian & Tabel Peran */}
+                {/* Bagian Kanan: Pencarian & Tabel Tenant */}
                 <div className="lg:col-span-8 space-y-6">
-                    {/* Bar Kontrol Kompak */}
+                    {/* Bar Kontrol */}
                     <div className="flex items-center gap-4 bg-muted border border-glass-border rounded-[1.5rem] p-2 shadow-2xl">
                         <div className="relative flex-1 group">
                             <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30 group-focus-within:text-primary transition-colors" size={18} />
                             <input
                                 type="text"
-                                placeholder="Cari nama peran dalam sistem..."
+                                placeholder="Cari nama atau slug tenant..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full bg-background/50 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-medium outline-none focus:bg-background/80 transition-all placeholder:text-glass-text/20"
                             />
                         </div>
                         <button
-                            onClick={fetchRoles}
+                            onClick={fetchTenants}
                             className="p-3 bg-glass-surface hover:bg-glass-hover rounded-xl text-primary transition-all border border-glass-border shadow-inner"
                             title="Segarkan Data"
                         >
@@ -278,45 +263,44 @@ export default function RolePage() {
                         </button>
                     </div>
 
-                    {/* Tabel Registri Peran */}
+                    {/* Tabel Tenant */}
                     <motion.div variants={slideUp}>
-                        {loading && roles.length === 0 ? (
+                        {loading && tenants.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-[2.5rem] border border-glass-border shadow-2xl">
                                 <Loader2 className="animate-spin mb-6 text-primary" size={48} />
-                                <p className="text-lg font-bold text-glass-text/40 tracking-tight">Sinkronisasi Data Peran...</p>
+                                <p className="text-lg font-bold text-glass-text/40 tracking-tight">Sinkronisasi Registri Tenant...</p>
                             </div>
                         ) : (
                             <div className="glass-card overflow-hidden border-glass-border rounded-[2.5rem] shadow-2xl">
                                 <DataTable
-                                    title="Registri Otoritas Peran"
-                                    data={filteredRoles}
+                                    title="Registri Tenant Sistem"
+                                    data={filteredTenants}
                                     columns={[
                                         {
-                                            header: "IDENTITAS PERAN",
+                                            header: "INDENTITAS TENANT",
                                             accessor: (item) => (
                                                 <div className="flex items-center gap-4 py-2">
-                                                    <div className="h-10 w-10 rounded-xl bg-linear-to-br from-primary/20 to-emerald-500/20 flex items-center justify-center text-primary border border-white/5 shadow-sm">
-                                                        <ShieldCheck size={18} />
+                                                    <div className="h-10 w-10 rounded-xl bg-linear-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center text-indigo-500 border border-white/5 shadow-sm">
+                                                        <Building2 size={18} />
                                                     </div>
                                                     <div>
                                                         <span className="font-black text-glass-text text-base tracking-tight leading-none block">{item.name}</span>
-                                                        <span className="text-[10px] font-black text-primary/40 uppercase tracking-widest mt-1 block">ID: #{item.id}</span>
+                                                        <span className="text-[10px] font-black text-primary/40 uppercase tracking-widest mt-1 block">SLUG: {item.slug}</span>
                                                     </div>
                                                 </div>
                                             )
                                         },
                                         {
-                                            header: "TENANT",
+                                            header: "STATUS",
                                             accessor: (item) => (
-                                                <div className="flex items-center gap-2">
-                                                    {item.tenantName ? (
-                                                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                                            <Building2 size={10} />
-                                                            {item.tenantName}
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-glass-text/30 text-[10px] uppercase font-black tracking-widest italic">Global</span>
-                                                    )}
+                                                <div className={cn(
+                                                    "inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                                                    item.isActive
+                                                        ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                                                        : "bg-rose-500/10 text-rose-500 border-rose-500/20"
+                                                )}>
+                                                    <div className={cn("h-1.5 w-1.5 rounded-full", item.isActive ? "bg-emerald-500" : "bg-rose-500")} />
+                                                    {item.isActive ? "Aktif" : "Nonaktif"}
                                                 </div>
                                             )
                                         },
@@ -327,14 +311,14 @@ export default function RolePage() {
                                                     <button
                                                         onClick={() => handleEditOpen(item)}
                                                         className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-glass-text/40 hover:text-primary transition-all border border-glass-border shadow-sm active:scale-90"
-                                                        title="Ubah Peran"
+                                                        title="Ubah Tenant"
                                                     >
                                                         <Edit2 size={16} />
                                                     </button>
                                                     <button
                                                         onClick={() => handleDelete(item.id)}
                                                         className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-glass-text/40 hover:text-rose-500 transition-all border border-glass-border shadow-sm active:scale-90"
-                                                        title="Hapus Peran"
+                                                        title="Hapus Tenant"
                                                     >
                                                         <Trash2 size={16} />
                                                     </button>
@@ -349,7 +333,7 @@ export default function RolePage() {
                 </div>
             </div>
 
-            {/* Modal Edit Peran (Bahasa Indonesia & Estetik) */}
+            {/* Modal Edit Tenant */}
             <AnimatePresence>
                 {isEditModalOpen && (
                     <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
@@ -366,7 +350,7 @@ export default function RolePage() {
                             exit={{ opacity: 0, scale: 0.9, y: 30 }}
                             className="relative w-full max-w-md bg-background border border-glass-border rounded-[3rem] p-10 shadow-2xl overflow-hidden"
                         >
-                            <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-primary via-emerald-500 to-transparent" />
+                            <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-indigo-600 via-blue-500 to-transparent" />
 
                             <button
                                 onClick={() => setIsEditModalOpen(false)}
@@ -375,51 +359,62 @@ export default function RolePage() {
                                 <X size={20} />
                             </button>
 
-                            <div className="mb-10 text-center">
+                            <div className="mb-8 text-center">
                                 <div className="h-16 w-16 rounded-2xl bg-primary/20 flex items-center justify-center text-primary mx-auto mb-6 shadow-xl border border-primary/10">
-                                    <ShieldCheck size={28} />
+                                    <Building2 size={28} />
                                 </div>
-                                <h2 className="text-3xl font-black text-glass-text mb-2 tracking-tight">Ubah Peran</h2>
-                                <p className="text-glass-text/40 font-medium">Perbarui identitas tingkat otoritas sistem.</p>
+                                <h2 className="text-3xl font-black text-glass-text mb-2 tracking-tight">Ubah Tenant</h2>
+                                <p className="text-glass-text/40 font-medium">Perbarui identitas dan status tenant.</p>
                             </div>
 
-                            <form onSubmit={handleEditSubmit} className="space-y-6 text-left">
-                                <div className="space-y-3">
+                            <form onSubmit={handleEditSubmit} className="space-y-6">
+                                <div className="space-y-2">
                                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary ml-1">
-                                        Nama Peran Baru
+                                        Nama Tenant
                                     </label>
                                     <input
                                         type="text"
                                         value={editFormData.name}
-                                        onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value.toUpperCase() })}
-                                        className="w-full bg-background/80 border border-glass-border rounded-2xl py-4 px-6 text-glass-text font-black text-xl outline-none focus:border-primary/50 transition-all shadow-inner"
+                                        onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                                        className="w-full bg-background/80 border border-glass-border rounded-xl py-3 px-4 text-glass-text font-bold outline-none focus:border-primary/50 transition-all shadow-inner"
                                         required
-                                        autoFocus
                                     />
                                 </div>
 
-                                <div className="space-y-3">
+                                <div className="space-y-2">
                                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary ml-1">
-                                        Tenant Admin
+                                        Slug
                                     </label>
-                                    <div className="relative">
-                                        <select
-                                            value={editFormData.tenantId}
-                                            onChange={(e) => setEditFormData({ ...editFormData, tenantId: e.target.value })}
-                                            className="w-full bg-background/80 border border-glass-border rounded-2xl py-4 px-6 text-glass-text font-bold outline-none focus:border-primary/50 transition-all appearance-none shadow-inner"
-                                        >
-                                            <option value="">Global (Tanpa Tenant)</option>
-                                            {tenants.map((tenant) => (
-                                                <option key={tenant.id} value={tenant.id.toString()}>
-                                                    {tenant.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <Building2 className="absolute right-6 top-1/2 -translate-y-1/2 text-primary/60 pointer-events-none" size={20} />
-                                    </div>
+                                    <input
+                                        type="text"
+                                        value={editFormData.slug}
+                                        onChange={(e) => setEditFormData({ ...editFormData, slug: e.target.value.toLowerCase() })}
+                                        className="w-full bg-background/80 border border-glass-border rounded-xl py-3 px-4 text-glass-text font-bold outline-none focus:border-primary/50 transition-all shadow-inner"
+                                        required
+                                    />
                                 </div>
 
-                                <div className="flex gap-4">
+                                <div className="flex items-center justify-between p-4 bg-muted rounded-2xl border border-glass-border">
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-black text-glass-text uppercase tracking-widest">Status Aktivasi</span>
+                                        <span className="text-[10px] text-glass-text/40">Tentukan apakah tenant aktif</span>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setEditFormData({ ...editFormData, isActive: !editFormData.isActive })}
+                                        className={cn(
+                                            "relative w-14 h-7 rounded-full transition-colors duration-300",
+                                            editFormData.isActive ? "bg-emerald-500" : "bg-glass-surface border border-glass-border"
+                                        )}
+                                    >
+                                        <div className={cn(
+                                            "absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300",
+                                            editFormData.isActive ? "translate-x-7" : "translate-x-0"
+                                        )} />
+                                    </button>
+                                </div>
+
+                                <div className="flex gap-4 pt-4">
                                     <button
                                         type="button"
                                         onClick={() => setIsEditModalOpen(false)}

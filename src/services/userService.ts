@@ -1,4 +1,5 @@
 import { API, apiGet, apiPost, apiPut, apiDelete } from "@/config/api.config";
+import { ApiResponse, User } from "@/types/auth";
 
 /**
  * ============================================
@@ -6,62 +7,41 @@ import { API, apiGet, apiPost, apiPut, apiDelete } from "@/config/api.config";
  * ============================================
  */
 
-// ========== TYPES ==========
-export interface User {
-    id: number;
-    name: string;
-    email: string;
-    roleId?: number;
-}
-
 // ========== FUNCTIONS ==========
 
 /**
  * Get all users
- * TODO: Implement ketika backend API ready
  */
-export async function getAllUsers(): Promise<any> {
-    return apiGet(API.users.getAll);
+export async function getAllUsers(): Promise<ApiResponse<User[]>> {
+    return apiGet<ApiResponse<User[]>>(API.users.getAll);
 }
 
 /**
  * Get user by ID
- * TODO: Implement ketika backend API ready
  */
-export async function getUserById(id: number): Promise<any> {
-    throw new Error("Get user by ID API belum diimplementasikan");
-    // Nanti implementasinya seperti ini:
-    // return apiGet(API.users.getById(id));
+export async function getUserById(id: number): Promise<ApiResponse<User>> {
+    return apiGet<ApiResponse<User>>(API.users.getById(id));
 }
 
 /**
  * Create new user
- * TODO: Implement ketika backend API ready
  */
-export async function createUser(userData: User): Promise<any> {
-    throw new Error("Create user API belum diimplementasikan");
-    // Nanti implementasinya seperti ini:
-    // return apiPost(API.users.create, userData);
+export async function createUser(userData: any): Promise<ApiResponse<User>> {
+    return apiPost<ApiResponse<User>>(API.users.create, userData);
 }
 
 /**
  * Update user
- * TODO: Implement ketika backend API ready
  */
-export async function updateUser(id: number, userData: Partial<User>): Promise<any> {
-    throw new Error("Update user API belum diimplementasikan");
-    // Nanti implementasinya seperti ini:
-    // return apiPut(API.users.update(id), userData);
+export async function updateUser(id: number, userData: any): Promise<ApiResponse<User>> {
+    return apiPut<ApiResponse<User>>(API.users.update(id), userData);
 }
 
 /**
  * Delete user
- * TODO: Implement ketika backend API ready
  */
-export async function deleteUser(id: number): Promise<any> {
-    throw new Error("Delete user API belum diimplementasikan");
-    // Nanti implementasinya seperti ini:
-    // return apiDelete(API.users.delete(id));
+export async function deleteUser(id: number): Promise<ApiResponse<any>> {
+    return apiDelete<ApiResponse<any>>(API.users.delete(id));
 }
 /**
  * Get user roles by ID
@@ -73,20 +53,20 @@ export async function getUserRoles(id: number): Promise<any> {
 /**
  * Add role to user
  */
-export async function addRoleToUser(userId: number, roleId: number): Promise<any> {
-    return apiPost(API.users.addRole(userId, roleId), {});
+export async function addRoleToUser(userId: number, roleId: number, tenantId?: number): Promise<any> {
+    return apiPost(API.users.addRole(userId, roleId, tenantId), {});
 }
 
 /**
  * Remove role from user
  */
-export async function removeRoleFromUser(userId: number, roleId: number): Promise<any> {
-    return apiDelete(API.users.removeRole(userId, roleId));
+export async function removeRoleFromUser(userId: number, roleId: number, tenantId?: number): Promise<any> {
+    return apiDelete(API.users.removeRole(userId, roleId, tenantId));
 }
 
 /**
  * Update user roles (Bulk)
  */
-export async function updateUserRoles(userId: number, roleIds: number[]): Promise<any> {
-    return apiPut(API.users.updateRoles(userId), roleIds);
+export async function updateUserRoles(userId: number, roleIds: number[], tenantId?: number): Promise<any> {
+    return apiPut(API.users.updateRoles(userId, tenantId), roleIds);
 }
