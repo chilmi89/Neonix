@@ -104,8 +104,13 @@ export async function getCurrentUser(tokenOverride?: string): Promise<MeResponse
         }
         return response;
     } catch (error: any) {
-        // Jika token tidak valid (401), hapus dari storage
-        if (error.message.includes("401") || error.message.includes("Unauthorized")) {
+        // Jika token tidak valid (401/403), hapus dari storage
+        if (
+            error.message.includes("401") ||
+            error.message.includes("403") ||
+            error.message.includes("Unauthorized") ||
+            error.message.includes("Forbidden")
+        ) {
             localStorage.removeItem("token");
             localStorage.removeItem("user");
         }
