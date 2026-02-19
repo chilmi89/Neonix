@@ -47,3 +47,20 @@ export interface EventCategory {
     id: number;
     name: string;
 }
+
+export interface Event {
+    id: number;
+    tenantId: number;
+    categoryId: number;
+    categoryName?: string;
+    name: string;
+    description: string;
+    locationName: string;
+    city: string;
+    address: string;
+    posterUrl?: string;
+    startDate: string;
+    endDate: string;
+    isPublished: boolean;
+    createdAt?: string;
+}
