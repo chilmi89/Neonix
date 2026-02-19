@@ -90,6 +90,15 @@ export const API = {
         delete: (id: number) => `${API_BASE_URL}/tenants/${id}`,
         getBySlug: (slug: string) => `${API_BASE_URL}/tenants/slug/${slug}`,
     },
+
+    // Event Categories
+    eventCategories: {
+        getAll: `${API_BASE_URL}/event-categories`,
+        getById: (id: number) => `${API_BASE_URL}/event-categories/${id}`,
+        create: `${API_BASE_URL}/event-categories`,
+        update: (id: number) => `${API_BASE_URL}/event-categories/${id}`,
+        delete: (id: number) => `${API_BASE_URL}/event-categories/${id}`,
+    },
 };
 
 // ========== HELPER FUNCTIONS ==========
