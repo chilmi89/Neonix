@@ -12,13 +12,22 @@ const genres = [
     { icon: Trophy, label: "Sports" },
 ];
 
-export function GenreSection() {
+interface GenreSectionProps {
+    activeGenre?: string;
+    onGenreClick?: (genre: string) => void;
+}
+
+export function GenreSection({ activeGenre, onGenreClick }: GenreSectionProps) {
     return (
-        <section className="py-20 px-8 md:px-12 lg:px-16 w-full space-y-12">
-            <h2 className="text-3xl font-black text-foreground text-center uppercase tracking-tighter">Browse by Genre</h2>
+        <section className="w-full mt-2 mb-8">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {genres.map((genre, i) => (
-                    <GenreCard key={i} {...genre} />
+                    <GenreCard
+                        key={i}
+                        {...genre}
+                        isActive={activeGenre === genre.label}
+                        onClick={() => onGenreClick?.(genre.label)}
+                    />
                 ))}
             </div>
         </section>
