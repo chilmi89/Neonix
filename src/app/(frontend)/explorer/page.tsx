@@ -5,7 +5,8 @@ import { Search, Calendar, ChevronDown, Check, X } from "lucide-react";
 import { NeonNavbar } from "../_components/layout/NeonNavbar";
 import { NeonFooter } from "../_components/layout/NeonFooter";
 import { NeonEventDetailModal } from "../_components/ui/NeonEventDetailModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const events = [
@@ -129,6 +130,7 @@ const priceRanges = ["All Prices", "< $100", "$100 - $300", "$300 - $600", "> $6
 const categories = ["All (VIP & Standard)", "VIP Only", "Standard Only"];
 
 export default function ExplorerPage() {
+    const searchParams = useSearchParams();
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -139,6 +141,14 @@ export default function ExplorerPage() {
     const [category, setCategory] = useState("All (VIP & Standard)");
 
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+    // Read search query and location from URL on mount
+    useEffect(() => {
+        const q = searchParams.get("q");
+        if (q) setSearchQuery(q);
+        const loc = searchParams.get("location");
+        if (loc && locations.includes(loc)) setLocation(loc);
+    }, [searchParams]);
 
     // Filter Logic
     const filteredEvents = events.filter(event => {

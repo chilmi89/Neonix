@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Search, MapPin, ChevronDown } from "lucide-react";
 
@@ -9,6 +10,7 @@ export function NeonNavbar() {
     const [scrolled, setScrolled] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState<any>(null);
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -24,6 +26,18 @@ export function NeonNavbar() {
 
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const navLinks = [
+        { href: "/", label: "Home" },
+        { href: "/explorer", label: "Explorer" },
+        { href: "/vip-access", label: "VIP Access" },
+        { href: "/about", label: "About" },
+    ];
+
+    const isActive = (href: string) => {
+        if (href === "/") return pathname === "/";
+        return pathname.startsWith(href);
+    };
 
     return (
         <nav className={cn(
@@ -41,10 +55,30 @@ export function NeonNavbar() {
                 </Link>
 
                 <div className="hidden md:flex items-center gap-10">
-                    <Link href="/" className="text-sm font-bold text-foreground uppercase tracking-wider hover:text-neon-pink transition-colors">Home</Link>
-                    <Link href="/explorer" className="text-sm font-bold text-foreground uppercase tracking-wider hover:text-neon-pink transition-colors">Explorer</Link>
-                    <Link href="/vip-access" className="text-sm font-bold text-neon-yellow hover:brightness-125 transition-all uppercase tracking-wider">VIP Access</Link>
-                    <Link href="/about" className="text-sm font-medium text-foreground/40 hover:text-foreground transition-all font-inter uppercase tracking-wider">About</Link>
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={cn(
+                                "text-sm font-bold uppercase tracking-wider transition-all relative",
+                                isActive(link.href)
+                                    ? link.href === "/vip-access"
+                                        ? "text-neon-yellow"
+                                        : "text-neon-pink"
+                                    : link.href === "/vip-access"
+                                        ? "text-neon-yellow/50 hover:text-neon-yellow"
+                                        : "text-foreground/50 hover:text-neon-pink"
+                            )}
+                        >
+                            {link.label}
+                            {isActive(link.href) && (
+                                <span className={cn(
+                                    "absolute -bottom-1 left-0 w-full h-0.5 rounded-full",
+                                    link.href === "/vip-access" ? "bg-neon-yellow" : "bg-neon-pink"
+                                )} />
+                            )}
+                        </Link>
+                    ))}
                 </div>
 
                 <div className="flex items-center gap-6 shrink-0">
