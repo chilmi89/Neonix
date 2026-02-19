@@ -120,7 +120,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
                 }
             }
         } catch (error: any) {
-            if (error.message.includes("401") || error.message.includes("Unauthorized")) {
+            if (
+                error.message.includes("401") ||
+                error.message.includes("403") ||
+                error.message.includes("Unauthorized") ||
+                error.message.includes("Forbidden")
+            ) {
                 router.push("/login");
             }
         } finally {
