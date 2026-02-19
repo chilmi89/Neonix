@@ -53,7 +53,7 @@ export default function VipAccessPage() {
 
             <main className="w-full">
                 {/* VIP Hero - Full Screen */}
-                <section className="min-h-screen flex flex-col justify-center items-center text-center px-8 md:px-12 lg:px-16 pt-32 pb-20 overflow-hidden relative">
+                <section className="min-h-screen flex flex-col justify-center items-center text-center px-8 md:px-12 lg:px-16 overflow-hidden relative">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-pink/10 rounded-full blur-[120px] -z-10" />
 
                     <motion.div
@@ -85,7 +85,7 @@ export default function VipAccessPage() {
                 </section>
 
                 {/* Pricing Cards */}
-                <section className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 mb-40">
+                <section className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 mb-40 pt-24 pb-16">
                     {PRICING_PLANS.map((plan, idx) => (
                         <motion.div
                             key={plan.name}
