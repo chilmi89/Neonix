@@ -16,7 +16,8 @@ import {
     Key,
     Lock,
     Building2,
-    Layers
+    Layers,
+    Calendar
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -68,6 +69,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                         { icon: Building2, label: "Tenants", href: "/dashboard/superadmin/tenant" },
                         { icon: Users, label: "Users Management", href: "/dashboard/superadmin/users" },
                         { icon: Layers, label: "Event Categories", href: "/dashboard/superadmin/event-category" },
+                        { icon: Calendar, label: "Events Registry", href: "/dashboard/admin/event" },
                         { icon: ShieldCheck, label: "Roles", href: "/dashboard/superadmin/role" },
                         { icon: Key, label: "Permissions", href: "/dashboard/superadmin/permission" },
                         { icon: UserCircle, label: "Give Role", href: "/dashboard/superadmin/users-role" },
@@ -75,6 +77,9 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                     );
                 } else if (hasAdminAccess) {
                     baseItems[0] = { icon: UserCircle, label: "Admin Dash", href: "/dashboard/admin" };
+                    baseItems.splice(1, 0,
+                        { icon: Calendar, label: "Event Management", href: "/dashboard/admin/event" }
+                    );
                 }
             } catch (e) {
                 console.error("Error setting menu items based on user", e);

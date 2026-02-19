@@ -1,50 +1,37 @@
-import { API, apiGet, apiPost, apiPut, apiDelete } from "@/config/api.config";
+import { API, apiGet, apiPostMultipart, apiPutMultipart, apiDelete } from "@/config/api.config";
+import { ApiResponse, Event } from "@/types/auth";
 
 /**
- * Event Service - Placeholder
- * TODO: Implement ketika backend API ready
+ * Get all events
  */
-
-export interface Event {
-    id?: number;
-    title: string;
-    description?: string;
-    location?: string;
-    startDate: string;
-    endDate: string;
+export async function getAllEvents(): Promise<ApiResponse<Event[]>> {
+    return apiGet<ApiResponse<Event[]>>(API.events.getAll);
 }
 
-export async function getAllEvents(): Promise<any> {
-    throw new Error("Get all events API belum diimplementasikan");
-    // return apiGet(API.events.getAll);
+/**
+ * Get event by ID
+ */
+export async function getEventById(id: number): Promise<ApiResponse<Event>> {
+    return apiGet<ApiResponse<Event>>(API.events.getById(id));
 }
 
-export async function getEventById(id: number): Promise<any> {
-    throw new Error("Get event by ID API belum diimplementasikan");
-    // return apiGet(API.events.getById(id));
+/**
+ * Create new event (Multipart)
+ */
+export async function createEvent(formData: FormData): Promise<ApiResponse<Event>> {
+    return apiPostMultipart<ApiResponse<Event>>(API.events.create, formData);
 }
 
-export async function getUpcomingEvents(): Promise<any> {
-    throw new Error("Get upcoming events API belum diimplementasikan");
-    // return apiGet(API.events.upcoming);
+/**
+ * Update event (Multipart)
+ */
+export async function updateEvent(id: number, formData: FormData): Promise<ApiResponse<Event>> {
+    return apiPutMultipart<ApiResponse<Event>>(API.events.update(id), formData);
 }
 
-export async function getPastEvents(): Promise<any> {
-    throw new Error("Get past events API belum diimplementasikan");
-    // return apiGet(API.events.past);
-}
-
-export async function createEvent(eventData: Event): Promise<any> {
-    throw new Error("Create event API belum diimplementasikan");
-    // return apiPost(API.events.create, eventData);
-}
-
-export async function updateEvent(id: number, eventData: Partial<Event>): Promise<any> {
-    throw new Error("Update event API belum diimplementasikan");
-    // return apiPut(API.events.update(id), eventData);
-}
-
-export async function deleteEvent(id: number): Promise<any> {
-    throw new Error("Delete event API belum diimplementasikan");
-    // return apiDelete(API.events.delete(id));
+/**
+ * Delete event
+ */
+export async function deleteEvent(id: number): Promise<ApiResponse<null>> {
+    return apiDelete<ApiResponse<null>>(API.events.delete(id));
 }

@@ -99,14 +99,11 @@ export const API = {
         update: (id: number) => `${API_BASE_URL}/event-categories/${id}`,
         delete: (id: number) => `${API_BASE_URL}/event-categories/${id}`,
     },
+
 };
 
 // ========== HELPER FUNCTIONS ==========
 
-/**
- * Get headers untuk API request
- * Otomatis include token JWT jika ada
- */
 /**
  * Get headers untuk API request
  * @param includeAuth - Apakah menyertakan token
@@ -200,6 +197,50 @@ export async function apiDelete<T>(url: string, withAuth = true): Promise<T> {
     const response = await fetch(url, {
         method: "DELETE",
         headers: getHeaders(withAuth),
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: "Request failed" }));
+        throw new Error(error.message || `HTTP ${response.status}`);
+    }
+
+    return response.json();
+}
+
+/**
+ * Helper untuk POST Multipart request (File Upload)
+ */
+export async function apiPostMultipart<T>(url: string, formData: FormData, withAuth = true, tokenOverride?: string): Promise<T> {
+    const headers = getHeaders(withAuth, tokenOverride);
+    // Remove Content-Type to let browser set boundary automatically for FormData
+    delete headers["Content-Type"];
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: formData,
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: "Request failed" }));
+        throw new Error(error.message || `HTTP ${response.status}`);
+    }
+
+    return response.json();
+}
+
+/**
+ * Helper untuk PUT Multipart request (File Upload)
+ */
+export async function apiPutMultipart<T>(url: string, formData: FormData, withAuth = true): Promise<T> {
+    const headers = getHeaders(withAuth);
+    // Remove Content-Type to let browser set boundary automatically for FormData
+    delete headers["Content-Type"];
+
+    const response = await fetch(url, {
+        method: "PUT",
+        headers: headers,
+        body: formData,
     });
 
     if (!response.ok) {
