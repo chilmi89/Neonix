@@ -51,7 +51,7 @@ export function TrendingSection() {
     };
 
     return (
-        <section className="py-16 px-8 md:px-12 lg:px-16 w-full space-y-10">
+        <section className="pt-32 pb-16 px-8 md:px-12 lg:px-16 w-full space-y-10">
             <div className="flex justify-between items-end mb-12">
                 <div>
                     <h2 className="text-4xl font-black text-foreground mb-4 uppercase tracking-tighter">Trending Events</h2>

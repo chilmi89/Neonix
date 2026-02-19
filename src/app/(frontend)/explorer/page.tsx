@@ -5,7 +5,9 @@ import { Search, Calendar, ChevronDown, Check, X } from "lucide-react";
 import { NeonNavbar } from "../_components/layout/NeonNavbar";
 import { NeonFooter } from "../_components/layout/NeonFooter";
 import { NeonEventDetailModal } from "../_components/ui/NeonEventDetailModal";
-import { useState } from "react";
+import { GenreSection } from "@/app/(frontend)/(home)/_components/GenreSection";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const events = [
@@ -129,6 +131,7 @@ const priceRanges = ["All Prices", "< $100", "$100 - $300", "$300 - $600", "> $6
 const categories = ["All (VIP & Standard)", "VIP Only", "Standard Only"];
 
 export default function ExplorerPage() {
+    const searchParams = useSearchParams();
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -139,6 +142,15 @@ export default function ExplorerPage() {
     const [category, setCategory] = useState("All (VIP & Standard)");
 
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+    const [activeGenre, setActiveGenre] = useState<string | null>(null);
+
+    // Read search query and location from URL on mount
+    useEffect(() => {
+        const q = searchParams.get("q");
+        if (q) setSearchQuery(q);
+        const loc = searchParams.get("location");
+        if (loc && locations.includes(loc)) setLocation(loc);
+    }, [searchParams]);
 
     // Filter Logic
     const filteredEvents = events.filter(event => {
@@ -160,7 +172,18 @@ export default function ExplorerPage() {
         if (category === "VIP Only") matchesCategory = event.isVip;
         else if (category === "Standard Only") matchesCategory = !event.isVip;
 
-        return matchesSearch && matchesLocation && matchesDate && matchesPrice && matchesCategory;
+        // Genre mapping
+        const genreMap: Record<string, string[]> = {
+            "Electronic": ["Konser", "Party"],
+            "Hip Hop": ["Konser", "Music"],
+            "Jazz": ["Konser", "Music"],
+            "Rock": ["Konser", "Music"],
+            "Comedy": ["Theater"],
+            "Sports": ["Sport"],
+        };
+        const matchesGenre = !activeGenre || (genreMap[activeGenre]?.includes(event.type) ?? false);
+
+        return matchesSearch && matchesLocation && matchesDate && matchesPrice && matchesCategory && matchesGenre;
     });
 
     const resetFilters = () => {
@@ -169,6 +192,7 @@ export default function ExplorerPage() {
         setDate("All Years");
         setPriceRange("All Prices");
         setCategory("All (VIP & Standard)");
+        setActiveGenre(null);
     };
 
     const handleEventClick = (event: any) => {
@@ -393,6 +417,12 @@ export default function ExplorerPage() {
                         Reset filter
                     </button>
                 </div>
+
+                {/* Browse by Genre */}
+                <GenreSection
+                    activeGenre={activeGenre ?? undefined}
+                    onGenreClick={(genre) => setActiveGenre(activeGenre === genre ? null : genre)}
+                />
 
                 {/* Results Section */}
                 <div className="space-y-12">
