@@ -27,6 +27,11 @@ export const API = {
         me: `${API_BASE_URL}/auth/me`,
     },
 
+    // Public API
+    public: {
+        events: `${API_BASE_URL}/public/events`,
+    },
+
     // Users
     users: {
         getAll: `${API_BASE_URL}/users`,
