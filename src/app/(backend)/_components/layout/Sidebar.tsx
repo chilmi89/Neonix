@@ -70,6 +70,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                         { icon: Building2, label: "Tenants", href: "/dashboard/superadmin/tenant" },
                         { icon: Users, label: "Users Management", href: "/dashboard/superadmin/users" },
                         { icon: Layers, label: "Event Categories", href: "/dashboard/superadmin/event-category" },
+                        { icon: Tags, label: "Tickets Registry", href: "/dashboard/admin/tickets" },
                         { icon: Calendar, label: "Events Registry", href: "/dashboard/admin/event" },
                         { icon: ShieldCheck, label: "Roles", href: "/dashboard/superadmin/role" },
                         { icon: Tags, label: "Ticket Categories", href: "/dashboard/admin/ticket-category" },
@@ -81,7 +82,8 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                     baseItems[0] = { icon: UserCircle, label: "Admin Dash", href: "/dashboard/admin" };
                     baseItems.splice(1, 0,
                         { icon: Calendar, label: "Event Management", href: "/dashboard/admin/event" },
-                        { icon: Tags, label: "Ticket Categories", href: "/dashboard/admin/ticket-category" }
+                        { icon: Tags, label: "Ticket Categories", href: "/dashboard/admin/ticket-category" },
+                        { icon: Tags, label: "Ticket Management", href: "/dashboard/admin/tickets" }
                     );
                 }
             } catch (e) {
