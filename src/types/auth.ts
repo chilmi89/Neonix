@@ -73,3 +73,20 @@ export interface TicketCategory {
     description: string;
     createdAt?: string;
 }
+
+export interface Ticket {
+    id: number;
+    tenantId: number;
+    eventId: number;
+    categoryId: number;
+    categoryName?: string;
+    name: string;
+    description: string;
+    price: number;
+    quota: number;
+    sold: number;
+    saleStart: string;
+    saleEnd: string;
+    isActive: boolean;
+    createdAt?: string;
+}

@@ -109,6 +109,16 @@ export const API = {
         delete: (id: number | string) => `${API_BASE_URL}/admin/ticket-categories/${id}`,
     },
 
+    // Tickets
+    tickets: {
+        getAll: `${API_BASE_URL}/admin/tickets`,
+        getById: (id: number | string) => `${API_BASE_URL}/admin/tickets/${id}`,
+        create: `${API_BASE_URL}/admin/tickets`,
+        update: (id: number | string) => `${API_BASE_URL}/admin/tickets/${id}`,
+        delete: (id: number | string) => `${API_BASE_URL}/admin/tickets/${id}`,
+        getByEvent: (eventId: number | string) => `${API_BASE_URL}/admin/tickets?eventId=${eventId}`,
+    },
+
 };
 
 // ========== HELPER FUNCTIONS ==========
