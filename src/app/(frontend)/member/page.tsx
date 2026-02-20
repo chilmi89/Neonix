@@ -17,10 +17,11 @@ import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
 import { LiquidBackground } from "@/app/(frontend)/_components/ui/LiquidBackground";
 import { ProfileSection } from "./_components/ProfileSection";
 import { TicketsHistory } from "./_components/TicketsHistory";
+import { SettingsSection } from "./_components/SettingsSection";
 
 export default function DashboardPage() {
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState<"profile" | "tickets">("tickets");
+    const [activeTab, setActiveTab] = useState<"profile" | "tickets" | "settings">("tickets");
     const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
@@ -38,6 +39,7 @@ export default function DashboardPage() {
     const menuItems = [
         { id: "profile", label: "Profile", icon: User },
         { id: "tickets", label: "My Tickets", icon: Ticket },
+        { id: "settings", label: "Settings", icon: Settings },
     ];
 
     if (!user) return null; // Avoid flicker before redirect
@@ -85,11 +87,7 @@ export default function DashboardPage() {
                                 </button>
                             ))}
 
-                            <div className="pt-4 mt-4 border-t border-white/5 space-y-2">
-                                <button className="w-full flex items-center gap-3 p-4 rounded-2xl text-white/40 hover:bg-white/5 hover:text-white transition-all group">
-                                    <Settings size={20} className="group-hover:rotate-90 transition-transform duration-500" />
-                                    <span className="text-sm font-bold uppercase tracking-wider">Settings</span>
-                                </button>
+                            <div className="pt-4 mt-4 border-t border-white/5">
                                 <button
                                     onClick={() => {
                                         localStorage.removeItem("token");
@@ -109,7 +107,7 @@ export default function DashboardPage() {
                     <div className="space-y-8">
                         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
-                                {activeTab === "profile" ? "General Profile" : "Ticket History"}
+                                {activeTab === "profile" ? "General Profile" : activeTab === "tickets" ? "Ticket History" : "Account Settings"}
                             </h1>
 
                             <div className="flex items-center gap-4">
@@ -138,8 +136,10 @@ export default function DashboardPage() {
                             >
                                 {activeTab === "profile" ? (
                                     <ProfileSection />
-                                ) : (
+                                ) : activeTab === "tickets" ? (
                                     <TicketsHistory />
+                                ) : (
+                                    <SettingsSection />
                                 )}
                             </motion.div>
                         </AnimatePresence>

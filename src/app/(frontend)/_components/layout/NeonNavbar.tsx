@@ -32,7 +32,7 @@ export function NeonNavbar() {
         { href: "/explorer", label: "Explorer" },
         { href: "/vip-access", label: "VIP Access" },
         { href: "/about", label: "About" },
-        ...(isLoggedIn ? [{ href: "/member", label: "Dashboard" }] : []),
+        ...(isLoggedIn ? [{ href: "/member", label: "Member" }] : []),
     ];
 
     const isActive = (href: string) => {

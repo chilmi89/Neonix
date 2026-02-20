@@ -19,6 +19,7 @@ import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { PlasmaBackground } from "@/app/(frontend)/_components/ui/PlasmaBackground";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
+import { PaymentSelector } from "@/app/(frontend)/_components/ui/PaymentSelector";
 
 export default function CheckoutPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
     const params = use(paramsPromise);
@@ -134,25 +135,11 @@ export default function CheckoutPage({ params: paramsPromise }: { params: Promis
                             </div>
 
                             {/* Payment Tabs */}
-                            <div className="grid grid-cols-3 gap-4 mb-8">
-                                {[
-                                    { id: 'card', icon: CreditCard, label: 'Card' },
-                                    { id: 'crypto', icon: Wallet, label: 'Crypto' },
-                                    { id: 'qr', icon: QrCode, label: 'QR Pay' }
-                                ].map((method) => (
-                                    <button
-                                        key={method.id}
-                                        onClick={() => setPaymentMethod(method.id)}
-                                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border transition-all ${paymentMethod === method.id
-                                            ? 'bg-neon-pink/5 border-neon-pink text-white'
-                                            : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10'
-                                            }`}
-                                    >
-                                        <method.icon size={24} />
-                                        <span className="text-xs font-bold uppercase tracking-widest">{method.label}</span>
-                                    </button>
-                                ))}
-                            </div>
+                            <PaymentSelector
+                                selectedMethod={paymentMethod}
+                                onSelect={setPaymentMethod}
+                                className="mb-8"
+                            />
 
                             {/* Payment Form */}
                             <div className="space-y-6">

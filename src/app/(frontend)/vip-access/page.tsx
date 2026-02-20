@@ -6,6 +6,7 @@ import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const PRICING_PLANS = [
     {
@@ -133,14 +134,22 @@ export default function VipAccessPage() {
                                 ))}
                             </div>
 
-                            <button className={cn(
-                                "w-full py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all",
-                                plan.isVip
-                                    ? "bg-neon-yellow text-black shadow-[0_20px_40px_rgba(255,215,0,0.2)] hover:shadow-[0_20px_50px_rgba(255,215,0,0.4)] hover:-translate-y-1 active:scale-[0.98]"
-                                    : "bg-white/5 text-white/20 cursor-default"
-                            )}>
-                                {plan.buttonText}
-                            </button>
+                            {plan.isVip ? (
+                                <Link
+                                    href="/checkout/vip"
+                                    className={cn(
+                                        "w-full py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all block text-center bg-neon-yellow text-black shadow-[0_20px_40px_rgba(255,215,0,0.2)] hover:shadow-[0_20px_50px_rgba(255,215,0,0.4)] hover:-translate-y-1 active:scale-[0.98]"
+                                    )}
+                                >
+                                    {plan.buttonText}
+                                </Link>
+                            ) : (
+                                <button className={cn(
+                                    "w-full py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all bg-white/5 text-white/20 cursor-default"
+                                )}>
+                                    {plan.buttonText}
+                                </button>
+                            )}
                         </motion.div>
                     ))}
                 </section>
