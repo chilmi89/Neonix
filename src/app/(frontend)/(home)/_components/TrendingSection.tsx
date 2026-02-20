@@ -1,52 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NeonEventCard } from "@/app/(frontend)/_components/ui/NeonEventCard";
 import { NeonEventDetailModal } from "@/app/(frontend)/_components/ui/NeonEventDetailModal";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
-
-const featuredEvents = [
-    {
-        id: "1",
-        title: "Neon Lights Festival 2024",
-        date: "Aug 12 - 14, 2024",
-        location: "GBK Stadium, Jakarta",
-        image: "/fototiket1.png",
-        price: "150",
-        tag: "trending" as const,
-        description: "Experience the most electrifying weekend of the year. The Neon Lights Festival returns to Jakarta with a lineup that defies expectations.",
-        genres: ["Electronic", "Dance", "Pop"]
-    },
-    {
-        id: "2",
-        title: "Midnight Jazz Session",
-        date: "Sep 05, 2024",
-        location: "Blue Note, Tokyo",
-        image: "/fototiker2.png",
-        price: "45",
-        description: "A cozy evening of world-class jazz in the heart of Tokyo. Featuring intimate performances and classic jazz standards.",
-        genres: ["Jazz", "Acoustic"]
-    },
-    {
-        id: "3",
-        title: "Underground Techno Rave",
-        date: "Oct 31, 2024",
-        location: "Warehouse 51, LA",
-        image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
-        price: "80",
-        tag: "hot" as const,
-        description: "LA's most exclusive underground techno event. Dark rooms, pulsating lights, and unrelenting beats until sunrise.",
-        genres: ["Techno", "House"]
-    }
-];
+import { getPublicEvents, PublicEvent } from "@/services/publicService";
 
 export function TrendingSection() {
+    const [events, setEvents] = useState<PublicEvent[]>([]);
+    const [loading, setLoading] = useState(true);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleEventClick = (event: any) => {
-        setSelectedEvent(event);
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const res = await getPublicEvents();
+                if (res.status === "success" && res.data) {
+                    setEvents(res.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch public events:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEvents();
+    }, []);
+
+    const formatPrice = (price: number) => {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'decimal',
+            minimumFractionDigits: 0
+        }).format(price);
+    };
+
+    const formatDate = (dateStr: string) => {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
+    const handleEventClick = (event: PublicEvent) => {
+        // Map PublicEvent to the format expected by NeonEventDetailModal
+        const mappedEvent = {
+            id: event.id.toString(),
+            title: event.name,
+            image: event.posterUrl,
+            location: `${event.city} - ${event.locationName}`,
+            date: formatDate(event.startDate),
+            price: formatPrice(event.startingPrice),
+            description: "", // Public API doesn't seem to return description yet
+            genres: [event.categoryName],
+        };
+        setSelectedEvent(mappedEvent);
         setIsModalOpen(true);
     };
 
@@ -62,15 +74,32 @@ export function TrendingSection() {
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {featuredEvents.map((event) => (
-                    <NeonEventCard
-                        key={event.id}
-                        {...event}
-                        onClick={() => handleEventClick(event)}
-                    />
-                ))}
-            </div>
+            {loading ? (
+                <div className="flex flex-col items-center justify-center py-20 gap-4">
+                    <Loader2 className="animate-spin text-neon-cyan" size={48} />
+                    <p className="text-neon-pink font-black uppercase tracking-widest animate-pulse">Scanning the Grid...</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {events.map((event, index) => (
+                        <NeonEventCard
+                            key={event.id}
+                            image={event.posterUrl}
+                            title={event.name}
+                            location={`${event.city} - ${event.locationName}`}
+                            date={formatDate(event.startDate)}
+                            price={formatPrice(event.startingPrice)}
+                            tag={index === 0 ? "trending" : index === 1 ? "hot" : undefined}
+                            onClick={() => handleEventClick(event)}
+                        />
+                    ))}
+                    {events.length === 0 && (
+                        <div className="col-span-full text-center py-20 border border-dashed border-white/10 rounded-2xl bg-white/5">
+                            <p className="text-muted-foreground font-medium">No active events found in the matrix.</p>
+                        </div>
+                    )}
+                </div>
+            )}
 
             <NeonEventDetailModal
                 isOpen={isModalOpen}
