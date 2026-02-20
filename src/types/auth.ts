@@ -65,3 +65,11 @@ export interface Event {
     isPublished: boolean;
     createdAt?: string;
 }
+
+export interface TicketCategory {
+    id: number;
+    tenantId?: number;
+    name: string;
+    description: string;
+    createdAt?: string;
+}

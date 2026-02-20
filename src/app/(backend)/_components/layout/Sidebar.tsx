@@ -17,7 +17,8 @@ import {
     Lock,
     Building2,
     Layers,
-    Calendar
+    Calendar,
+    Tags
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -71,6 +72,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                         { icon: Layers, label: "Event Categories", href: "/dashboard/superadmin/event-category" },
                         { icon: Calendar, label: "Events Registry", href: "/dashboard/admin/event" },
                         { icon: ShieldCheck, label: "Roles", href: "/dashboard/superadmin/role" },
+                        { icon: Tags, label: "Ticket Categories", href: "/dashboard/admin/ticket-category" },
                         { icon: Key, label: "Permissions", href: "/dashboard/superadmin/permission" },
                         { icon: UserCircle, label: "Give Role", href: "/dashboard/superadmin/users-role" },
                         { icon: Lock, label: "Give Permission", href: "/dashboard/superadmin/role-permission" }
@@ -78,7 +80,8 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                 } else if (hasAdminAccess) {
                     baseItems[0] = { icon: UserCircle, label: "Admin Dash", href: "/dashboard/admin" };
                     baseItems.splice(1, 0,
-                        { icon: Calendar, label: "Event Management", href: "/dashboard/admin/event" }
+                        { icon: Calendar, label: "Event Management", href: "/dashboard/admin/event" },
+                        { icon: Tags, label: "Ticket Categories", href: "/dashboard/admin/ticket-category" }
                     );
                 }
             } catch (e) {
