@@ -49,7 +49,7 @@ export default function SuperAdminDashboardPage() {
                         <Zap size={12} fill="currentColor" /> Inti Sistem
                     </motion.div>
                     <h1 className="text-5xl font-black text-glass-text tracking-tighter">
-                        Nexus <span className="text-primary italic">Command</span>
+                        Neonix <span className="text-primary italic">System</span>
                     </h1>
                     <p className="text-glass-text/70 max-w-xl text-lg leading-relaxed">
                         Pengawasan global dan konfigurasi infrastruktur. Pantau performa, keamanan, dan operasi administratif secara real-time.

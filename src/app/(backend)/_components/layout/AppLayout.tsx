@@ -14,7 +14,7 @@ export function AppLayout({ children }: AppLayoutProps) {
     const { user, loading } = useUser();
 
     return (
-        <div className="min-h-screen flex bg-transparent">
+        <div className="dark min-h-screen flex bg-transparent">
             <Sidebar
                 isCollapsed={isSidebarCollapsed}
                 onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
