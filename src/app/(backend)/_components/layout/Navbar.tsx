@@ -1,7 +1,6 @@
 "use client";
 
-import { Bell, Search, Menu, User, Sun, Moon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Bell, Search, Menu, User } from "lucide-react";
 import { GlassButton } from "@/app/(frontend)/_components/ui/GlassButton";
 import { useState, useEffect } from "react";
 import { useUser } from "@/context/UserContext";
@@ -12,32 +11,12 @@ interface NavbarProps {
 }
 
 export function Navbar({ isSidebarCollapsed, onToggleSidebar }: NavbarProps) {
-    const [isDarkMode, setIsDarkMode] = useState(false);
     const [mounted, setMounted] = useState(false);
     const { user } = useUser();
 
     useEffect(() => {
         setMounted(true);
-        const savedTheme = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-        if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-            setIsDarkMode(true);
-            document.documentElement.classList.add("dark");
-        }
     }, []);
-
-    const toggleDarkMode = () => {
-        const newMode = !isDarkMode;
-        setIsDarkMode(newMode);
-        if (newMode) {
-            document.documentElement.classList.add("dark");
-            localStorage.setItem("theme", "dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-            localStorage.setItem("theme", "light");
-        }
-    };
 
     return (
         <header className="sticky top-0 z-30 w-full p-4 md:px-8">
@@ -61,15 +40,6 @@ export function Navbar({ isSidebarCollapsed, onToggleSidebar }: NavbarProps) {
                 </div>
 
                 <div className="flex items-center gap-2 md:gap-4">
-                    <GlassButton
-                        variant="ghost"
-                        size="sm"
-                        onClick={toggleDarkMode}
-                        className="p-2 rounded-full"
-                    >
-                        {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-                    </GlassButton>
-
                     <div className="relative">
                         <GlassButton variant="ghost" size="sm" className="relative p-2 rounded-full">
                             <Bell size={20} />
