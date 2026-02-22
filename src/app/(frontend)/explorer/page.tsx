@@ -6,132 +6,21 @@ import { NeonNavbar } from "../_components/layout/NeonNavbar";
 import { NeonFooter } from "../_components/layout/NeonFooter";
 import { NeonEventDetailModal } from "../_components/ui/NeonEventDetailModal";
 import { GenreSection } from "@/app/(frontend)/(home)/_components/GenreSection";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { getPublicEvents, PublicEvent } from "@/services/publicService";
 
-const events = [
-    {
-        id: "1",
-        title: "Neon Sky VIP Rooftop Party",
-        venue: "Skyline Tower - Jakarta",
-        country: "Indonesia",
-        city: "Jakarta",
-        date: "Fri, 25 Oct 2025 - 21:00",
-        year: "2025",
-        type: "Konser",
-        status: "Limited Seats",
-        price: "320.00",
-        image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
-        isVip: true
-    },
-    {
-        id: "2",
-        title: "Night League Finals: Jakarta vs Surabaya",
-        venue: "National Arena - Jakarta",
-        country: "Indonesia",
-        city: "Jakarta",
-        date: "Sat, 02 Nov 2024 - 19:30",
-        year: "2024",
-        type: "Sport",
-        status: "Kategori: Standard",
-        price: "75.00",
-        image: "https://images.unsplash.com/photo-1540575861501-7ad058bf3efb?auto=format&fit=crop&q=80&w=800",
-        isVip: false
-    },
-    {
-        id: "3",
-        title: "Phantom of the Opera - Royal Box",
-        venue: "Grand Theater Hall - Jakarta",
-        country: "Indonesia",
-        city: "Jakarta",
-        date: "Sun, 10 Nov 2024 - 20:00",
-        year: "2024",
-        type: "Theater",
-        status: "Includes Backstage Tour",
-        price: "540.00",
-        image: "https://images.unsplash.com/photo-1514525253344-a8135a43cf3e?auto=format&fit=crop&q=80&w=800",
-        isVip: true
-    },
-    {
-        id: "4",
-        title: "FutureTech Summit 2025",
-        venue: "Convention Center - Jakarta",
-        country: "Indonesia",
-        city: "Jakarta",
-        date: "Thu, 05 Dec 2025 - 09:00",
-        year: "2025",
-        type: "Konferensi",
-        status: "All Access Pass",
-        price: "260.00",
-        image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=800",
-        isVip: false
-    },
-    {
-        id: "5",
-        title: "Cyberpunk Tokyo Night",
-        venue: "Shibuya Crossing Arena - Tokyo",
-        country: "Japan",
-        city: "Tokyo",
-        date: "Wed, 12 Mar 2026 - 22:00",
-        year: "2026",
-        type: "Party",
-        status: "Neon Access Only",
-        price: "450.00",
-        image: "https://images.unsplash.com/photo-1540959733332-e94e7bf71f0d?auto=format&fit=crop&q=80&w=800",
-        isVip: true
-    },
-    {
-        id: "6",
-        title: "Formula E Singapore Grand Prix",
-        venue: "Marina Bay Circuit - Singapore",
-        country: "Singapore",
-        city: "Singapore",
-        date: "Sat, 20 Sep 2025 - 18:00",
-        year: "2025",
-        type: "Sport",
-        status: "VIP Lounge Available",
-        price: "850.00",
-        image: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&q=80&w=800",
-        isVip: true
-    },
-    {
-        id: "7",
-        title: "Silicon Valley AI Expo",
-        venue: "Maron Center - Los Angeles",
-        country: "USA",
-        city: "Los Angeles",
-        date: "Mon, 15 Jul 2024 - 10:00",
-        year: "2024",
-        type: "Konferensi",
-        status: "Free for Students",
-        price: "45.00",
-        image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800",
-        isVip: false
-    },
-    {
-        id: "8",
-        title: "Glastonbury Music Festival 2026",
-        venue: "Worthy Farm - London",
-        country: "UK",
-        city: "London",
-        date: "Fri, 26 Jun 2026 - 12:00",
-        year: "2026",
-        type: "Music",
-        status: "Tickets Selling Fast",
-        price: "1200.00",
-        image: "https://images.unsplash.com/photo-1459749411177-042180ce673c?auto=format&fit=crop&q=80&w=800",
-        isVip: true
-    }
-];
 
 const locations = ["All Locations", "Indonesia", "Singapore", "Japan", "USA", "UK"];
 const dates = ["All Years", "2024", "2025", "2026"];
 const priceRanges = ["All Prices", "< $100", "$100 - $300", "$300 - $600", "> $600"];
 const categories = ["All (VIP & Standard)", "VIP Only", "Standard Only"];
 
-export default function ExplorerPage() {
+function ExplorerPageContent() {
     const searchParams = useSearchParams();
+    const [events, setEvents] = useState<PublicEvent[]>([]);
+    const [loading, setLoading] = useState(true);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -144,6 +33,27 @@ export default function ExplorerPage() {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const [activeGenre, setActiveGenre] = useState<string | null>(null);
 
+    // Fetch Events from API
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await getPublicEvents();
+                if (response.status === "success" && Array.isArray(response.data)) {
+                    setEvents(response.data);
+                } else {
+                    console.warn("API success but data is not an array:", response.data);
+                    setEvents([]);
+                }
+            } catch (error) {
+                console.error("Failed to fetch events:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEvents();
+    }, []);
+
     // Read search query and location from URL on mount
     useEffect(() => {
         const q = searchParams.get("q");
@@ -153,35 +63,41 @@ export default function ExplorerPage() {
     }, [searchParams]);
 
     // Filter Logic
-    const filteredEvents = events.filter(event => {
-        const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            event.venue.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            event.type.toLowerCase().includes(searchQuery.toLowerCase());
+    const filteredEvents = (events || []).filter(event => {
+        if (!event) return false;
 
-        const matchesLocation = location === "All Locations" || event.country === location;
-        const matchesDate = date === "All Years" || event.year === date;
+        const name = event.name || "";
+        const locationName = event.locationName || "";
+        const categoryName = event.categoryName || "";
+        const city = event.city || "";
+        const startDateStr = event.startDate || "";
+        const dateObj = startDateStr ? new Date(startDateStr) : null;
+        const isDateValid = dateObj && !isNaN(dateObj.getTime());
+        const eventYear = isDateValid ? dateObj.getFullYear().toString() : "";
 
-        const price = parseFloat(event.price);
+        const price = Number(event.startingPrice) || 0;
+
+        const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            locationName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            categoryName.toLowerCase().includes(searchQuery.toLowerCase());
+
+        const matchesLocation = location === "All Locations" || city.toLowerCase() === location.toLowerCase();
+
+        const matchesDate = date === "All Years" || eventYear === date;
+
         let matchesPrice = true;
         if (priceRange === "< $100") matchesPrice = price < 100;
         else if (priceRange === "$100 - $300") matchesPrice = price >= 100 && price <= 300;
         else if (priceRange === "$300 - $600") matchesPrice = price > 300 && price <= 600;
         else if (priceRange === "> $600") matchesPrice = price > 600;
 
-        let matchesCategory = true;
-        if (category === "VIP Only") matchesCategory = event.isVip;
-        else if (category === "Standard Only") matchesCategory = !event.isVip;
+        // Genre mapping matching API categories
+        const matchesGenre = !activeGenre || (categoryName.toUpperCase() === activeGenre.toUpperCase());
 
-        // Genre mapping
-        const genreMap: Record<string, string[]> = {
-            "Electronic": ["Konser", "Party"],
-            "Hip Hop": ["Konser", "Music"],
-            "Jazz": ["Konser", "Music"],
-            "Rock": ["Konser", "Music"],
-            "Comedy": ["Theater"],
-            "Sports": ["Sport"],
-        };
-        const matchesGenre = !activeGenre || (genreMap[activeGenre]?.includes(event.type) ?? false);
+        // Note: isVip placeholder logic
+        let matchesCategory = true;
+        if (category === "VIP Only") matchesCategory = false;
+        else if (category === "Standard Only") matchesCategory = true;
 
         return matchesSearch && matchesLocation && matchesDate && matchesPrice && matchesCategory && matchesGenre;
     });
@@ -195,8 +111,29 @@ export default function ExplorerPage() {
         setActiveGenre(null);
     };
 
-    const handleEventClick = (event: any) => {
-        setSelectedEvent(event);
+    const handleEventClick = (event: PublicEvent) => {
+        if (!event) return;
+
+        const dateObj = event.startDate ? new Date(event.startDate) : null;
+        const isDateValid = dateObj && !isNaN(dateObj.getTime());
+
+        const mappedEvent = {
+            id: event.id?.toString() || "",
+            title: event.name || "Unnamed Event",
+            image: event.posterUrl || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
+            location: `${event.city || ""} - ${event.locationName || ""}`,
+            date: isDateValid ? dateObj.toLocaleDateString('id-ID', {
+                weekday: 'short',
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : "TBA",
+            price: (Number(event.startingPrice) || 0).toString(),
+            genres: [event.categoryName || "Uncategorized"],
+        };
+        setSelectedEvent(mappedEvent);
         setIsModalOpen(true);
     };
 
@@ -440,66 +377,77 @@ export default function ExplorerPage() {
                     </div>
 
                     <div className="space-y-6 min-h-[400px]">
-                        {filteredEvents.length > 0 ? (
-                            filteredEvents.map((event, i) => (
-                                <motion.div
-                                    key={event.id}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: (i % 4) * 0.05 }}
-                                    onClick={() => handleEventClick(event)}
-                                    className="bg-muted/50 backdrop-blur-sm border border-glass-border rounded-[2rem] overflow-hidden flex flex-col md:flex-row items-center gap-8 p-4 group hover:border-glass-border transition-all hover:shadow-2xl cursor-pointer"
-                                >
-                                    <div className="w-full md:w-64 h-40 rounded-2xl overflow-hidden shrink-0 relative">
-                                        <img src={event.image} alt={event.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                        {event.isVip ? (
-                                            <div className="absolute top-3 left-3 px-3 py-1 bg-neon-pink text-white text-[8px] font-black uppercase tracking-[0.2em] rounded-full shadow-[0_0_15px_rgba(255,0,255,0.4)]">
+                        {loading ? (
+                            <div className="flex flex-col items-center justify-center py-40">
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neon-pink"></div>
+                                <p className="mt-4 text-muted-foreground font-bold tracking-widest uppercase text-[10px]">Memuat Event...</p>
+                            </div>
+                        ) : filteredEvents.length > 0 ? (
+                            filteredEvents.map((event, i) => {
+                                // Safe date formatting to prevent hydration mismatch and RangeError
+                                const dateObj = event.startDate ? new Date(event.startDate) : null;
+                                const isDateValid = dateObj && !isNaN(dateObj.getTime());
+
+                                const eventDate = isDateValid ? dateObj.toLocaleDateString('id-ID', {
+                                    weekday: 'short',
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }) : "TBA";
+
+                                const startingPrice = Number(event.startingPrice) || 0;
+                                const eventName = event.name || "Unnamed Event";
+                                const locationName = event.locationName || "Unknown Location";
+                                const city = event.city || "Unknown City";
+                                const posterUrl = event.posterUrl || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800";
+                                const categoryName = event.categoryName || "Uncategorized";
+
+                                return (
+                                    <motion.div
+                                        key={event.id || `event-${i}`}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: (i % 4) * 0.05 }}
+                                        onClick={() => handleEventClick(event)}
+                                        className="bg-[#0C0C0C] border border-white/5 rounded-3xl overflow-hidden flex flex-col md:flex-row items-center gap-6 p-4 group hover:border-white/10 transition-all hover:bg-[#111111] cursor-pointer"
+                                    >
+                                        <div className="w-full md:w-32 h-24 rounded-2xl overflow-hidden shrink-0 relative">
+                                            <img src={posterUrl} alt={eventName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                            <div className="absolute top-2 left-2 px-2 py-0.5 bg-neon-yellow/10 backdrop-blur-md text-neon-yellow text-[7px] font-black uppercase tracking-widest rounded-md border border-neon-yellow/20">
                                                 VIP
                                             </div>
-                                        ) : (
-                                            <div className="absolute top-3 left-3 px-3 py-1 bg-white/10 backdrop-blur-md text-white text-[8px] font-black uppercase tracking-[0.2em] rounded-full border border-white/10">
-                                                STANDARD
-                                            </div>
-                                        )}
-                                    </div>
+                                        </div>
 
-                                    <div className="flex-1 space-y-4 w-full">
-                                        <div className="space-y-1">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-[8px] font-black bg-white/5 border border-white/10 px-2 py-0.5 rounded text-white/40 uppercase tracking-widest">{event.type}</span>
-                                                <span className="w-1 h-1 rounded-full bg-white/10" />
-                                                <span className="text-[8px] font-bold text-neon-cyan uppercase tracking-widest">{event.city}, {event.country}</span>
-                                            </div>
-                                            <h3 className="text-xl font-black tracking-tight leading-none group-hover:text-neon-pink transition-colors">{event.title}</h3>
-                                            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{event.venue}</p>
-                                        </div>
-                                        <div className="flex flex-wrap items-center gap-4">
-                                            <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest bg-black/20 px-3 py-2 rounded-xl">
-                                                <Calendar size={12} className="text-neon-pink/50" />
-                                                {event.date}
-                                            </div>
-                                            <div className="flex items-center gap-2 text-[10px] font-bold text-neon-yellow uppercase tracking-widest bg-neon-yellow/5 border border-neon-yellow/10 px-3 py-2 rounded-xl">
-                                                {event.status}
+                                        <div className="flex-1 space-y-2 w-full text-left">
+                                            <h3 className="text-base font-black tracking-tight text-white group-hover:text-neon-pink transition-colors">{eventName}</h3>
+                                            <div className="flex flex-col gap-1">
+                                                <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-none">
+                                                    {locationName} · {city}
+                                                </p>
+                                                <div className="flex items-center gap-3">
+                                                    <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{eventDate}</span>
+                                                    <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{categoryName}</span>
+                                                    <span className="px-2 py-0.5 bg-neon-yellow/5 border border-neon-yellow/10 text-neon-yellow text-[8px] font-black uppercase tracking-widest rounded-full">
+                                                        Limited Seats
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="w-full md:w-auto text-right px-6 flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-3 shrink-0">
-                                        <div className="space-y-0.5">
-                                            <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest leading-none">Mulai dari</p>
-                                            <div className="text-3xl font-black tracking-tighter text-white">${event.price}</div>
+                                        <div className="w-full md:w-auto flex flex-row md:flex-row items-center justify-between md:justify-end gap-12 px-2">
+                                            <div className="text-right">
+                                                <p className="text-[9px] text-white/30 font-bold uppercase tracking-widest leading-none mb-1">Mulai dari</p>
+                                                <div className="text-2xl font-black tracking-tighter text-neon-yellow">${startingPrice.toFixed(2)}</div>
+                                            </div>
+                                            <button className="px-8 py-3.5 rounded-full font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 bg-neon-cyan text-black hover:shadow-[0_0_20px_rgba(0,255,242,0.4)] shadow-lg">
+                                                Buy VIP
+                                            </button>
                                         </div>
-                                        <button className={cn(
-                                            "px-10 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg",
-                                            event.isVip
-                                                ? "bg-neon-cyan text-black hover:bg-neon-pink hover:text-white shadow-neon-cyan/20"
-                                                : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
-                                        )}>
-                                            Detail
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            ))
+                                    </motion.div>
+                                );
+                            })
                         ) : (
                             <div className="flex flex-col items-center justify-center py-40 text-center space-y-4">
                                 <div className="w-20 h-20 bg-muted border border-glass-border rounded-full flex items-center justify-center text-muted-foreground mb-4">
@@ -530,5 +478,17 @@ export default function ExplorerPage() {
 
             <NeonFooter />
         </div>
+    );
+}
+
+export default function ExplorerPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="animate-spin text-neon-pink">Loading Explorer...</div>
+            </div>
+        }>
+            <ExplorerPageContent />
+        </Suspense>
     );
 }
