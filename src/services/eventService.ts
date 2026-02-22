@@ -1,5 +1,5 @@
 import { API, apiGet, apiPostMultipart, apiPutMultipart, apiDelete } from "@/config/api.config";
-import { ApiResponse, Event } from "@/types/auth";
+import { ApiResponse, Event, EventCategory } from "@/types/auth";
 
 /**
  * Get all events
@@ -34,4 +34,11 @@ export async function updateEvent(id: number, formData: FormData): Promise<ApiRe
  */
 export async function deleteEvent(id: number): Promise<ApiResponse<null>> {
     return apiDelete<ApiResponse<null>>(API.events.delete(id));
+}
+
+/**
+ * Get all event categories
+ */
+export async function getEventCategories(): Promise<ApiResponse<EventCategory[]>> {
+    return apiGet<ApiResponse<EventCategory[]>>(API.eventCategories.getAll);
 }
