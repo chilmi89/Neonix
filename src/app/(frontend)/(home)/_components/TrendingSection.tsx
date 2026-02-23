@@ -6,6 +6,7 @@ import { NeonEventDetailModal } from "@/app/(frontend)/_components/ui/NeonEventD
 import { ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { getPublicEvents, PublicEvent } from "@/services/publicService";
+import { getImageUrl } from "@/config/api.config";
 
 export function TrendingSection() {
     const [events, setEvents] = useState<PublicEvent[]>([]);
@@ -47,16 +48,26 @@ export function TrendingSection() {
     };
 
     const handleEventClick = (event: PublicEvent) => {
+        // Robust date validation
+        const dateObj = event.startDate ? new Date(event.startDate) : null;
+        const isDateValid = dateObj && !isNaN(dateObj.getTime());
+
         // Map PublicEvent to the format expected by NeonEventDetailModal
         const mappedEvent = {
             id: event.id.toString(),
-            title: event.name,
-            image: event.posterUrl,
-            location: `${event.city} - ${event.locationName}`,
-            date: formatDate(event.startDate),
-            price: formatPrice(event.startingPrice),
-            description: "", // Public API doesn't seem to return description yet
-            genres: [event.categoryName],
+            title: event.name || event.title || "Unnamed Event",
+            image: getImageUrl(event.posterUrl),
+            location: `${event.city || ""} - ${event.locationName || event.location || ""}`,
+            date: isDateValid ? dateObj.toLocaleDateString('id-ID', {
+                weekday: 'short',
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : "TBA",
+            price: (Number(event.startingPrice) || 0).toString(),
+            genres: [event.categoryName || "Uncategorized"],
         };
         setSelectedEvent(mappedEvent);
         setIsModalOpen(true);
@@ -81,18 +92,30 @@ export function TrendingSection() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {events.map((event, index) => (
-                        <NeonEventCard
-                            key={event.id}
-                            image={event.posterUrl}
-                            title={event.name}
-                            location={`${event.city} - ${event.locationName}`}
-                            date={formatDate(event.startDate)}
-                            price={formatPrice(event.startingPrice)}
-                            tag={index === 0 ? "trending" : index === 1 ? "hot" : undefined}
-                            onClick={() => handleEventClick(event)}
-                        />
-                    ))}
+                    {events.map((event, index) => {
+                        const dateObj = event.startDate ? new Date(event.startDate) : null;
+                        const isDateValid = dateObj && !isNaN(dateObj.getTime());
+                        const eventDate = isDateValid ? dateObj.toLocaleDateString('id-ID', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                        }) : "TBA";
+
+                        const posterUrl = getImageUrl(event.posterUrl);
+
+                        return (
+                            <NeonEventCard
+                                key={event.id}
+                                image={posterUrl}
+                                title={event.name || event.title || "Unnamed Event"}
+                                location={`${event.city || ""} - ${event.locationName || event.location || ""}`}
+                                date={eventDate}
+                                price={formatPrice(Number(event.startingPrice) || 0)}
+                                tag={index === 0 ? "trending" : index === 1 ? "hot" : undefined}
+                                onClick={() => handleEventClick(event)}
+                            />
+                        );
+                    })}
                     {events.length === 0 && (
                         <div className="col-span-full text-center py-20 border border-dashed border-white/10 rounded-2xl bg-white/5">
                             <p className="text-muted-foreground font-medium">No active events found in the matrix.</p>

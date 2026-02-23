@@ -17,11 +17,15 @@ export function NeonNavbar() {
         window.addEventListener("scroll", handleScroll);
 
         // Check login status
-        const token = localStorage.getItem("token");
-        const userData = localStorage.getItem("user");
-        if (token && userData) {
-            setIsLoggedIn(true);
-            setUser(JSON.parse(userData));
+        try {
+            const token = localStorage.getItem("token");
+            const userData = localStorage.getItem("user");
+            if (token && userData) {
+                setIsLoggedIn(true);
+                setUser(JSON.parse(userData));
+            }
+        } catch (error) {
+            console.error("Error parsing user data from localStorage:", error);
         }
 
         return () => window.removeEventListener("scroll", handleScroll);
