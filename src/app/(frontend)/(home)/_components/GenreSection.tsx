@@ -9,24 +9,16 @@ import { EventCategory } from "@/types/auth";
 const ICON_MAP: Record<string, any> = {
     "PENDIDIKAN": GraduationCap,
     "OLAHRAGA": Trophy,
-    "GAMING": Gamepad2,
-    "ELECTRONIC": Music2,
-    "HIP HOP": Mic2,
-    "JAZZ": Piano,
-    "ROCK": Disc,
-    "COMEDY": Theater,
+    "GAMING": Gamepad2, 
 };
 
 const DEFAULT_ICON = Music2;
 
 
 const STATIC_GENRES = [
-    { id: "s1", name: "ELECTRONIC" },
-    { id: "s2", name: "HIP HOP" },
-    { id: "s3", name: "JAZZ" },
-    { id: "s4", name: "ROCK" },
-    { id: "s5", name: "COMEDY" },
-    { id: "s6", name: "OLAHRAGA" },
+    { id: "s1", name: "PENDIDIKAN" },
+    { id: "s2", name: "OLAHRAGA" },
+    { id: "s3", name: "GAMING" },
 ];
 
 interface GenreSectionProps {
@@ -71,9 +63,10 @@ export function GenreSection({ activeGenre, onGenreClick }: GenreSectionProps) {
         <section className="w-full mt-2 mb-8">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {categories.map((category) => {
+                    if (!category || !category.name) return null;
                     const Icon = ICON_MAP[category.name] || DEFAULT_ICON;
                     // Format label: capitalize first letter or keep as is if desired
-                    const label = category.name.charAt(0) + category.name.slice(1).toLowerCase();
+                    const label = category.name.charAt(0).toUpperCase() + category.name.slice(1).toLowerCase();
 
                     return (
                         <GenreCard

@@ -3,11 +3,13 @@ import { ApiResponse } from "@/types/auth";
 
 export interface PublicEvent {
     id: number;
-    name: string;
+    name?: string;
+    title?: string;
     posterUrl: string;
     categoryName: string;
     city: string;
-    locationName: string;
+    locationName?: string;
+    location?: string;
     startDate: string;
     endDate: string;
     startingPrice: number;
@@ -17,7 +19,7 @@ export interface PublicEvent {
  * Get events for public landing page
  */
 export async function getPublicEvents(): Promise<ApiResponse<PublicEvent[]>> {
-    return apiGet<ApiResponse<PublicEvent[]>>(API.public.events, false); // false = no auth token needed
+    return apiGet<ApiResponse<PublicEvent[]>>(API.public.events, false);
 }
 
 /**

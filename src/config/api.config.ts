@@ -274,3 +274,20 @@ export async function apiPutMultipart<T>(url: string, formData: FormData, withAu
 
     return response.json();
 }
+
+/**
+ * Helper untuk mendapatkan URL gambar yang benar.
+ * Jika path dimulai dengan '/', maka akan dipetakan ke proxy lokal (Internal Backend).
+ * Jika path adalah URL lengkap, maka akan dikembalikan apa adanya.
+ */
+export function getImageUrl(path?: string): string {
+    if (!path) return "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800";
+
+    if (path.startsWith('http')) {
+        return path;
+    }
+
+    // Gunakan relative path untuk memanfaatkan Next.js proxy/rewrites di next.config.ts
+    // Contoh: /uploads/posters/... akan di-proxy ke Backend IP
+    return path.startsWith('/') ? path : `/${path}`;
+}

@@ -4,12 +4,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Calendar, ChevronDown, Check, X } from "lucide-react";
 import { NeonNavbar } from "../_components/layout/NeonNavbar";
 import { NeonFooter } from "../_components/layout/NeonFooter";
-import { NeonEventDetailModal } from "../_components/ui/NeonEventDetailModal";
+import { NeonEventDetailModal } from "@/app/(frontend)/_components/ui/NeonEventDetailModal";
+import { NeonEventCard } from "@/app/(frontend)/_components/ui/NeonEventCard";
+import { NeonTicketCard } from "@/app/(frontend)/_components/ui/NeonTicketCard";
 import { GenreSection } from "@/app/(frontend)/(home)/_components/GenreSection";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { getPublicEvents, PublicEvent } from "@/services/publicService";
+import { getImageUrl } from "@/config/api.config";
 
 
 const locations = ["All Locations", "Indonesia", "Singapore", "Japan", "USA", "UK"];
@@ -37,8 +40,11 @@ function ExplorerPageContent() {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
+                console.log("Fetching events...");
                 const response = await getPublicEvents();
+                console.log("API Response:", response);
                 if (response.status === "success" && Array.isArray(response.data)) {
+                    console.log(`Successfully fetched ${response.data.length} events`);
                     setEvents(response.data);
                 } else {
                     console.warn("API success but data is not an array:", response.data);
@@ -66,8 +72,8 @@ function ExplorerPageContent() {
     const filteredEvents = (events || []).filter(event => {
         if (!event) return false;
 
-        const name = event.name || "";
-        const locationName = event.locationName || "";
+        const name = event.name || event.title || "";
+        const locName = event.locationName || event.location || "";
         const categoryName = event.categoryName || "";
         const city = event.city || "";
         const startDateStr = event.startDate || "";
@@ -78,7 +84,7 @@ function ExplorerPageContent() {
         const price = Number(event.startingPrice) || 0;
 
         const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            locationName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            locName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             categoryName.toLowerCase().includes(searchQuery.toLowerCase());
 
         const matchesLocation = location === "All Locations" || city.toLowerCase() === location.toLowerCase();
@@ -95,12 +101,14 @@ function ExplorerPageContent() {
         const matchesGenre = !activeGenre || (categoryName.toUpperCase() === activeGenre.toUpperCase());
 
         // Note: isVip placeholder logic
-        let matchesCategory = true;
-        if (category === "VIP Only") matchesCategory = false;
-        else if (category === "Standard Only") matchesCategory = true;
+        const matchesCategory = category === "All (VIP & Standard)" ||
+            (category === "VIP Only" && price > 200) ||
+            (category === "Standard Only" && price <= 200);
 
-        return matchesSearch && matchesLocation && matchesDate && matchesPrice && matchesCategory && matchesGenre;
+        return matchesSearch && matchesLocation && matchesDate && matchesPrice && matchesGenre && matchesCategory;
     });
+
+    console.log("Total events:", events.length, "Filtered events:", filteredEvents.length);
 
     const resetFilters = () => {
         setSearchQuery("");
@@ -119,9 +127,9 @@ function ExplorerPageContent() {
 
         const mappedEvent = {
             id: event.id?.toString() || "",
-            title: event.name || "Unnamed Event",
-            image: event.posterUrl || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
-            location: `${event.city || ""} - ${event.locationName || ""}`,
+            title: event.name || event.title || "Unnamed Event",
+            image: getImageUrl(event.posterUrl),
+            location: `${event.city || ""} - ${event.locationName || event.location || ""}`,
             date: isDateValid ? dateObj.toLocaleDateString('id-ID', {
                 weekday: 'short',
                 day: '2-digit',
@@ -376,7 +384,7 @@ function ExplorerPageContent() {
                         </div>
                     </div>
 
-                    <div className="space-y-6 min-h-[400px]">
+                    <div className="flex flex-col gap-8 min-h-[400px]">
                         {loading ? (
                             <div className="flex flex-col items-center justify-center py-40">
                                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neon-pink"></div>
@@ -384,68 +392,50 @@ function ExplorerPageContent() {
                             </div>
                         ) : filteredEvents.length > 0 ? (
                             filteredEvents.map((event, i) => {
-                                // Safe date formatting to prevent hydration mismatch and RangeError
+                                // Safe date formatting
                                 const dateObj = event.startDate ? new Date(event.startDate) : null;
                                 const isDateValid = dateObj && !isNaN(dateObj.getTime());
 
-                                const eventDate = isDateValid ? dateObj.toLocaleDateString('id-ID', {
+                                const eventDate = isDateValid ? dateObj.toLocaleDateString('en-US', {
                                     weekday: 'short',
                                     day: '2-digit',
                                     month: 'short',
-                                    year: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
                                 }) : "TBA";
 
+                                const eventTime = isDateValid ? dateObj.toLocaleTimeString('en-US', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: false
+                                }) : "";
+
                                 const startingPrice = Number(event.startingPrice) || 0;
-                                const eventName = event.name || "Unnamed Event";
-                                const locationName = event.locationName || "Unknown Location";
+                                const eventName = event.name || event.title || "Unnamed Event";
+                                const locationName = event.locationName || event.location || "Unknown Location";
                                 const city = event.city || "Unknown City";
-                                const posterUrl = event.posterUrl || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800";
+
+                                const posterUrl = getImageUrl(event.posterUrl);
                                 const categoryName = event.categoryName || "Uncategorized";
 
+                                // Determine Type & Tag based on data or simple logic for now
+                                const type = i % 3 === 0 ? "VIP" : "STANDARD";
+                                const customTag = i % 5 === 0 ? "Limited Seats" :
+                                    i % 4 === 0 ? "Includes Backstage Tour" :
+                                        undefined;
+
                                 return (
-                                    <motion.div
+                                    <NeonTicketCard
                                         key={event.id || `event-${i}`}
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: (i % 4) * 0.05 }}
+                                        image={posterUrl}
+                                        title={eventName}
+                                        location={`${locationName} · ${city}`}
+                                        date={eventDate}
+                                        time={eventTime}
+                                        price={startingPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                        category={categoryName}
+                                        type={type}
+                                        tag={customTag}
                                         onClick={() => handleEventClick(event)}
-                                        className="bg-[#0C0C0C] border border-white/5 rounded-3xl overflow-hidden flex flex-col md:flex-row items-center gap-6 p-4 group hover:border-white/10 transition-all hover:bg-[#111111] cursor-pointer"
-                                    >
-                                        <div className="w-full md:w-32 h-24 rounded-2xl overflow-hidden shrink-0 relative">
-                                            <img src={posterUrl} alt={eventName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                            <div className="absolute top-2 left-2 px-2 py-0.5 bg-neon-yellow/10 backdrop-blur-md text-neon-yellow text-[7px] font-black uppercase tracking-widest rounded-md border border-neon-yellow/20">
-                                                VIP
-                                            </div>
-                                        </div>
-
-                                        <div className="flex-1 space-y-2 w-full text-left">
-                                            <h3 className="text-base font-black tracking-tight text-white group-hover:text-neon-pink transition-colors">{eventName}</h3>
-                                            <div className="flex flex-col gap-1">
-                                                <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-none">
-                                                    {locationName} · {city}
-                                                </p>
-                                                <div className="flex items-center gap-3">
-                                                    <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{eventDate}</span>
-                                                    <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{categoryName}</span>
-                                                    <span className="px-2 py-0.5 bg-neon-yellow/5 border border-neon-yellow/10 text-neon-yellow text-[8px] font-black uppercase tracking-widest rounded-full">
-                                                        Limited Seats
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="w-full md:w-auto flex flex-row md:flex-row items-center justify-between md:justify-end gap-12 px-2">
-                                            <div className="text-right">
-                                                <p className="text-[9px] text-white/30 font-bold uppercase tracking-widest leading-none mb-1">Mulai dari</p>
-                                                <div className="text-2xl font-black tracking-tighter text-neon-yellow">${startingPrice.toFixed(2)}</div>
-                                            </div>
-                                            <button className="px-8 py-3.5 rounded-full font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 bg-neon-cyan text-black hover:shadow-[0_0_20px_rgba(0,255,242,0.4)] shadow-lg">
-                                                Buy VIP
-                                            </button>
-                                        </div>
-                                    </motion.div>
+                                    />
                                 );
                             })
                         ) : (
