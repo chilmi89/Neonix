@@ -236,7 +236,7 @@ export function NeonEventDetailModal({ isOpen, onClose, event }: NeonEventDetail
                                     {/* CTA Buttons */}
                                     <div className="space-y-3">
                                         <Link
-                                            href={`/checkout/${event.id}`}
+                                            href={`/checkout/${event.id}${(fullDetail as any)?.tenantId ? `?tenantId=${(fullDetail as any).tenantId}` : ""}`}
                                             className="relative group/cta flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl overflow-hidden font-black text-sm uppercase tracking-widest transition-all duration-300 bg-neon-pink text-white shadow-[0_0_24px_rgba(255,0,128,0.4)] hover:shadow-[0_0_40px_rgba(255,0,128,0.7)]"
                                         >
                                             <Ticket size={16} />

@@ -5,287 +5,561 @@ import {
     ChevronLeft,
     Minus,
     Plus,
-    CreditCard,
-    Wallet,
-    QrCode,
-    CheckCircle2,
     ArrowRight,
     MapPin,
     Calendar,
-    Ticket
+    Ticket,
+    Loader2,
+    AlertCircle,
+    CheckCircle2,
+    ShoppingBag,
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, use, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PlasmaBackground } from "@/app/(frontend)/_components/ui/PlasmaBackground";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
-import { PaymentSelector } from "@/app/(frontend)/_components/ui/PaymentSelector";
+import {
+    getPublicEventById,
+    getPublicTicketsByTenantAndEvent,
+    getPublicTicketsByEvent,
+    purchaseTicket,
+    PublicEvent,
+    TicketPurchaseRequest,
+} from "@/services/publicService";
+import { Ticket as TicketType } from "@/types/auth";
+import { getImageUrl } from "@/config/api.config";
 
-export default function CheckoutPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
-    const params = use(paramsPromise);
-    const router = useRouter();
-    const [regularCount, setRegularCount] = useState(2);
-    const [vipCount, setVipCount] = useState(0);
-    const [paymentMethod, setPaymentMethod] = useState("card");
+// ─── Hook: baca user dari localStorage (aman di public pages tanpa UserProvider) ──
+
+function useLocalUser() {
+    const [localUser, setLocalUser] = useState<{
+        name?: string;
+        username?: string;
+        email?: string;
+    } | null>(null);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            router.push("/login?redirect=/checkout/" + params.id);
+        try {
+            const raw = localStorage.getItem("user");
+            if (raw) setLocalUser(JSON.parse(raw));
+        } catch {
+            /* ignore parse error */
         }
-    }, [router, params.id]);
+    }, []);
 
-    const prices = {
-        regular: 50000,
-        vip: 120000,
-        serviceFee: 5000,
-        tax: 0.11
+    return localUser;
+}
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface TicketGroup {
+    categoryId: number;
+    categoryName: string;
+    tickets: TicketType[];
+}
+
+interface CartItem {
+    ticketId: number;
+    quantity: number;
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function groupTicketsByCategory(tickets: TicketType[]): TicketGroup[] {
+    const map = new Map<number, TicketGroup>();
+    for (const t of tickets) {
+        const catId = t.categoryId ?? 0;
+        if (!map.has(catId)) {
+            map.set(catId, {
+                categoryId: catId,
+                categoryName: t.categoryName ?? "Uncategorized",
+                tickets: [],
+            });
+        }
+        map.get(catId)!.tickets.push(t);
+    }
+    return Array.from(map.values());
+}
+
+function formatDate(dateStr?: string) {
+    if (!dateStr) return "-";
+    return new Date(dateStr).toLocaleDateString("id-ID", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+}
+
+function formatIDR(n: number) {
+    return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+    }).format(n);
+}
+
+const CATEGORY_COLORS = [
+    "text-neon-cyan",
+    "text-neon-pink",
+    "text-purple-400",
+    "text-yellow-400",
+    "text-green-400",
+];
+
+// ─── Inner Page ───────────────────────────────────────────────────────────────
+
+function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string }> }) {
+    const params = use(paramsPromise);
+    const eventId = params.id;
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const tenantIdFromUrl = searchParams.get("tenantId");
+    const localUser = useLocalUser(); // baca dari localStorage, aman tanpa UserProvider
+
+    const [publicEvent, setPublicEvent] = useState<PublicEvent | null>(null);
+    const [ticketGroups, setTicketGroups] = useState<TicketGroup[]>([]);
+    const [cart, setCart] = useState<CartItem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [buyerName, setBuyerName] = useState("");
+    const [buyerEmail, setBuyerEmail] = useState("");
+    const [purchasing, setPurchasing] = useState(false);
+
+    // ── Auto-fill dari user login ──────────────────────────────────────────────
+    useEffect(() => {
+        if (!localUser || buyerName || buyerEmail) return;
+        if (localUser.name) setBuyerName(localUser.name);
+        else if (localUser.username) setBuyerName(localUser.username);
+        if (localUser.email) setBuyerEmail(localUser.email);
+    }, [localUser, buyerName, buyerEmail]);
+
+    // ── Fetch event + tiket ───────────────────────────────────────────────────
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            setError(null);
+            try {
+                let resolvedTenantId = tenantIdFromUrl;
+
+                try {
+                    const pubRes = await getPublicEventById(eventId);
+                    if (pubRes.status === "success" && pubRes.data) {
+                        setPublicEvent(pubRes.data);
+                        if (!resolvedTenantId && pubRes.data.tenantId)
+                            resolvedTenantId = String(pubRes.data.tenantId);
+                    }
+                } catch (e) {
+                    console.warn("[Checkout] event detail:", e);
+                }
+
+                let tickets: TicketType[] = [];
+                try {
+                    if (resolvedTenantId) {
+                        const res = await getPublicTicketsByTenantAndEvent(resolvedTenantId, eventId);
+                        tickets = res.data || [];
+                    } else {
+                        const res = await getPublicTicketsByEvent(eventId);
+                        tickets = res.data || [];
+                    }
+                } catch (e) {
+                    console.error("[Checkout] tickets:", e);
+                }
+
+                setTicketGroups(groupTicketsByCategory(tickets));
+                setCart(tickets.map((t) => ({ ticketId: t.id, quantity: 0 })));
+            } catch (err: any) {
+                setError(err?.message ?? "Terjadi kesalahan.");
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, [eventId, tenantIdFromUrl]);
+
+    // ── Cart helpers ──────────────────────────────────────────────────────────
+    const getQty = (ticketId: number) =>
+        cart.find((c) => c.ticketId === ticketId)?.quantity ?? 0;
+
+    const changeQty = (ticketId: number, delta: number) =>
+        setCart((prev) =>
+            prev.map((c) =>
+                c.ticketId === ticketId
+                    ? { ...c, quantity: Math.max(0, c.quantity + delta) }
+                    : c
+            )
+        );
+
+    const allTickets = ticketGroups.flatMap((g) => g.tickets);
+    const cartLines = allTickets
+        .filter((t) => getQty(t.id) > 0)
+        .map((t) => ({ ticket: t, qty: getQty(t.id) }));
+    const subtotal = cartLines.reduce(
+        (sum, { ticket, qty }) => sum + ticket.price * qty,
+        0
+    );
+
+    // ── Purchase ──────────────────────────────────────────────────────────────
+    const handleCheckout = async () => {
+        if (subtotal === 0 || !buyerName.trim() || !buyerEmail.trim()) return;
+        setPurchasing(true);
+        try {
+            for (const { ticket, qty } of cartLines) {
+                const req: TicketPurchaseRequest = {
+                    buyerName: buyerName.trim(),
+                    buyerEmail: buyerEmail.trim(),
+                    quantity: qty,
+                };
+                await purchaseTicket(ticket.id, req);
+            }
+            router.push("/member");
+        } catch (err: any) {
+            alert("Checkout gagal: " + (err?.message ?? "Terjadi kesalahan"));
+        } finally {
+            setPurchasing(false);
+        }
     };
 
-    const subtotal = (regularCount * prices.regular) + (vipCount * prices.vip);
-    const taxAmount = Math.round(subtotal * prices.tax);
-    const total = subtotal + prices.serviceFee + taxAmount;
+    const displayName = publicEvent?.name ?? publicEvent?.title ?? `Event #${eventId}`;
+    const displayPoster = publicEvent?.posterUrl;
+    const isFormValid = subtotal > 0 && buyerName.trim() && buyerEmail.trim();
+    const isLoggedIn = !!localUser;
 
+    // ── Loading / Error states ─────────────────────────────────────────────────
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-black text-white flex items-center justify-center font-inter relative">
+                <PlasmaBackground />
+                <NeonNavbar />
+                <div className="relative z-10 flex flex-col items-center gap-4">
+                    <Loader2 className="animate-spin text-neon-cyan" size={48} />
+                    <p className="text-white/60 text-sm font-bold uppercase tracking-widest">
+                        Memuat tiket…
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen bg-black text-white flex items-center justify-center font-inter relative">
+                <PlasmaBackground />
+                <NeonNavbar />
+                <div className="relative z-10 flex flex-col items-center gap-4 text-center px-6">
+                    <AlertCircle className="text-red-400" size={48} />
+                    <p className="text-white font-black text-2xl uppercase">Gagal Memuat</p>
+                    <p className="text-white/60 text-sm">{error}</p>
+                    <Link
+                        href="/"
+                        className="mt-4 inline-flex items-center gap-2 bg-neon-cyan text-black font-black px-6 py-3 rounded-xl uppercase tracking-wider"
+                    >
+                        Kembali
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    // ── Main render ───────────────────────────────────────────────────────────
     return (
-        <div className="min-h-screen bg-black text-white selection:bg-neon-pink/30 overflow-x-hidden font-inter relative">
+        <div className="min-h-screen bg-black text-white overflow-x-hidden font-inter relative">
             <PlasmaBackground />
             <NeonNavbar />
 
-            <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
-                {/* Back Link */}
-                <Link href="/" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8 group">
-                    <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="text-sm font-bold uppercase tracking-wider">Back to Home</span>
+            <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-5xl mx-auto">
+                {/* Back */}
+                <Link
+                    href="/"
+                    className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8 group"
+                >
+                    <ChevronLeft
+                        size={20}
+                        className="group-hover:-translate-x-1 transition-transform"
+                    />
+                    <span className="text-sm font-bold uppercase tracking-wider">Back</span>
                 </Link>
 
-                <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-12">
-                    Ticket Checkout
+                <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-10">
+                    Ticket <span className="text-neon-cyan">Checkout</span>
                 </h1>
 
-                <div className="grid lg:grid-cols-[1fr_400px] gap-8">
-                    {/* Left Column */}
-                    <div className="space-y-8">
-                        {/* Select Tickets */}
-                        <section className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-8">
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="w-10 h-10 rounded-xl bg-neon-cyan/20 flex items-center justify-center">
-                                    <Ticket className="text-neon-cyan" size={20} />
-                                </div>
-                                <h2 className="text-2xl font-black uppercase tracking-tight">Select Tickets</h2>
+                <div className="grid lg:grid-cols-[1fr_360px] gap-8">
+                    {/* ── Left ─────────────────────────────────────────────── */}
+                    <div className="space-y-6">
+                        {/* Event info */}
+                        <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl p-5">
+                            {displayPoster && (
+                                <img
+                                    src={getImageUrl(displayPoster)}
+                                    alt={displayName}
+                                    className="w-20 h-20 rounded-xl object-cover shrink-0"
+                                />
+                            )}
+                            <div>
+                                <h2 className="font-black text-xl uppercase tracking-tight">
+                                    {displayName}
+                                </h2>
+                                {publicEvent?.city && (
+                                    <div className="flex items-center gap-1.5 mt-1 text-white/40 text-xs font-bold">
+                                        <MapPin size={12} />
+                                        {publicEvent.locationName ?? publicEvent.location} ·{" "}
+                                        {publicEvent.city}
+                                    </div>
+                                )}
+                                {publicEvent?.startDate && (
+                                    <div className="flex items-center gap-1.5 mt-1 text-white/40 text-xs font-bold">
+                                        <Calendar size={12} />
+                                        {formatDate(publicEvent.startDate)}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Pilih tiket */}
+                        <section className="bg-white/5 border border-white/10 rounded-3xl p-6">
+                            <div className="flex items-center gap-3 mb-6">
+                                <Ticket className="text-neon-cyan" size={20} />
+                                <h3 className="text-lg font-black uppercase tracking-tight">
+                                    Pilih Tiket
+                                </h3>
                             </div>
 
-                            <div className="space-y-6">
-                                {/* Regular Admission */}
-                                <div className="flex items-center justify-between p-6 bg-white/5 rounded-2xl border border-white/5">
-                                    <div className="space-y-1">
-                                        <h3 className="font-bold text-lg">Regular Admission</h3>
-                                        <p className="text-xs text-white/40">Standard entry access to the screening.</p>
-                                        <p className="text-xl font-black text-neon-cyan mt-2">Rp {prices.regular.toLocaleString()}</p>
-                                    </div>
-                                    <div className="flex items-center gap-4 bg-black/40 p-2 rounded-xl border border-white/10">
-                                        <button
-                                            onClick={() => setRegularCount(Math.max(0, regularCount - 1))}
-                                            className="w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors"
-                                        >
-                                            <Minus size={16} />
-                                        </button>
-                                        <span className="text-lg font-black w-8 text-center">{regularCount}</span>
-                                        <button
-                                            onClick={() => setRegularCount(regularCount + 1)}
-                                            className="w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors bg-white/5"
-                                        >
-                                            <Plus size={16} />
-                                        </button>
-                                    </div>
+                            {ticketGroups.length === 0 ? (
+                                <p className="text-white/30 text-sm font-bold text-center py-10">
+                                    Tidak ada tiket tersedia.
+                                </p>
+                            ) : (
+                                <div className="space-y-8">
+                                    {ticketGroups.map((group, gi) => {
+                                        const accent = CATEGORY_COLORS[gi % CATEGORY_COLORS.length];
+                                        return (
+                                            <div key={group.categoryId}>
+                                                <div className="flex items-center gap-3 mb-4">
+                                                    <span
+                                                        className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-white/5 border border-white/10 ${accent}`}
+                                                    >
+                                                        {group.categoryName}
+                                                    </span>
+                                                    <div className="flex-1 h-px bg-white/5" />
+                                                </div>
+                                                <div className="space-y-3">
+                                                    {group.tickets.map((ticket) => {
+                                                        const qty = getQty(ticket.id);
+                                                        const remaining = ticket.quota - ticket.sold;
+                                                        return (
+                                                            <div
+                                                                key={ticket.id}
+                                                                className="flex items-center justify-between p-5 bg-white/5 rounded-2xl border border-white/5"
+                                                            >
+                                                                <div className="flex-1 mr-4">
+                                                                    <p className="font-bold text-base">
+                                                                        {ticket.name}
+                                                                    </p>
+                                                                    {ticket.description && (
+                                                                        <p className="text-xs text-white/40 mt-0.5">
+                                                                            {ticket.description}
+                                                                        </p>
+                                                                    )}
+                                                                    <p className={`text-xl font-black mt-2 ${accent}`}>
+                                                                        {formatIDR(ticket.price)}
+                                                                    </p>
+                                                                    <p className="text-[10px] text-white/30 uppercase font-black tracking-wider mt-0.5">
+                                                                        {remaining > 0
+                                                                            ? `${remaining} sisa`
+                                                                            : "Habis"}
+                                                                    </p>
+                                                                </div>
+                                                                {remaining > 0 ? (
+                                                                    <div className="flex items-center gap-3 bg-black/40 p-2 rounded-xl border border-white/10 shrink-0">
+                                                                        <button
+                                                                            onClick={() => changeQty(ticket.id, -1)}
+                                                                            className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors"
+                                                                        >
+                                                                            <Minus size={15} />
+                                                                        </button>
+                                                                        <span className="text-lg font-black w-6 text-center">
+                                                                            {qty}
+                                                                        </span>
+                                                                        <button
+                                                                            onClick={() =>
+                                                                                qty < remaining &&
+                                                                                changeQty(ticket.id, 1)
+                                                                            }
+                                                                            disabled={qty >= remaining}
+                                                                            className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-white/10 bg-white/5 transition-colors disabled:opacity-30"
+                                                                        >
+                                                                            <Plus size={15} />
+                                                                        </button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <span className="text-[10px] font-black uppercase tracking-widest text-red-400/60 border border-red-400/20 px-3 py-2 rounded-xl">
+                                                                        Sold Out
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-
-                                {/* VIP Experience */}
-                                <div className="flex items-center justify-between p-6 bg-white/5 rounded-2xl border border-white/5">
-                                    <div className="space-y-1">
-                                        <h3 className="font-bold text-lg">VIP Experience</h3>
-                                        <p className="text-xs text-white/40">Premium seating, free popcorn & drinks.</p>
-                                        <p className="text-xl font-black text-neon-pink mt-2">Rp {prices.vip.toLocaleString()}</p>
-                                    </div>
-                                    <div className="flex items-center gap-4 bg-black/40 p-2 rounded-xl border border-white/10">
-                                        <button
-                                            onClick={() => setVipCount(Math.max(0, vipCount - 1))}
-                                            className="w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors"
-                                        >
-                                            <Minus size={16} />
-                                        </button>
-                                        <span className="text-lg font-black w-8 text-center">{vipCount}</span>
-                                        <button
-                                            onClick={() => setVipCount(vipCount + 1)}
-                                            className="w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors bg-white/5"
-                                        >
-                                            <Plus size={16} />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            )}
                         </section>
 
-                        {/* Secure Payment */}
-                        <section className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-8">
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="w-10 h-10 rounded-xl bg-neon-pink/20 flex items-center justify-center">
-                                    <CheckCircle2 className="text-neon-pink" size={20} />
-                                </div>
-                                <h2 className="text-2xl font-black uppercase tracking-tight">Secure Payment</h2>
+                        {/* Form buyer */}
+                        <section className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-black uppercase tracking-tight">
+                                    Data Pembeli
+                                </h3>
+                                {isLoggedIn && (
+                                    <span className="text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20">
+                                        ✓ Diambil dari akun
+                                    </span>
+                                )}
                             </div>
 
-                            {/* Payment Tabs */}
-                            <PaymentSelector
-                                selectedMethod={paymentMethod}
-                                onSelect={setPaymentMethod}
-                                className="mb-8"
-                            />
+                            <div className="space-y-1">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-white/40">
+                                    Nama Lengkap
+                                </label>
+                                <input
+                                    type="text"
+                                    value={buyerName}
+                                    onChange={(e) => setBuyerName(e.target.value)}
+                                    placeholder="Nama Lengkap"
+                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-3.5 text-sm font-bold focus:outline-none focus:border-neon-cyan/50 transition-colors"
+                                />
+                            </div>
 
-                            {/* Payment Form */}
-                            <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black tracking-widest text-white/40">Cardholder Name</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Alex Morgan"
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-neon-pink/50 transition-colors"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black tracking-widest text-white/40">Card Number</label>
-                                    <div className="relative">
-                                        <input
-                                            type="text"
-                                            placeholder="4242 4242 4242 4242"
-                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-neon-pink/50 transition-colors"
-                                        />
-                                        <CreditCard className="absolute right-6 top-1/2 -translate-y-1/2 text-white/20" size={20} />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] uppercase font-black tracking-widest text-white/40">Expiry Date</label>
-                                        <input
-                                            type="text"
-                                            placeholder="12 / 25"
-                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-neon-pink/50 transition-colors"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] uppercase font-black tracking-widest text-white/40">CVC</label>
-                                        <input
-                                            type="text"
-                                            placeholder="***"
-                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-neon-pink/50 transition-colors"
-                                        />
-                                    </div>
-                                </div>
+                            <div className="space-y-1">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-white/40">
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    value={buyerEmail}
+                                    onChange={(e) => setBuyerEmail(e.target.value)}
+                                    placeholder="email@example.com"
+                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-3.5 text-sm font-bold focus:outline-none focus:border-neon-cyan/50 transition-colors"
+                                />
+                            </div>
 
-                                <div className="flex gap-4 pt-4">
-                                    <input
-                                        type="text"
-                                        placeholder="VIP_ACCESS_20"
-                                        className="flex-1 bg-black/40 border border-white/10 rounded-xl px-6 py-4 text-sm font-bold"
-                                    />
-                                    <button className="bg-white/5 border border-white/10 px-8 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-colors">
-                                        Apply Code
-                                    </button>
-                                </div>
-                                <p className="text-[10px] font-bold text-neon-pink flex items-center gap-2">
-                                    <CheckCircle2 size={12} />
-                                    Discount applied successfully!
+                            {!isLoggedIn && (
+                                <p className="text-[10px] text-white/20 font-bold uppercase tracking-wider pt-1">
+                                    💡 Login untuk mengisi otomatis
                                 </p>
-                            </div>
+                            )}
                         </section>
                     </div>
 
-                    {/* Right Column: Order Summary */}
-                    <div className="space-y-8">
-                        <section className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden">
-                            {/* Card Visual */}
-                            <div className="relative h-64">
-                                <img
-                                    src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&q=80"
-                                    alt="Event"
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                                <div className="absolute top-4 left-4 bg-neon-pink text-black px-3 py-1 rounded text-[10px] font-black uppercase">
-                                    Horror
-                                </div>
-                                <div className="absolute bottom-4 left-4">
-                                    <h3 className="text-3xl font-black uppercase tracking-tighter">SUKMA</h3>
-                                </div>
+                    {/* ── Right: Order Summary ──────────────────────────────── */}
+                    <div className="lg:sticky lg:top-32 self-start">
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6">
+                            <h3 className="font-black text-lg uppercase tracking-tight">
+                                Ringkasan
+                            </h3>
+
+                            {/* Cart lines */}
+                            <div className="space-y-3 min-h-[60px]">
+                                {cartLines.length === 0 ? (
+                                    <p className="text-white/20 text-xs font-bold uppercase tracking-widest text-center py-4">
+                                        Belum ada tiket dipilih
+                                    </p>
+                                ) : (
+                                    cartLines.map(({ ticket, qty }) => (
+                                        <div
+                                            key={ticket.id}
+                                            className="flex justify-between text-sm"
+                                        >
+                                            <span className="text-white/60">
+                                                {ticket.name} ×{qty}
+                                            </span>
+                                            <span className="font-bold">
+                                                {formatIDR(ticket.price * qty)}
+                                            </span>
+                                        </div>
+                                    ))
+                                )}
                             </div>
 
-                            <div className="p-8 space-y-8">
-                                <div className="space-y-4">
-                                    <div className="flex items-start gap-3">
-                                        <Calendar size={18} className="text-neon-cyan shrink-0" />
-                                        <div>
-                                            <p className="text-sm font-bold">Saturday, Oct 25, 2025</p>
-                                            <p className="text-[10px] text-white/40 uppercase font-black">19:30 WIB</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-3">
-                                        <MapPin size={18} className="text-neon-cyan shrink-0" />
-                                        <div>
-                                            <p className="text-sm font-bold">CGV Grand Indonesia</p>
-                                            <p className="text-[10px] text-white/40 uppercase font-black">Audi 4, Free Seating</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="pt-8 border-t border-white/5 space-y-4 text-sm">
-                                    <div className="flex justify-between text-white/60">
-                                        <span>Regular Admission (x{regularCount})</span>
-                                        <span className="font-bold text-white">Rp {(regularCount * prices.regular).toLocaleString()}</span>
-                                    </div>
-                                    {vipCount > 0 && (
-                                        <div className="flex justify-between text-white/60">
-                                            <span>VIP Experience (x{vipCount})</span>
-                                            <span className="font-bold text-white">Rp {(vipCount * prices.vip).toLocaleString()}</span>
-                                        </div>
-                                    )}
-                                    <div className="flex justify-between text-white/60">
-                                        <span>Service Fee</span>
-                                        <span className="font-bold text-white">Rp {prices.serviceFee.toLocaleString()}</span>
-                                    </div>
-                                    <div className="flex justify-between text-white/60">
-                                        <span>Tax (11%)</span>
-                                        <span className="font-bold text-white">Rp {taxAmount.toLocaleString()}</span>
-                                    </div>
-                                </div>
-
-                                <div className="pt-8 border-t border-white/5 flex items-end justify-between">
-                                    <p className="text-[10px] uppercase font-black tracking-widest text-white/40 mb-1">Total Payment</p>
-                                    <p className="text-4xl font-black text-neon-cyan">Rp {total.toLocaleString()}</p>
-                                </div>
-
-                                <button className="w-full bg-neon-cyan text-black font-black py-5 rounded-2xl flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform shadow-lg shadow-neon-cyan/20 group uppercase tracking-widest">
-                                    Proceed to Payment
-                                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                                </button>
-
-                                <p className="text-[10px] text-white/40 text-center uppercase tracking-widest leading-relaxed">
-                                    By proceeding, you agree to our <Link href="#" className="underline">Terms & Conditions</Link>.
+                            {/* Total */}
+                            <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                                <p className="text-[10px] uppercase font-black tracking-widest text-white/40">
+                                    Total
+                                </p>
+                                <p className="text-3xl font-black text-neon-cyan">
+                                    {formatIDR(subtotal)}
                                 </p>
                             </div>
-                        </section>
 
-                        {/* Confirmation QR */}
-                        <section className="flex flex-col items-center gap-6 py-8">
-                            <p className="text-[10px] uppercase font-black tracking-widest text-white/40">Scan to confirm on mobile</p>
-                            <div className="w-48 h-48 bg-white p-6 rounded-3xl shadow-2xl shadow-neon-cyan/10 flex items-center justify-center">
-                                <svg viewBox="0 0 100 100" className="w-full h-full text-black">
-                                    <path d="M0 0h30v30H0zM10 10h10v10H10zM70 0h30v30H70zM80 10h10v10H80zM0 70h30v30H0zM10 80h10v10H10zM40 0h10v10H40zM50 10h10v10H50zM40 20h10v10H40zM0 40h10v10H0zM10 50h10v10H10zM20 40h10v10H20zM40 40h20v20H40zM45 45h10v10H45zM70 40h10v10H70zM90 40h10v10H90zM80 50h10v10H80zM40 70h10v10H40zM50 80h10v10H50zM40 90h10v10H40zM70 70h10v10H70zM90 70h10v10H90zM80 80h10v10H80zM70 90h10v10H70zM90 90h10v10H90z" fill="currentColor" />
-                                </svg>
+                            {/* Checkout button */}
+                            <motion.button
+                                whileTap={{ scale: 0.97 }}
+                                onClick={handleCheckout}
+                                disabled={!isFormValid || purchasing}
+                                className="w-full bg-neon-cyan text-black font-black py-4 rounded-2xl flex items-center justify-center gap-3 hover:brightness-110 transition-all shadow-lg shadow-neon-cyan/20 uppercase tracking-widest disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                                {purchasing ? (
+                                    <>
+                                        <Loader2 className="animate-spin" size={20} />
+                                        Memproses…
+                                    </>
+                                ) : (
+                                    <>
+                                        <ShoppingBag size={20} />
+                                        Checkout Sekarang
+                                        <ArrowRight size={18} />
+                                    </>
+                                )}
+                            </motion.button>
+
+                            {/* Hint */}
+                            {!isFormValid && (
+                                <p className="text-[10px] text-white/30 text-center uppercase tracking-wider">
+                                    {subtotal === 0
+                                        ? "Pilih minimal 1 tiket"
+                                        : "Lengkapi nama & email"}
+                                </p>
+                            )}
+
+                            {/* Info */}
+                            <div className="flex items-center gap-2 text-white/20 rounded-xl p-3 bg-white/3">
+                                <CheckCircle2
+                                    size={14}
+                                    className="text-neon-cyan/40 shrink-0"
+                                />
+                                <p className="text-[9px] font-bold uppercase tracking-wide leading-relaxed">
+                                    Setelah checkout, data masuk ke log transaksi admin
+                                </p>
                             </div>
-                            <p className="text-[10px] uppercase font-black tracking-widest text-white/20">Expires in 14:59</p>
-                        </section>
+                        </div>
                     </div>
                 </div>
             </main>
         </div>
+    );
+}
+
+// ─── Export ───────────────────────────────────────────────────────────────────
+
+export default function CheckoutPage({
+    params: paramsPromise,
+}: {
+    params: Promise<{ id: string }>;
+}) {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen bg-black flex items-center justify-center">
+                    <Loader2 className="animate-spin text-neon-cyan" size={48} />
+                </div>
+            }
+        >
+            <CheckoutInner paramsPromise={paramsPromise} />
+        </Suspense>
     );
 }

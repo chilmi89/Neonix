@@ -22,7 +22,8 @@ import {
     Database,
     Fingerprint,
     MoreVertical,
-    User
+    User,
+    ShoppingBag
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -136,13 +137,25 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                     items: [
                         { icon: Calendar, label: "My Events", href: "/dashboard/admin/event" },
                         { icon: Tags, label: "Ticket Types", href: "/dashboard/admin/ticket-category" },
-                        { icon: Database, label: "Inventory", href: "/dashboard/admin/tickets" }
+                        { icon: Database, label: "Inventory", href: "/dashboard/admin/tickets" },
+                        { icon: ShoppingBag, label: "Transaksi", href: "/dashboard/admin/transactions" },
+                        { icon: Users, label: "Users", href: "/dashboard/users" },
+                    ]
+                }
+            ];
+        } else {
+            // Member or other users
+            newSections = [
+                {
+                    label: "My Activity",
+                    items: [
+                        { icon: LayoutDashboard, label: "Member Dash", href: "/dashboard/member" },
                     ]
                 }
             ];
         }
-
         setSections(newSections);
+
         if (!isCollapsed) {
             setExpandedSections(newSections.map(s => s.label));
         }
@@ -336,7 +349,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                     {!isCollapsed && (
                         <div className="flex-1 flex flex-col items-start overflow-hidden">
                             <span className="text-[11px] font-bold text-white truncate w-full text-left">
-                                {user?.username || "Admin User"}
+                                {user?.name || user?.username || "Admin User"}
                             </span>
                             <span className="text-[9px] font-black text-white/20 uppercase tracking-widest leading-none">
                                 {user?.roles?.[0]?.name || "System Core"}
