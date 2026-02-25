@@ -69,7 +69,8 @@ export default function LoginPage() {
                 } else if (hasRole("admin")) {
                     router.push("/dashboard/admin");
                 } else {
-                    router.push("/member");
+                    // Buyer / user biasa → ke homepage untuk cari event & checkout
+                    router.push("/");
                 }
             }, 1500);
 

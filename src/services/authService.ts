@@ -11,6 +11,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    tenantId?: number;          // ID tenant — dibutuhkan untuk fetch tiket
     roles?: string[];
     permissions?: string[];
     createdAt?: string;

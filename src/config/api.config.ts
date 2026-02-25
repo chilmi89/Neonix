@@ -30,11 +30,22 @@ export const API = {
     // Public API
     public: {
         events: `${API_BASE_URL}/public/events`,
+        eventById: (id: number | string) => `${API_BASE_URL}/public/events/${id}`,
+        // GET /api/public/tickets/event/{eventId}  — fallback tanpa tenantId
+        ticketsByEvent: (eventId: number | string) =>
+            `${API_BASE_URL}/public/tickets/event/${eventId}`,
+        // GET /api/public/tickets/tenant/{tenantId}/event/{eventId}
+        ticketsByTenantAndEvent: (tenantId: number | string, eventId: number | string) =>
+            `${API_BASE_URL}/public/tickets/tenant/${tenantId}/event/${eventId}`,
+        // GET /api/public/tickets/{ticketId}
+        ticketById: (ticketId: number | string) => `${API_BASE_URL}/public/tickets/${ticketId}`,
+        // POST /api/public/tickets/{ticketId}/purchase
+        purchaseTicket: (ticketId: number | string) => `${API_BASE_URL}/public/tickets/${ticketId}/purchase`,
     },
 
     // Users
     users: {
-        getAll: `${API_BASE_URL}/users`,
+        getAll: `${API_BASE_URL}/users`, // Tetap /users, jika backend filter by tenant otomatis
         getById: (id: number) => `${API_BASE_URL}/users/${id}`,
         create: `${API_BASE_URL}/users`,
         update: (id: number) => `${API_BASE_URL}/users/${id}`,
@@ -86,6 +97,12 @@ export const API = {
         past: `${API_BASE_URL}/events/past`,
     },
 
+    // Admin Events (full data including tenantId)
+    adminEvents: {
+        getAll: `${API_BASE_URL}/admin/events`,
+        getById: (id: number | string) => `${API_BASE_URL}/admin/events/${id}`,
+    },
+
     // Tenants
     tenants: {
         getAll: `${API_BASE_URL}/tenants`,
@@ -122,6 +139,14 @@ export const API = {
         update: (id: number | string) => `${API_BASE_URL}/admin/tickets/${id}`,
         delete: (id: number | string) => `${API_BASE_URL}/admin/tickets/${id}`,
         getByEvent: (eventId: number | string) => `${API_BASE_URL}/admin/tickets?eventId=${eventId}`,
+    },
+
+    // Transactions
+    transactions: {
+        getAll: `${API_BASE_URL}/admin/transactions`,
+        getByEvent: (eventId: number | string) => `${API_BASE_URL}/admin/transactions?eventId=${eventId}`,
+        summary: `${API_BASE_URL}/admin/transactions/summary`,
+        getMember: `${API_BASE_URL}/member/transactions`,
     },
 
 };
