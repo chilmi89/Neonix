@@ -15,6 +15,7 @@ import {
     ShoppingBag,
 } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { useState, useEffect, use, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PlasmaBackground } from "@/app/(frontend)/_components/ui/PlasmaBackground";
@@ -264,279 +265,240 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
 
     // ── Main render ───────────────────────────────────────────────────────────
     return (
-        <div className="min-h-screen bg-black text-white overflow-x-hidden font-inter relative">
+        <div className="min-h-screen bg-[#080808] text-white overflow-x-hidden font-inter relative">
             <PlasmaBackground />
             <NeonNavbar />
 
-            <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-5xl mx-auto">
-                {/* Back */}
-                <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8 group"
-                >
-                    <ChevronLeft
-                        size={20}
-                        className="group-hover:-translate-x-1 transition-transform"
-                    />
-                    <span className="text-sm font-bold uppercase tracking-wider">Back</span>
-                </Link>
+            <main className="relative z-10 pt-32 pb-20 px-6 max-w-7xl mx-auto">
+                {/* Back link */}
+                <div className="mb-12">
+                    <Link
+                        href="/"
+                        className="inline-flex items-center gap-2 text-white/40 hover:text-neon-cyan transition-colors group"
+                    >
+                        <ChevronLeft
+                            size={18}
+                            className="group-hover:-translate-x-1 transition-transform"
+                        />
+                        <span className="text-xs font-black uppercase tracking-widest">Back to Events</span>
+                    </Link>
+                </div>
 
-                <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-10">
-                    Ticket <span className="text-neon-cyan">Checkout</span>
-                </h1>
-
-                <div className="grid lg:grid-cols-[1fr_360px] gap-8">
-                    {/* ── Left ─────────────────────────────────────────────── */}
-                    <div className="space-y-6">
-                        {/* Event info */}
-                        <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl p-5">
-                            {displayPoster && (
-                                <img
-                                    src={getImageUrl(displayPoster)}
-                                    alt={displayName}
-                                    className="w-20 h-20 rounded-xl object-cover shrink-0"
-                                />
-                            )}
-                            <div>
-                                <h2 className="font-black text-xl uppercase tracking-tight">
-                                    {displayName}
-                                </h2>
+                <div className="grid lg:grid-cols-[1.1fr_1fr] gap-16 items-start">
+                    {/* ── Left Column: Order Summary & Info ────────────────── */}
+                    <div className="lg:sticky lg:top-32 space-y-12">
+                        <div>
+                            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4">
+                                {displayName}
+                            </h1>
+                            <div className="flex flex-wrap gap-4 text-white/40 text-xs font-bold uppercase tracking-wider">
                                 {publicEvent?.city && (
-                                    <div className="flex items-center gap-1.5 mt-1 text-white/40 text-xs font-bold">
-                                        <MapPin size={12} />
-                                        {publicEvent.locationName ?? publicEvent.location} ·{" "}
-                                        {publicEvent.city}
+                                    <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                                        <MapPin size={14} className="text-neon-cyan" />
+                                        {publicEvent.locationName ?? publicEvent.location} · {publicEvent.city}
                                     </div>
                                 )}
                                 {publicEvent?.startDate && (
-                                    <div className="flex items-center gap-1.5 mt-1 text-white/40 text-xs font-bold">
-                                        <Calendar size={12} />
+                                    <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                                        <Calendar size={14} className="text-neon-cyan" />
                                         {formatDate(publicEvent.startDate)}
                                     </div>
                                 )}
                             </div>
                         </div>
 
-                        {/* Pilih tiket */}
-                        <section className="bg-white/5 border border-white/10 rounded-3xl p-6">
-                            <div className="flex items-center gap-3 mb-6">
-                                <Ticket className="text-neon-cyan" size={20} />
-                                <h3 className="text-lg font-black uppercase tracking-tight">
-                                    Pilih Tiket
-                                </h3>
-                            </div>
+                        {/* Summary Box */}
+                        <div className="bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-8 md:p-10">
+                            <h2 className="text-xl font-black uppercase tracking-tight mb-8">Order Summary</h2>
 
-                            {ticketGroups.length === 0 ? (
-                                <p className="text-white/30 text-sm font-bold text-center py-10">
-                                    Tidak ada tiket tersedia.
-                                </p>
-                            ) : (
-                                <div className="space-y-8">
-                                    {ticketGroups.map((group, gi) => {
-                                        const accent = CATEGORY_COLORS[gi % CATEGORY_COLORS.length];
-                                        return (
-                                            <div key={group.categoryId}>
-                                                <div className="flex items-center gap-3 mb-4">
-                                                    <span
-                                                        className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-white/5 border border-white/10 ${accent}`}
-                                                    >
-                                                        {group.categoryName}
-                                                    </span>
-                                                    <div className="flex-1 h-px bg-white/5" />
-                                                </div>
-                                                <div className="space-y-3">
-                                                    {group.tickets.map((ticket) => {
-                                                        const qty = getQty(ticket.id);
-                                                        const remaining = ticket.quota - ticket.sold;
-                                                        return (
-                                                            <div
-                                                                key={ticket.id}
-                                                                className="flex items-center justify-between p-5 bg-white/5 rounded-2xl border border-white/5"
-                                                            >
-                                                                <div className="flex-1 mr-4">
-                                                                    <p className="font-bold text-base">
-                                                                        {ticket.name}
-                                                                    </p>
-                                                                    {ticket.description && (
-                                                                        <p className="text-xs text-white/40 mt-0.5">
-                                                                            {ticket.description}
-                                                                        </p>
-                                                                    )}
-                                                                    <p className={`text-xl font-black mt-2 ${accent}`}>
-                                                                        {formatIDR(ticket.price)}
-                                                                    </p>
-                                                                    <p className="text-[10px] text-white/30 uppercase font-black tracking-wider mt-0.5">
-                                                                        {remaining > 0
-                                                                            ? `${remaining} sisa`
-                                                                            : "Habis"}
-                                                                    </p>
-                                                                </div>
-                                                                {remaining > 0 ? (
-                                                                    <div className="flex items-center gap-3 bg-black/40 p-2 rounded-xl border border-white/10 shrink-0">
-                                                                        <button
-                                                                            onClick={() => changeQty(ticket.id, -1)}
-                                                                            className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors"
-                                                                        >
-                                                                            <Minus size={15} />
-                                                                        </button>
-                                                                        <span className="text-lg font-black w-6 text-center">
-                                                                            {qty}
-                                                                        </span>
-                                                                        <button
-                                                                            onClick={() =>
-                                                                                qty < remaining &&
-                                                                                changeQty(ticket.id, 1)
-                                                                            }
-                                                                            disabled={qty >= remaining}
-                                                                            className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-white/10 bg-white/5 transition-colors disabled:opacity-30"
-                                                                        >
-                                                                            <Plus size={15} />
-                                                                        </button>
-                                                                    </div>
-                                                                ) : (
-                                                                    <span className="text-[10px] font-black uppercase tracking-widest text-red-400/60 border border-red-400/20 px-3 py-2 rounded-xl">
-                                                                        Sold Out
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </section>
-
-                        {/* Form buyer */}
-                        <section className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-4">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-black uppercase tracking-tight">
-                                    Data Pembeli
-                                </h3>
-                                {isLoggedIn && (
-                                    <span className="text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20">
-                                        ✓ Diambil dari akun
-                                    </span>
-                                )}
-                            </div>
-
-                            <div className="space-y-1">
-                                <label className="text-[10px] uppercase font-black tracking-widest text-white/40">
-                                    Nama Lengkap
-                                </label>
-                                <input
-                                    type="text"
-                                    value={buyerName}
-                                    onChange={(e) => setBuyerName(e.target.value)}
-                                    placeholder="Nama Lengkap"
-                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-3.5 text-sm font-bold focus:outline-none focus:border-neon-cyan/50 transition-colors"
-                                />
-                            </div>
-
-                            <div className="space-y-1">
-                                <label className="text-[10px] uppercase font-black tracking-widest text-white/40">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    value={buyerEmail}
-                                    onChange={(e) => setBuyerEmail(e.target.value)}
-                                    placeholder="email@example.com"
-                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-3.5 text-sm font-bold focus:outline-none focus:border-neon-cyan/50 transition-colors"
-                                />
-                            </div>
-
-                            {!isLoggedIn && (
-                                <p className="text-[10px] text-white/20 font-bold uppercase tracking-wider pt-1">
-                                    💡 Login untuk mengisi otomatis
-                                </p>
-                            )}
-                        </section>
-                    </div>
-
-                    {/* ── Right: Order Summary ──────────────────────────────── */}
-                    <div className="lg:sticky lg:top-32 self-start">
-                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6">
-                            <h3 className="font-black text-lg uppercase tracking-tight">
-                                Ringkasan
-                            </h3>
-
-                            {/* Cart lines */}
-                            <div className="space-y-3 min-h-[60px]">
+                            <div className="space-y-6 mb-10">
                                 {cartLines.length === 0 ? (
-                                    <p className="text-white/20 text-xs font-bold uppercase tracking-widest text-center py-4">
-                                        Belum ada tiket dipilih
-                                    </p>
+                                    <div className="py-12 text-center border-2 border-dashed border-white/5 rounded-2xl">
+                                        <p className="text-white/20 text-xs font-bold uppercase tracking-[0.2em]">
+                                            No tickets selected
+                                        </p>
+                                    </div>
                                 ) : (
                                     cartLines.map(({ ticket, qty }) => (
-                                        <div
-                                            key={ticket.id}
-                                            className="flex justify-between text-sm"
-                                        >
-                                            <span className="text-white/60">
-                                                {ticket.name} ×{qty}
-                                            </span>
-                                            <span className="font-bold">
+                                        <div key={ticket.id} className="flex justify-between items-start group">
+                                            <div className="space-y-1">
+                                                <p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors">
+                                                    {ticket.name}
+                                                </p>
+                                                <p className="text-[10px] text-white/30 font-black uppercase tracking-widest">
+                                                    QTY: {qty} × {formatIDR(ticket.price)}
+                                                </p>
+                                            </div>
+                                            <p className="text-sm font-black">
                                                 {formatIDR(ticket.price * qty)}
-                                            </span>
+                                            </p>
                                         </div>
                                     ))
                                 )}
                             </div>
 
-                            {/* Total */}
-                            <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                                <p className="text-[10px] uppercase font-black tracking-widest text-white/40">
-                                    Total
-                                </p>
-                                <p className="text-3xl font-black text-neon-cyan">
+                            <div className="border-t border-white/10 pt-8 flex items-end justify-between">
+                                <div>
+                                    <p className="text-[10px] font-black text-neon-cyan uppercase tracking-[0.2em] mb-1">Total Amount</p>
+                                    <p className="text-white/20 text-[10px] font-bold">Inc. all applicable taxes</p>
+                                </div>
+                                <p className="text-4xl font-black tracking-tighter">
                                     {formatIDR(subtotal)}
                                 </p>
                             </div>
-
-                            {/* Checkout button */}
-                            <motion.button
-                                whileTap={{ scale: 0.97 }}
-                                onClick={handleCheckout}
-                                disabled={!isFormValid || purchasing}
-                                className="w-full bg-neon-cyan text-black font-black py-4 rounded-2xl flex items-center justify-center gap-3 hover:brightness-110 transition-all shadow-lg shadow-neon-cyan/20 uppercase tracking-widest disabled:opacity-40 disabled:cursor-not-allowed"
-                            >
-                                {purchasing ? (
-                                    <>
-                                        <Loader2 className="animate-spin" size={20} />
-                                        Memproses…
-                                    </>
-                                ) : (
-                                    <>
-                                        <ShoppingBag size={20} />
-                                        Checkout Sekarang
-                                        <ArrowRight size={18} />
-                                    </>
-                                )}
-                            </motion.button>
-
-                            {/* Hint */}
-                            {!isFormValid && (
-                                <p className="text-[10px] text-white/30 text-center uppercase tracking-wider">
-                                    {subtotal === 0
-                                        ? "Pilih minimal 1 tiket"
-                                        : "Lengkapi nama & email"}
-                                </p>
-                            )}
-
-                            {/* Info */}
-                            <div className="flex items-center gap-2 text-white/20 rounded-xl p-3 bg-white/3">
-                                <CheckCircle2
-                                    size={14}
-                                    className="text-neon-cyan/40 shrink-0"
-                                />
-                                <p className="text-[9px] font-bold uppercase tracking-wide leading-relaxed">
-                                    Setelah checkout, data masuk ke log transaksi admin
-                                </p>
-                            </div>
                         </div>
+
+                        {/* Security Hint */}
+                        <div className="flex items-center gap-3 px-6 py-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+                            <CheckCircle2 size={16} className="text-neon-cyan/50" />
+                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] leading-relaxed">
+                                Guaranteed safe checkout with 256-bit SSL encryption
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* ── Right Column: Ticket Selection & Payment ─────────── */}
+                    <div className="space-y-12">
+                        {/* Select Tickets */}
+                        <section>
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="p-2 bg-neon-cyan/10 rounded-lg">
+                                    <Ticket className="text-neon-cyan" size={20} />
+                                </div>
+                                <h2 className="text-lg font-black uppercase tracking-widest">Selection</h2>
+                            </div>
+
+                            <div className="space-y-4">
+                                {ticketGroups.map((group, gi) => {
+                                    const accent = CATEGORY_COLORS[gi % CATEGORY_COLORS.length];
+                                    return (
+                                        <div key={group.categoryId} className="space-y-3">
+                                            <div className="flex items-center gap-3 px-2">
+                                                <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${accent}`}>
+                                                    {group.categoryName}
+                                                </span>
+                                                <div className="flex-1 h-px bg-white/5" />
+                                            </div>
+                                            {group.tickets.map((ticket) => {
+                                                const qty = getQty(ticket.id);
+                                                const remaining = ticket.quota - ticket.sold;
+                                                return (
+                                                    <div
+                                                        key={ticket.id}
+                                                        className={cn(
+                                                            "flex items-center justify-between p-6 rounded-2xl border transition-all duration-300",
+                                                            qty > 0
+                                                                ? "bg-white/[0.04] border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.02)]"
+                                                                : "bg-white/[0.02] border-white/5 hover:border-white/10"
+                                                        )}
+                                                    >
+                                                        <div className="flex-1 mr-6">
+                                                            <p className="font-bold text-base mb-1">{ticket.name}</p>
+                                                            <p className="text-lg font-black text-white/90">
+                                                                {formatIDR(ticket.price)}
+                                                            </p>
+                                                        </div>
+                                                        {remaining > 0 ? (
+                                                            <div className="flex items-center gap-4 bg-black/40 p-1.5 rounded-xl border border-white/10">
+                                                                <button
+                                                                    onClick={() => changeQty(ticket.id, -1)}
+                                                                    className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors disabled:opacity-20"
+                                                                    disabled={qty === 0}
+                                                                >
+                                                                    <Minus size={14} />
+                                                                </button>
+                                                                <span className="text-sm font-black w-4 text-center">
+                                                                    {qty}
+                                                                </span>
+                                                                <button
+                                                                    onClick={() => qty < remaining && changeQty(ticket.id, 1)}
+                                                                    disabled={qty >= remaining}
+                                                                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-20"
+                                                                >
+                                                                    <Plus size={14} />
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <span className="text-[10px] font-black uppercase tracking-widest text-red-400/50 border border-red-400/10 px-4 py-2 rounded-xl">
+                                                                Sold Out
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </section>
+
+                        {/* Customer Information & Payment */}
+                        <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-neon-cyan/10 rounded-lg">
+                                    <ShoppingBag className="text-neon-cyan" size={20} />
+                                </div>
+                                <h2 className="text-lg font-black uppercase tracking-widest">Buyer Details</h2>
+                            </div>
+
+                            <div className="bg-[#111] border border-white/5 rounded-3xl p-8 space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">
+                                        CONTACT NAME
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={buyerName}
+                                        onChange={(e) => setBuyerName(e.target.value)}
+                                        placeholder="Full Name"
+                                        className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-neon-cyan/50 focus:bg-neon-cyan/5 transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">
+                                        EMAIL ADDRESS
+                                    </label>
+                                    <input
+                                        type="email"
+                                        value={buyerEmail}
+                                        onChange={(e) => setBuyerEmail(e.target.value)}
+                                        placeholder="email@example.com"
+                                        className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-neon-cyan/50 focus:bg-neon-cyan/5 transition-all"
+                                    />
+                                    {isLoggedIn && (
+                                        <p className="text-[9px] font-black uppercase tracking-widest text-neon-cyan/40 px-1 pt-1">
+                                            ✓ Automatically filled from account
+                                        </p>
+                                    )}
+                                </div>
+
+                                <motion.button
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={handleCheckout}
+                                    disabled={!isFormValid || purchasing}
+                                    className="w-full bg-neon-cyan text-black font-black py-5 rounded-2xl flex items-center justify-center gap-3 hover:brightness-110 transition-all shadow-[0_20px_40px_rgba(0,255,255,0.15)] uppercase tracking-[0.2em] text-xs mt-10 disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none"
+                                >
+                                    {purchasing ? (
+                                        <>
+                                            <Loader2 className="animate-spin" size={18} />
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Complete Purchase — {formatIDR(subtotal)}
+                                            <ArrowRight size={16} />
+                                        </>
+                                    )}
+                                </motion.button>
+
+                                {!isFormValid && subtotal > 0 && (
+                                    <p className="text-[9px] text-white/20 text-center uppercase tracking-widest font-black">
+                                        Please provide contact details to continue
+                                    </p>
+                                )}
+                            </div>
+                        </section>
                     </div>
                 </div>
             </main>
