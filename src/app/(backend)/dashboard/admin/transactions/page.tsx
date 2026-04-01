@@ -131,10 +131,10 @@ export default function TransactionsPage() {
             variants={containerStagger}
             initial="initial"
             animate="animate"
-            className="space-y-8 pb-20"
+            className="space-y-6 pb-12"
         >
             {/* ── Header ─────────────────────────────────────────────────────── */}
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-6">
                 <div className="flex items-center gap-6">
                     <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_#10b981]">
                         <ShoppingBag size={32} />
@@ -159,7 +159,12 @@ export default function TransactionsPage() {
 
             {/* ── Summary Cards ──────────────────────────────────────────────── */}
             {summary && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <motion.div 
+                    variants={containerStagger}
+                    initial="initial"
+                    animate="animate"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                >
                     {[
                         {
                             label: "Total Transaksi",
@@ -204,13 +209,15 @@ export default function TransactionsPage() {
                             </div>
                         </motion.div>
                     ))}
-                </div>
+                </motion.div>
             )}
 
             {/* ── Revenue by Event ───────────────────────────────────────────── */}
             {summary && summary.byEvent && summary.byEvent.length > 0 && (
                 <motion.div
                     variants={slideUp}
+                    initial="initial"
+                    animate="animate"
                     className="bg-muted border border-glass-border rounded-3xl p-6 space-y-5"
                 >
                     <div className="flex items-center gap-3">
@@ -298,18 +305,18 @@ export default function TransactionsPage() {
             {/* ── Table ──────────────────────────────────────────────────────── */}
             <motion.div variants={slideUp}>
                 {loading && transactions.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-4xl border border-glass-border">
+                    <div className="flex flex-col items-center justify-center py-16 bg-muted rounded-4xl border border-glass-border">
                         <Loader2 className="animate-spin mb-6 text-emerald-500" size={48} />
                         <p className="text-lg font-bold text-glass-text/40">
                             Memuat data transaksi…
                         </p>
                     </div>
                 ) : error ? (
-                    <div className="flex flex-col items-center justify-center py-24 bg-muted rounded-4xl border border-red-500/20 text-red-400">
+                    <div className="flex flex-col items-center justify-center py-12 bg-muted rounded-4xl border border-red-500/20 text-red-400">
                         <p className="font-bold">Gagal memuat: {error}</p>
                     </div>
                 ) : filtered.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-4xl border border-glass-border">
+                    <div className="flex flex-col items-center justify-center py-16 bg-muted rounded-4xl border border-glass-border">
                         <ShoppingBag size={48} className="text-glass-text/10 mb-6" />
                         <p className="text-lg font-bold text-glass-text/40">
                             Belum ada transaksi ditemukan
