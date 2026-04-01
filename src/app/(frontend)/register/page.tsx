@@ -72,21 +72,21 @@ export default function RegisterPage() {
         <div className="min-h-screen text-white font-inter flex flex-col relative">
             <PlasmaBackground />
 
-            <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50 overflow-hidden">
+            <main className="flex-1 flex items-center justify-center py-6 md:py-10 px-4 relative z-50 overflow-hidden">
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
-                    className="w-full max-w-[540px] bg-glass-surface border border-glass-border rounded-[2.5rem] p-10 md:p-14 shadow-2xl relative transition-colors duration-500"
+                    className="w-full max-w-[540px] bg-glass-surface border border-glass-border rounded-[2rem] p-7 md:p-10 shadow-2xl relative transition-colors duration-500"
                 >
                     {/* Close Button */}
-                    <Link href="/" className="absolute top-8 right-8 text-white/20 hover:text-white transition-colors p-2">
+                    <Link href="/" className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors p-2">
                         <X size={24} />
                     </Link>
 
                     {/* Tab Switcher */}
-                    <div className="flex gap-8 mb-10 border-b border-white/5">
+                    <div className="flex gap-8 mb-6 border-b border-white/5">
                         <Link href="/login" className="pb-4 text-sm font-bold text-white/20 hover:text-white transition-all border-b-2 border-transparent">
                             Login
                         </Link>
@@ -95,7 +95,7 @@ export default function RegisterPage() {
                         </Link>
                     </div>
 
-                    <div className="space-y-2 mb-8 text-left">
+                    <div className="space-y-2 mb-6 text-left">
                         <h1 className="text-3xl font-bold tracking-tight text-foreground">Create Account</h1>
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed">Create your account to get started</p>
                     </div>
@@ -114,7 +114,7 @@ export default function RegisterPage() {
                         </div>
                     )}
 
-                    <form className="space-y-6" onSubmit={handleSubmit}>
+                    <form className="space-y-4" onSubmit={handleSubmit}>
                         {/* Full Name */}
                         <div className="space-y-2 text-left">
                             <label className="text-xs font-bold uppercase tracking-widest text-white/60 ml-1 font-inter">Full Name</label>
@@ -127,7 +127,7 @@ export default function RegisterPage() {
                                     onChange={handleChange}
                                     required
                                     placeholder="John Doe"
-                                    className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
+                                    className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
                                 />
                             </div>
                         </div>
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                                     onChange={handleChange}
                                     required
                                     placeholder="name@example.com"
-                                    className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
+                                    className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
                                 />
                             </div>
                         </div>
@@ -162,7 +162,7 @@ export default function RegisterPage() {
                                         onChange={handleChange}
                                         required
                                         placeholder="••••••••"
-                                        className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30 font-mono"
+                                        className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30 font-mono"
                                     />
                                     <button
                                         type="button"
@@ -184,7 +184,7 @@ export default function RegisterPage() {
                                         onChange={handleChange}
                                         required
                                         placeholder="••••••••"
-                                        className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30 font-mono"
+                                        className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30 font-mono"
                                     />
                                 </div>
                             </div>
@@ -204,7 +204,7 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#FFD700] text-black font-bold py-4 rounded-2xl shadow-[0_0_25px_rgba(255,215,0,0.3)] hover:shadow-[0_0_35px_rgba(255,215,0,0.5)] hover:brightness-110 transition-all mt-4 text-sm active:scale-[0.98] font-inter flex items-center justify-center gap-2"
+                            className="w-full bg-[#FFD700] text-black font-bold py-3 rounded-2xl shadow-[0_0_25px_rgba(255,215,0,0.3)] hover:shadow-[0_0_35px_rgba(255,215,0,0.5)] hover:brightness-110 transition-all mt-4 text-sm active:scale-[0.98] font-inter flex items-center justify-center gap-2"
                         >
                             {loading ? (
                                 <>
@@ -218,7 +218,7 @@ export default function RegisterPage() {
                     </form>
 
                     {/* Footer Link */}
-                    <p className="text-center text-sm text-white/40 mt-10">
+                    <p className="text-center text-sm text-white/40 mt-6">
                         Already have an account?{" "}
                         <Link href="/login" className="text-[#FFD700] font-bold hover:brightness-125 transition-all">
                             Sign In
