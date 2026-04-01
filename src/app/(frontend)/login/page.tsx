@@ -84,21 +84,21 @@ export default function LoginPage() {
         <div className="min-h-screen text-white font-inter flex flex-col relative overflow-hidden">
             <PlasmaBackground />
 
-            <main className="flex-1 flex items-center justify-center py-20 px-6 relative z-50">
+            <main className="flex-1 flex items-center justify-center py-6 md:py-10 px-4 relative z-50">
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
-                    className="w-full max-w-[480px] bg-glass-surface border border-glass-border rounded-[2.5rem] p-10 md:p-12 shadow-2xl relative transition-colors duration-500"
+                    className="w-full max-w-[480px] bg-glass-surface border border-glass-border rounded-[2rem] p-7 md:p-10 shadow-2xl relative transition-colors duration-500"
                 >
                     {/* Close Button */}
-                    <Link href="/" className="absolute top-8 right-8 text-white/20 hover:text-white transition-colors p-2">
+                    <Link href="/" className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors p-2">
                         <X size={24} />
                     </Link>
 
                     {/* Tab Switcher */}
-                    <div className="flex gap-8 mb-10 border-b border-white/5">
+                    <div className="flex gap-8 mb-6 border-b border-white/5">
                         <Link href="/login" className="pb-4 text-sm font-bold border-b-2 border-neon-pink text-white transition-all">
                             Login
                         </Link>
@@ -107,7 +107,7 @@ export default function LoginPage() {
                         </Link>
                     </div>
 
-                    <div className="space-y-2 mb-8 text-left">
+                    <div className="space-y-2 mb-6 text-left">
                         <h1 className="text-3xl font-bold tracking-tight text-foreground uppercase">Welcome Back</h1>
                         <p className="text-muted-foreground text-sm font-medium leading-relaxed">Enter your credentials to access your account</p>
                     </div>
@@ -119,7 +119,7 @@ export default function LoginPage() {
                         </div>
                     )}
 
-                    <form onSubmit={handleLogin} className="space-y-6">
+                    <form onSubmit={handleLogin} className="space-y-4">
                         <div className="space-y-2 text-left">
                             <label className="text-xs font-bold uppercase tracking-widest text-white/60 ml-1">Email</label>
                             <div className="relative group">
@@ -129,7 +129,7 @@ export default function LoginPage() {
                                     placeholder="name@example.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground outline-none focus:border-neon-pink/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
+                                    className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-4 text-sm text-foreground outline-none focus:border-neon-pink/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
                                     required
                                 />
                             </div>
@@ -144,7 +144,7 @@ export default function LoginPage() {
                                     placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-muted border border-glass-border rounded-2xl py-4 pl-12 pr-12 text-sm text-foreground outline-none focus:border-neon-pink/50 focus:bg-background transition-all placeholder:text-muted-foreground/30 font-mono"
+                                    className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-12 text-sm text-foreground outline-none focus:border-neon-pink/50 focus:bg-background transition-all placeholder:text-muted-foreground/30 font-mono"
                                     required
                                 />
                                 <button
@@ -165,7 +165,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-neon-pink text-white font-bold py-4 rounded-2xl shadow-[0_0_20px_rgba(255,0,255,0.4)] hover:shadow-[0_0_30px_rgba(255,0,255,0.6)] hover:brightness-110 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
+                            className="w-full bg-neon-pink text-white font-bold py-3 rounded-2xl shadow-[0_0_20px_rgba(255,0,255,0.4)] hover:shadow-[0_0_30px_rgba(255,0,255,0.6)] hover:brightness-110 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
                         >
                             {loading ? (
                                 <>
@@ -178,7 +178,7 @@ export default function LoginPage() {
                         </button>
                     </form>
 
-                    <div className="relative my-10">
+                    <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-white/5"></div>
                         </div>
@@ -188,11 +188,11 @@ export default function LoginPage() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <button className="flex items-center justify-center gap-3 bg-black/40 border border-white/5 rounded-2xl py-4 hover:bg-white/5 transition-all group">
+                        <button type="button" className="flex items-center justify-center gap-3 bg-black/40 border border-white/5 rounded-2xl py-3 hover:bg-white/5 transition-all group">
                             <i className="fab fa-google text-white/40 group-hover:text-white transition-colors"></i>
                             <span className="text-sm font-bold text-white/60 group-hover:text-white">Google</span>
                         </button>
-                        <button className="flex items-center justify-center gap-3 bg-black/40 border border-white/5 rounded-2xl py-4 hover:bg-white/5 transition-all group">
+                        <button type="button" className="flex items-center justify-center gap-3 bg-black/40 border border-white/5 rounded-2xl py-3 hover:bg-white/5 transition-all group">
                             <i className="fab fa-apple text-white/40 group-hover:text-white transition-colors text-lg"></i>
                             <span className="text-sm font-bold text-white/60 group-hover:text-white">Apple</span>
                         </button>
