@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronDown, Mail, MapPin, MessageSquare, Users, TrendingUp, ShieldCheck, ArrowRight } from "lucide-react";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
+import { MobileMockupWidget } from "@/app/(frontend)/_components/ui/MobileMockupWidget";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -231,6 +232,7 @@ export default function AboutPage() {
             </main>
 
             <NeonFooter />
+            <MobileMockupWidget />
         </div>
     );
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, X, BarChart3, PlusCircle, Settings2, Map as MapIcon, ArrowUpRight, TrendingUp, Users, DollarSign, Zap, Shield } from "lucide-react";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
+import { MobileMockupWidget } from "@/app/(frontend)/_components/ui/MobileMockupWidget";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -265,6 +266,7 @@ export default function VipAccessPage() {
             </main>
 
             <NeonFooter />
+            <MobileMockupWidget />
         </div>
     );
 }
