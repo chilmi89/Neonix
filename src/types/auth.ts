@@ -90,3 +90,30 @@ export interface Ticket {
     isActive: boolean;
     createdAt?: string;
 }
+
+export interface SubscriptionPlan {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    durationDays: number;
+    isActive: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+export interface UserSubscription {
+    id: number;
+    userId: number;
+    userName: string;
+    tenantId?: number;
+    tenantName?: string;
+    planId: number;
+    planName: string;
+    roleId: number;
+    status: string;
+    startDate: string;
+    endDate: string;
+    createdAt: string;
+    updatedAt: string;
+}

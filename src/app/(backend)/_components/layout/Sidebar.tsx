@@ -23,7 +23,8 @@ import {
     Fingerprint,
     MoreVertical,
     User,
-    ShoppingBag
+    ShoppingBag,
+    CreditCard
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -98,6 +99,8 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                     items: [
                         { icon: ShieldCheck, label: "Superadmin Dash", href: "/dashboard/superadmin" },
                         { icon: Building2, label: "Tenants Registry", href: "/dashboard/superadmin/tenant" },
+                        { icon: CreditCard, label: "Subscription Plans", href: "/dashboard/superadmin/subscription-plan" },
+                        { icon: Activity, label: "User Subscriptions", href: "/dashboard/superadmin/user-subscription" },
                     ]
                 },
                 {
