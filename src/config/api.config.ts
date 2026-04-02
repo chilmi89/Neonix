@@ -149,6 +149,38 @@ export const API = {
         getMember: `${API_BASE_URL}/member/transactions`,
     },
 
+    // Subscription Plans
+    subscriptionPlans: {
+        getAll: `${API_BASE_URL}/subscription-plans`,
+        getActive: `${API_BASE_URL}/subscription-plans/active`,
+        getById: (id: number | string) => `${API_BASE_URL}/subscription-plans/${id}`,
+        create: `${API_BASE_URL}/subscription-plans`,
+        update: (id: number | string) => `${API_BASE_URL}/subscription-plans/${id}`,
+        delete: (id: number | string) => `${API_BASE_URL}/subscription-plans/${id}`,
+    },
+
+    // User Subscriptions (Admin)
+    adminUserSubscriptions: {
+        getAll: `${API_BASE_URL}/admin/subscriptions`,
+        getById: (id: number | string) => `${API_BASE_URL}/admin/subscriptions/${id}`,
+        updateStatus: (id: number | string, status: string) => `${API_BASE_URL}/admin/subscriptions/${id}/status?status=${status}`,
+        delete: (id: number | string) => `${API_BASE_URL}/admin/subscriptions/${id}`,
+        manualCreate: `${API_BASE_URL}/admin/subscriptions`,
+    },
+
+    // User Subscriptions (Member Facing)
+    userSubscriptions: {
+        subscribe: (userId: number | string) => `${API_BASE_URL}/subscriptions/subscribe?userId=${userId}`,
+        mySubscriptions: (userId?: number | string, tenantId?: number | string) => {
+            let url = `${API_BASE_URL}/subscriptions/my-subscriptions?`;
+            const params = [];
+            if (userId) params.push(`userId=${userId}`);
+            if (tenantId) params.push(`tenantId=${tenantId}`);
+            return url + params.join("&");
+        },
+        myActiveSubscription: (userId: number | string) => `${API_BASE_URL}/subscriptions/my-active-subscription?userId=${userId}`,
+    },
+
 };
 
 // ========== HELPER FUNCTIONS ==========
@@ -246,6 +278,24 @@ export async function apiDelete<T>(url: string, withAuth = true): Promise<T> {
     const response = await fetch(url, {
         method: "DELETE",
         headers: getHeaders(withAuth),
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: "Request failed" }));
+        throw new Error(error.message || `HTTP ${response.status}`);
+    }
+
+    return response.json();
+}
+
+/**
+ * Helper untuk PATCH request
+ */
+export async function apiPatch<T>(url: string, data?: any, withAuth = true): Promise<T> {
+    const response = await fetch(url, {
+        method: "PATCH",
+        headers: getHeaders(withAuth),
+        body: data ? JSON.stringify(data) : undefined,
     });
 
     if (!response.ok) {
