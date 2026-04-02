@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { 
-    MapPin, 
-    Calendar, 
-    Ticket, 
-    ChevronRight, 
-    Loader2, 
+import {
+    MapPin,
+    Calendar,
+    Ticket,
+    ChevronRight,
+    Loader2,
     ShoppingBag,
     AlertCircle
 } from "lucide-react";
@@ -93,7 +93,7 @@ export function TicketsHistory() {
                     <h3 className="text-xl font-bold uppercase">Belum ada tiket</h3>
                     <p className="text-white/40 text-sm max-w-[300px]">Semua tiket yang Anda beli akan muncul di sini secara otomatis.</p>
                 </div>
-                <button 
+                <button
                     onClick={() => window.location.href = "/"}
                     className="mt-4 px-8 py-4 bg-neon-pink text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:brightness-110 transition-all shadow-lg shadow-neon-pink/20"
                 >
@@ -104,8 +104,8 @@ export function TicketsHistory() {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="grid gap-6">
+        <div className="max-w-5xl mx-auto space-y-4">
+            <div className="flex flex-col gap-4">
                 {transactions.map((t, i) => {
                     // Map TransactionDTO to UI structure
                     const uiTicket = {
@@ -125,69 +125,66 @@ export function TicketsHistory() {
                     return (
                         <motion.div
                             key={t.id}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="group bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden hover:border-white/20 transition-all cursor-pointer"
+                            className="group relative bg-[#0A0A0A] border border-white/5 rounded-[2.5rem] p-3 flex items-center gap-6 hover:border-neon-pink/30 hover:bg-white/[0.02] transition-all cursor-pointer overflow-hidden shadow-2xl"
                             onClick={() => setSelectedTicket(uiTicket)}
                         >
-                            <div className="flex flex-col md:flex-row">
-                                {/* Image Wrapper */}
-                                <div className="w-full md:w-56 h-48 md:h-auto overflow-hidden bg-white/5">
-                                    <img
-                                        src={uiTicket.image}
-                                        alt={uiTicket.title}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                    />
+                            {/* Left: Image with VIP badge */}
+                            <div className="relative w-44 h-28 shrink-0 overflow-hidden rounded-[2rem] border border-white/10">
+                                <img
+                                    src={uiTicket.image}
+                                    alt={uiTicket.title}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                />
+                                <div className="absolute top-3 left-3 px-3 py-1 bg-neon-yellow/10 backdrop-blur-md border border-neon-yellow/30 rounded-lg shadow-[0_0_15px_rgba(255,215,0,0.2)]">
+                                    <span className="text-[9px] font-black italic text-neon-yellow">VIP</span>
                                 </div>
+                            </div>
 
-                                {/* Info */}
-                                <div className="flex-1 p-6 md:p-8 flex flex-col md:flex-row justify-between gap-6">
-                                    <div className="space-y-4">
-                                        <div className="flex flex-wrap items-center gap-3">
-                                            <span className="px-3 py-1 rounded-lg bg-neon-cyan/20 text-neon-cyan text-[10px] font-black uppercase tracking-widest">
-                                                Active
-                                            </span>
-                                            <span className="text-[10px] text-white/40 font-black uppercase tracking-widest px-3 py-1 bg-white/5 rounded-lg border border-white/5">
-                                                {uiTicket.category}
-                                            </span>
-                                            <span className="text-[10px] text-white/40 font-black uppercase tracking-widest">ID: {uiTicket.id}</span>
-                                        </div>
+                            {/* Middle: Info */}
+                            <div className="flex-1 flex flex-col justify-center min-w-0">
+                                <h3 className="text-2xl font-black text-neon-pink uppercase tracking-tighter mb-0.5 truncate group-hover:drop-shadow-[0_0_10px_rgba(255,0,255,0.4)] transition-all">
+                                    {uiTicket.title}
+                                </h3>
+                                <p className="text-[11px] font-medium text-white/40 mb-4 truncate">{uiTicket.location}</p>
 
-                                        <div>
-                                            <h3 className="text-2xl font-black uppercase tracking-tighter mb-2 group-hover:text-neon-pink transition-colors">
-                                                {uiTicket.title}
-                                            </h3>
-                                            <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-sm text-white/60 font-medium">
-                                                <div className="flex items-center gap-2">
-                                                    <Calendar size={16} className="text-neon-cyan" />
-                                                    <span>{uiTicket.date} · {uiTicket.time}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <Ticket size={16} className="text-neon-pink" />
-                                                    <span>{uiTicket.type} <span className="text-white/20">×{uiTicket.quantity}</span></span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <Calendar size={14} className="text-neon-pink" />
+                                        <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">{uiTicket.date}</span>
                                     </div>
-
-                                    <div className="flex flex-row md:flex-col justify-between items-end md:text-right gap-4">
-                                        <div>
-                                            <p className="text-[10px] text-white/40 uppercase font-black tracking-widest">Amount Paid</p>
-                                            <p className="text-xl font-black text-white mt-1">{uiTicket.price}</p>
-                                        </div>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setSelectedTicket(uiTicket);
-                                            }}
-                                            className="w-full md:w-auto bg-white/5 border border-white/10 px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-neon-pink/10 hover:border-neon-pink/30 hover:text-neon-pink transition-all text-xs font-black uppercase tracking-widest"
-                                        >
-                                            View Detail
-                                            <ChevronRight size={16} />
-                                        </button>
+                                    <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-md border border-white/5">
+                                        <span className="text-[8px] font-black text-white/40 uppercase tracking-widest">{uiTicket.category}</span>
+                                    </div>
+                                    <div className="px-3 py-1 border border-neon-pink/20 rounded-md bg-neon-pink/5">
+                                        <span className="text-[8px] font-black text-neon-pink uppercase tracking-widest">Limited Seats</span>
                                     </div>
                                 </div>
+                            </div>
+
+                            {/* Divider Line */}
+                            <div className="w-px h-16 bg-white/5 ml-4 hidden md:block" />
+
+                            {/* Right: Price & CTA */}
+                            <div className="px-8 flex flex-col items-end gap-3 min-w-[200px]">
+                                <div className="text-right">
+                                    <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.2em] mb-1">Status: Active</p>
+                                    <p className="text-2xl font-black text-neon-yellow drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
+                                        {uiTicket.price}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setSelectedTicket(uiTicket);
+                                    }}
+                                    className="px-8 py-2.5 bg-neon-cyan text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,255,255,0.4)] transition-all flex items-center gap-2"
+                                >
+                                    View Details
+                                    <ChevronRight size={14} />
+                                </button>
                             </div>
                         </motion.div>
                     );
