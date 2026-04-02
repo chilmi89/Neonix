@@ -120,11 +120,19 @@ export function UserProvider({ children }: { children: ReactNode }) {
                 }
             }
         } catch (error: any) {
+            const isPublicRoute = 
+                pathname === "/login" || 
+                pathname === "/register" || 
+                pathname === "/" || 
+                pathname === "/vip-access" ||
+                pathname.startsWith("/events");
+
             if (
-                error.message.includes("401") ||
+                (error.message.includes("401") ||
                 error.message.includes("403") ||
                 error.message.includes("Unauthorized") ||
-                error.message.includes("Forbidden")
+                error.message.includes("Forbidden")) &&
+                !isPublicRoute
             ) {
                 router.push("/login");
             }
