@@ -11,6 +11,7 @@ import { TrendingSection } from "./_components/TrendingSection";
 import { VipSection } from "./_components/VipSection";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
 import { LiquidBackground } from "@/app/(frontend)/_components/ui/LiquidBackground";
+import { MobileMockupWidget } from "@/app/(frontend)/_components/ui/MobileMockupWidget";
 
 export default function Homepage() {
     return (
@@ -25,6 +26,7 @@ export default function Homepage() {
             </main>
 
             <NeonFooter />
+            <MobileMockupWidget />
         </div>
     );
 }

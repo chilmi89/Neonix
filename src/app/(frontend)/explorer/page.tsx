@@ -8,6 +8,7 @@ import { NeonEventDetailModal } from "@/app/(frontend)/_components/ui/NeonEventD
 import { NeonEventCard } from "@/app/(frontend)/_components/ui/NeonEventCard";
 import { NeonTicketCard } from "@/app/(frontend)/_components/ui/NeonTicketCard";
 import { GenreSection } from "@/app/(frontend)/(home)/_components/GenreSection";
+import { MobileMockupWidget } from "@/app/(frontend)/_components/ui/MobileMockupWidget";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -467,6 +468,7 @@ function ExplorerPageContent() {
             />
 
             <NeonFooter />
+            <MobileMockupWidget />
         </div>
     );
 }
