@@ -228,7 +228,11 @@ export async function apiGet<T>(url: string, withAuth = true, tokenOverride?: st
             errorData = { message: "Failed to parse error response" };
         }
 
-        console.error(`API Error [${url}] Status: ${response.status}:`, errorData);
+        // Quietly handle auth errors without cluttering console
+        if (response.status !== 401 && response.status !== 403) {
+            console.error(`API Error [${url}] Status: ${response.status}:`, errorData);
+        }
+        
         throw new Error((errorData as any).message || `HTTP ${response.status}`);
     }
 
