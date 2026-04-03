@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
-import { LiquidBackground } from "@/app/(frontend)/_components/ui/LiquidBackground";
+import { PlasmaBackground } from "@/app/(frontend)/_components/ui/PlasmaBackground";
 import { ProfileSection } from "./_components/ProfileSection";
 import { TicketsHistory } from "./_components/TicketsHistory";
 import { SettingsSection } from "./_components/SettingsSection";
@@ -45,17 +45,17 @@ export default function DashboardPage() {
     if (!user) return null; // Avoid flicker before redirect
 
     return (
-        <div className="min-h-screen bg-black text-white selection:bg-neon-pink/30 overflow-x-hidden font-inter relative">
-            <LiquidBackground />
+        <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 overflow-x-hidden font-inter relative">
+            <PlasmaBackground />
             <NeonNavbar />
 
             <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
                 <div className="grid lg:grid-cols-[280px_1fr] gap-12">
                     {/* Sidebar */}
                     <aside className="space-y-8">
-                        <div className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl">
-                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-neon-pink to-neon-cyan p-0.5">
-                                <div className="w-full h-full rounded-[14px] bg-black flex items-center justify-center overflow-hidden">
+                        <div className="flex items-center gap-4 p-4 bg-white border border-border rounded-3xl shadow-sm shadow-primary/5">
+                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-sky-500 p-0.5">
+                                <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center overflow-hidden">
                                     <img
                                         src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'Alex'}`}
                                         alt="Avatar"
@@ -64,8 +64,8 @@ export default function DashboardPage() {
                                 </div>
                             </div>
                             <div>
-                                <h2 className="font-black text-lg uppercase tracking-tight">{user?.name || 'Alex Morgan'}</h2>
-                                <p className="text-[10px] text-neon-cyan font-bold uppercase tracking-widest">VIP Member</p>
+                                <h2 className="font-black text-lg uppercase tracking-tight text-foreground">{user?.name || 'Alex Morgan'}</h2>
+                                <p className="text-[10px] text-primary font-black uppercase tracking-widest">VIP Member</p>
                             </div>
                         </div>
 
@@ -75,13 +75,13 @@ export default function DashboardPage() {
                                     key={item.id}
                                     onClick={() => setActiveTab(item.id as any)}
                                     className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all group ${activeTab === item.id
-                                        ? "bg-neon-pink/10 border border-neon-pink/20 text-white"
-                                        : "hover:bg-white/5 text-white/40 border border-transparent"
+                                        ? "bg-primary/10 border border-primary/20 text-primary"
+                                        : "hover:bg-muted text-foreground/40 border border-transparent"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
-                                        <item.icon size={20} className={activeTab === item.id ? "text-neon-pink" : "group-hover:text-white transition-colors"} />
-                                        <span className="text-sm font-bold uppercase tracking-wider">{item.label}</span>
+                                        <item.icon size={20} className={activeTab === item.id ? "text-primary" : "group-hover:text-primary transition-colors"} />
+                                        <span className="text-sm font-black uppercase tracking-wider">{item.label}</span>
                                     </div>
                                     <ChevronRight size={16} className={activeTab === item.id ? "opacity-100" : "opacity-0 group-hover:opacity-40 transition-opacity"} />
                                 </button>
@@ -106,22 +106,22 @@ export default function DashboardPage() {
                     {/* Content Area */}
                     <div className="space-y-8">
                         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
+                            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-foreground">
                                 {activeTab === "profile" ? "General Profile" : activeTab === "tickets" ? "Ticket History" : "Account Settings"}
                             </h1>
 
                             <div className="flex items-center gap-4">
                                 <div className="relative group flex-1 md:flex-none">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-neon-cyan transition-colors" size={18} />
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20 group-focus-within:text-primary transition-colors" size={18} />
                                     <input
                                         type="text"
                                         placeholder="Search activities..."
-                                        className="w-full md:w-64 bg-white/5 border border-white/10 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-medium focus:outline-none focus:border-neon-cyan/50 transition-all"
+                                        className="w-full md:w-64 bg-white border border-border rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold focus:outline-none focus:border-primary/50 transition-all text-foreground"
                                     />
                                 </div>
-                                <button className="relative w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
-                                    <Bell size={20} className="text-white/60" />
-                                    <span className="absolute top-3 right-3 w-2 h-2 bg-neon-pink rounded-full border-2 border-black" />
+                                <button className="relative w-12 h-12 rounded-2xl bg-white border border-border flex items-center justify-center hover:bg-muted transition-colors">
+                                    <Bell size={20} className="text-foreground/40" />
+                                    <span className="absolute top-3 right-3 w-2 h-2 bg-primary rounded-full border-2 border-white" />
                                 </button>
                             </div>
                         </header>

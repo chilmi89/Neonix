@@ -20,27 +20,20 @@ export function NeonEventCard({ image, title, location, date, price, tag, onClic
             whileHover={{ y: -6 }}
             transition={{ type: "spring", stiffness: 280, damping: 22 }}
             onClick={onClick}
-            className="group relative h-full min-h-[380px] rounded-2xl overflow-hidden cursor-pointer"
+            className="group relative h-full min-h-[400px] rounded-[2.5rem] overflow-hidden cursor-pointer bg-white border border-border shadow-xl shadow-black/5"
             style={{ isolation: "isolate" }}
         >
-            {/* Animated neon border glow */}
-            <div className="absolute -inset-[1px] rounded-2xl bg-linear-to-br from-neon-pink/0 via-white/5 to-neon-cyan/0 group-hover:from-neon-pink/60 group-hover:via-white/10 group-hover:to-neon-cyan/60 transition-all duration-700 z-0" />
-            <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-transparent transition-colors duration-500 z-0" />
 
             {/* Inner container */}
-            <div className="relative h-full rounded-2xl overflow-hidden z-10">
-                {/* Full-cover background image */}
-                <div className="absolute inset-0">
+            <div className="relative h-full rounded-[2.5rem] overflow-hidden z-10">
+                {/* Background image area */}
+                <div className="absolute top-0 inset-x-0 h-[65%] overflow-hidden">
                     <img
                         src={image}
                         alt={title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                     />
-                    {/* Multi-layer gradient system */}
-                    <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent" />
-                    <div className="absolute inset-0 bg-linear-to-b from-black/40 via-transparent to-transparent" />
-                    {/* Cinematic side vignette */}
-                    <div className="absolute inset-0 bg-linear-to-r from-black/30 via-transparent to-black/30" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
                 </div>
 
                 {/* Tag badge — floating top-left */}
@@ -59,9 +52,9 @@ export function NeonEventCard({ image, title, location, date, price, tag, onClic
                         ) : (
                             <motion.div
                                 initial={{ opacity: 0.9 }}
-                                animate={{ opacity: [0.9, 1, 0.9], boxShadow: ["0 0 8px rgba(255,0,128,0.4)", "0 0 18px rgba(255,0,128,0.7)", "0 0 8px rgba(255,0,128,0.4)"] }}
+                                animate={{ opacity: [0.9, 1, 0.9] }}
                                 transition={{ repeat: Infinity, duration: 1.5 }}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest backdrop-blur-md bg-neon-pink/20 border border-neon-pink/60 text-neon-pink"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest backdrop-blur-md bg-accent/20 border border-accent/40 text-accent-foreground"
                             >
                                 <Zap size={10} fill="currentColor" />
                                 hot
@@ -70,53 +63,47 @@ export function NeonEventCard({ image, title, location, date, price, tag, onClic
                     </div>
                 )}
 
-                {/* Floating price chip — top-right */}
-                <div className="absolute top-4 right-4 z-20 px-3 py-1.5 rounded-xl backdrop-blur-md bg-black/50 border border-neon-yellow/30 text-neon-yellow font-black text-sm drop-shadow-[0_0_8px_rgba(255,230,0,0.6)]">
+                {/* Price hint — replaced with bottom section details */}
+                <div className="absolute top-5 right-5 z-20 px-3 py-1.5 rounded-xl backdrop-blur-md bg-white/80 border border-border text-foreground font-black text-sm shadow-sm">
                     ${price}
                 </div>
 
                 {/* Bottom content overlay */}
-                <div className="absolute inset-x-0 bottom-0 z-10">
-                    {/* Deep bottom gradient */}
-                    <div className="absolute inset-0 bg-linear-to-t from-black/98 via-black/80 to-transparent" />
-
-                    <div className="relative px-5 pb-5 pt-16 space-y-3">
-                        {/* Title */}
-                        <h3 className="text-xl font-extrabold text-white line-clamp-2 leading-tight tracking-tight group-hover:text-neon-pink transition-colors duration-300 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+                <div className="absolute inset-x-0 bottom-0 p-6 pt-0 flex flex-col gap-4">
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between gap-4">
+                            <span className="text-[10px] font-black text-primary uppercase tracking-widest">Featured Event</span>
+                        </div>
+                        <h3 className="text-xl font-black text-foreground line-clamp-2 leading-tight tracking-tight group-hover:text-primary transition-colors duration-300">
                             {title}
                         </h3>
+                    </div>
 
-                        {/* Meta row */}
-                        <div className="flex flex-col gap-1">
-                            <div className="flex items-center gap-2 text-white/60 text-xs font-medium">
-                                <MapPin size={11} className="text-neon-pink/80 shrink-0" />
-                                <span className="truncate">{location}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-white/60 text-xs font-medium">
-                                <Calendar size={11} className="text-neon-pink/80 shrink-0" />
-                                <span>{date}</span>
-                            </div>
+                    <div className="flex flex-col gap-2.5">
+                        <div className="flex items-center gap-2.5 text-muted-foreground text-[11px] font-bold uppercase tracking-widest">
+                            <MapPin size={12} className="text-primary shrink-0" />
+                            <span className="truncate">{location}</span>
+                        </div>
+                        <div className="flex items-center gap-2.5 text-muted-foreground text-[11px] font-bold uppercase tracking-widest">
+                            <Calendar size={12} className="text-primary shrink-0" />
+                            <span>{date}</span>
+                        </div>
+                    </div>
+
+                    <div className="h-px bg-border my-1" />
+
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-[9px] uppercase text-foreground/30 font-bold tracking-[0.2em]">Starting from</p>
+                            <p className="text-2xl font-black text-primary leading-none">
+                                ${price}
+                            </p>
                         </div>
 
-                        {/* Neon divider */}
-                        <div className="h-px bg-linear-to-r from-transparent via-neon-pink/40 to-transparent" />
-
-                        {/* Bottom row: label + CTA */}
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-[9px] uppercase text-white/30 font-bold tracking-[0.2em]">Mulai dari</p>
-                                <p className="text-2xl font-black text-neon-yellow drop-shadow-[0_0_14px_rgba(255,230,0,0.8)] leading-none">
-                                    ${price}
-                                </p>
-                            </div>
-
-                            {/* Shimmer CTA button */}
-                            <button className="relative overflow-hidden flex items-center gap-2 bg-neon-pink text-white font-black text-[10px] px-5 py-2.5 rounded-xl uppercase tracking-widest shadow-[0_0_20px_rgba(255,0,128,0.4)] hover:shadow-[0_0_30px_rgba(255,0,128,0.7)] transition-all duration-300 group/btn">
-                                <span className="relative z-10">Detail</span>
-                                {/* Shine sweep */}
-                                <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500" />
-                            </button>
-                        </div>
+                        <button className="relative overflow-hidden flex items-center gap-2 bg-primary text-white font-black text-[10px] px-6 py-3 rounded-xl uppercase tracking-widest shadow-lg shadow-primary/20 hover:brightness-110 transition-all duration-300 group/btn">
+                            <span className="relative z-10">Details</span>
+                            <Zap size={12} className="group-hover:translate-x-1 transition-transform" />
+                        </button>
                     </div>
                 </div>
             </div>

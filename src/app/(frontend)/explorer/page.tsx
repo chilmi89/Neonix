@@ -163,7 +163,7 @@ function ExplorerPageContent() {
                             animate={{ opacity: 1, x: 0 }}
                             className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-4"
                         >
-                            Explorer<span className="text-neon-pink">.</span>
+                            Explorer<span className="text-primary">.</span>
                         </motion.h1>
                         <p className="text-muted-foreground max-w-lg text-sm font-medium leading-relaxed">
                             Telusuri ratusan event VIP dan standar dengan filter lokasi, tanggal, harga, dan kategori dalam satu layar.
@@ -171,22 +171,22 @@ function ExplorerPageContent() {
                     </div>
 
                     <div className="w-full md:max-w-md relative group">
-                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-neon-pink transition-colors" size={20} />
+                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={20} />
                         <input
                             type="text"
-                            placeholder="Cari event, artis, atau venue..."
+                            placeholder="Search event, artist, or venue..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-muted border border-glass-border rounded-full py-5 pl-14 pr-8 text-sm outline-none focus:border-neon-pink/50 transition-all placeholder:text-muted-foreground font-medium"
+                            className="w-full bg-white border border-border rounded-full py-5 pl-14 pr-8 text-sm outline-none focus:border-primary/50 transition-all placeholder:text-muted-foreground font-bold shadow-sm"
                         />
                     </div>
                 </div>
 
                 {/* Filter Section */}
-                <div className="bg-muted border border-glass-border rounded-[2.5rem] p-4 flex flex-col lg:flex-row items-center gap-4 shadow-2xl mb-16 relative">
-                    <div className="flex items-center gap-2 px-6 border-r border-glass-border">
-                        <div className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse" />
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Filter pencarian</span>
+                <div className="bg-white border border-border rounded-[2.5rem] p-4 flex flex-col lg:flex-row items-center gap-4 shadow-xl mb-16 relative">
+                    <div className="flex items-center gap-2 px-6 border-r border-border">
+                        <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+                        <span className="text-[10px] font-black text-foreground/30 uppercase tracking-[0.2em]">Search Filters</span>
                     </div>
 
                     <div className="flex flex-1 flex-wrap items-center gap-4 px-4 w-full relative">
@@ -195,14 +195,14 @@ function ExplorerPageContent() {
                             <div
                                 onClick={() => toggleDropdown('location')}
                                 className={cn(
-                                    "bg-background border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer transition-all hover:border-neon-cyan/50",
-                                    openDropdown === 'location' ? "border-neon-cyan ring-1 ring-neon-cyan/20" : "border-glass-border"
+                                    "bg-muted/50 border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer transition-all hover:border-primary/50",
+                                    openDropdown === 'location' ? "border-primary ring-1 ring-primary/20 bg-white" : "border-border"
                                 )}
                             >
-                                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest px-1">Location</span>
+                                <span className="text-[8px] font-black text-foreground/30 uppercase tracking-[0.2em] px-1">Location</span>
                                 <div className="flex items-center justify-between px-1">
-                                    <span className="text-xs font-bold truncate">{location === "All Locations" ? "All Locations" : location}</span>
-                                    <ChevronDown size={14} className={cn("text-muted-foreground transition-transform duration-300", openDropdown === 'location' && "rotate-180 text-neon-cyan")} />
+                                    <span className="text-xs font-black truncate">{location === "All Locations" ? "All Locations" : location}</span>
+                                    <ChevronDown size={14} className={cn("text-foreground/20 transition-transform duration-300", openDropdown === 'location' && "rotate-180 text-primary")} />
                                 </div>
                             </div>
                             <AnimatePresence>
@@ -211,15 +211,15 @@ function ExplorerPageContent() {
                                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                        className="absolute top-[calc(100%+8px)] left-0 w-full bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl z-[100] max-h-60 overflow-y-auto"
+                                        className="absolute top-[calc(100%+8px)] left-0 w-full bg-white border border-border rounded-2xl p-2 shadow-2xl z-[100] max-h-60 overflow-y-auto"
                                     >
                                         {locations.map((loc) => (
                                             <div
                                                 key={loc}
                                                 onClick={() => { setLocation(loc); setOpenDropdown(null); }}
                                                 className={cn(
-                                                    "px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-between group cursor-pointer",
-                                                    location === loc ? "bg-neon-cyan text-black" : "text-white/60 hover:bg-white/5 hover:text-white"
+                                                    "px-4 py-3 rounded-xl text-xs font-black transition-all flex items-center justify-between group cursor-pointer",
+                                                    location === loc ? "bg-primary text-white" : "text-foreground/40 hover:bg-muted hover:text-foreground"
                                                 )}
                                             >
                                                 {loc}
@@ -236,14 +236,14 @@ function ExplorerPageContent() {
                             <div
                                 onClick={() => toggleDropdown('date')}
                                 className={cn(
-                                    "bg-background border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer transition-all hover:border-neon-pink/50",
-                                    openDropdown === 'date' ? "border-neon-pink ring-1 ring-neon-pink/20" : "border-glass-border"
+                                    "bg-muted/50 border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer transition-all hover:border-primary/50",
+                                    openDropdown === 'date' ? "border-primary ring-1 ring-primary/20 bg-white" : "border-border"
                                 )}
                             >
-                                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest px-1">Year</span>
+                                <span className="text-[8px] font-black text-foreground/30 uppercase tracking-[0.2em] px-1">Year</span>
                                 <div className="flex items-center justify-between px-1">
-                                    <span className="text-xs font-bold">{date}</span>
-                                    <ChevronDown size={14} className={cn("text-muted-foreground transition-transform duration-300", openDropdown === 'date' && "rotate-180 text-neon-pink")} />
+                                    <span className="text-xs font-black">{date}</span>
+                                    <ChevronDown size={14} className={cn("text-foreground/20 transition-transform duration-300", openDropdown === 'date' && "rotate-180 text-primary")} />
                                 </div>
                             </div>
                             <AnimatePresence>
@@ -252,15 +252,15 @@ function ExplorerPageContent() {
                                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                        className="absolute top-[calc(100%+8px)] left-0 w-full bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl z-[100]"
+                                        className="absolute top-[calc(100%+8px)] left-0 w-full bg-white border border-border rounded-2xl p-2 shadow-2xl z-[100]"
                                     >
                                         {dates.map((d) => (
                                             <div
                                                 key={d}
                                                 onClick={() => { setDate(d); setOpenDropdown(null); }}
                                                 className={cn(
-                                                    "px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-between group cursor-pointer",
-                                                    date === d ? "bg-neon-pink text-white" : "text-white/60 hover:bg-white/5 hover:text-white"
+                                                    "px-4 py-3 rounded-xl text-xs font-black transition-all flex items-center justify-between group cursor-pointer",
+                                                    date === d ? "bg-primary text-white" : "text-foreground/40 hover:bg-muted hover:text-foreground"
                                                 )}
                                             >
                                                 {d}
@@ -277,14 +277,14 @@ function ExplorerPageContent() {
                             <div
                                 onClick={() => toggleDropdown('price')}
                                 className={cn(
-                                    "bg-background border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer transition-all hover:border-neon-yellow/50",
-                                    openDropdown === 'price' ? "border-neon-yellow ring-1 ring-neon-yellow/20" : "border-glass-border"
+                                    "bg-muted/50 border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer transition-all hover:border-primary/50",
+                                    openDropdown === 'price' ? "border-primary ring-1 ring-primary/20 bg-white" : "border-border"
                                 )}
                             >
-                                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest px-1">Price</span>
+                                <span className="text-[8px] font-black text-foreground/30 uppercase tracking-[0.2em] px-1">Price</span>
                                 <div className="flex items-center justify-between px-1">
-                                    <span className="text-xs font-bold">{priceRange}</span>
-                                    <ChevronDown size={14} className={cn("text-muted-foreground transition-transform duration-300", openDropdown === 'price' && "rotate-180 text-neon-yellow")} />
+                                    <span className="text-xs font-black">{priceRange}</span>
+                                    <ChevronDown size={14} className={cn("text-foreground/20 transition-transform duration-300", openDropdown === 'price' && "rotate-180 text-primary")} />
                                 </div>
                             </div>
                             <AnimatePresence>
@@ -293,15 +293,15 @@ function ExplorerPageContent() {
                                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                        className="absolute top-[calc(100%+8px)] left-0 w-full bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl z-[100]"
+                                        className="absolute top-[calc(100%+8px)] left-0 w-full bg-white border border-border rounded-2xl p-2 shadow-2xl z-[100]"
                                     >
                                         {priceRanges.map((pr) => (
                                             <div
                                                 key={pr}
                                                 onClick={() => { setPriceRange(pr); setOpenDropdown(null); }}
                                                 className={cn(
-                                                    "px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-between group cursor-pointer",
-                                                    priceRange === pr ? "bg-neon-yellow text-black" : "text-white/60 hover:bg-white/5 hover:text-white"
+                                                    "px-4 py-3 rounded-xl text-xs font-black transition-all flex items-center justify-between group cursor-pointer",
+                                                    priceRange === pr ? "bg-primary text-white" : "text-foreground/40 hover:bg-muted hover:text-foreground"
                                                 )}
                                             >
                                                 {pr}
@@ -318,14 +318,14 @@ function ExplorerPageContent() {
                             <div
                                 onClick={() => toggleDropdown('category')}
                                 className={cn(
-                                    "bg-black border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer transition-all shadow-[0_0_20px_rgba(255,0,255,0.05)]",
-                                    openDropdown === 'category' ? "border-neon-pink ring-1 ring-neon-pink/20" : "border-neon-pink/30 hover:border-neon-pink/50"
+                                    "bg-white border rounded-2xl p-4 flex flex-col gap-1 cursor-pointer transition-all shadow-sm",
+                                    openDropdown === 'category' ? "border-primary ring-1 ring-primary/20 bg-white" : "border-border hover:border-primary/50"
                                 )}
                             >
-                                <span className="text-[8px] font-bold text-neon-pink uppercase tracking-widest px-1">Category</span>
+                                <span className="text-[8px] font-black text-foreground/30 uppercase tracking-[0.2em] px-1">Category</span>
                                 <div className="flex items-center justify-between px-1">
-                                    <span className="text-xs font-bold text-neon-pink">{category}</span>
-                                    <ChevronDown size={14} className={cn("text-neon-pink/40 transition-transform duration-300", openDropdown === 'category' && "rotate-180 text-neon-pink")} />
+                                    <span className="text-xs font-black text-primary">{category}</span>
+                                    <ChevronDown size={14} className={cn("text-primary/40 transition-transform duration-300", openDropdown === 'category' && "rotate-180 text-primary")} />
                                 </div>
                             </div>
                             <AnimatePresence>
@@ -334,15 +334,15 @@ function ExplorerPageContent() {
                                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                        className="absolute top-[calc(100%+8px)] left-0 w-full bg-black/90 backdrop-blur-xl border border-neon-pink/20 rounded-2xl p-2 shadow-2xl z-[100]"
+                                        className="absolute top-[calc(100%+8px)] left-0 w-full bg-white border border-border rounded-2xl p-2 shadow-2xl z-[100]"
                                     >
                                         {categories.map((cat) => (
                                             <div
                                                 key={cat}
                                                 onClick={() => { setCategory(cat); setOpenDropdown(null); }}
                                                 className={cn(
-                                                    "px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-between group cursor-pointer",
-                                                    category === cat ? "bg-neon-pink text-white" : "text-neon-pink/60 hover:bg-neon-pink/10 hover:text-neon-pink"
+                                                    "px-4 py-3 rounded-xl text-xs font-black transition-all flex items-center justify-between group cursor-pointer",
+                                                    category === cat ? "bg-primary text-white" : "text-foreground/40 hover:bg-muted hover:text-foreground"
                                                 )}
                                             >
                                                 {cat}
@@ -357,10 +357,10 @@ function ExplorerPageContent() {
 
                     <button
                         onClick={resetFilters}
-                        className="text-[10px] font-bold text-muted-foreground hover:text-neon-pink transition-colors uppercase tracking-widest px-8 group flex items-center gap-2"
+                        className="text-[10px] font-black text-foreground/30 hover:text-primary transition-colors uppercase tracking-[0.2em] px-8 group flex items-center gap-2"
                     >
                         <X size={14} className="group-hover:rotate-90 transition-transform" />
-                        Reset filter
+                        Clear filters
                     </button>
                 </div>
 
@@ -372,15 +372,15 @@ function ExplorerPageContent() {
 
                 {/* Results Section */}
                 <div className="space-y-12">
-                    <div className="flex items-center justify-between border-b border-white/5 pb-6">
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                            Menampilkan {filteredEvents.length} event untuk filter saat ini
+                    <div className="flex items-center justify-between border-b border-border pb-8">
+                        <p className="text-[10px] font-black text-foreground/30 uppercase tracking-[0.2em]">
+                            Displaying {filteredEvents.length} events for current filters
                         </p>
-                        <div className="flex items-center gap-3 cursor-pointer group">
-                            <span className="text-[10px] font-bold text-muted-foreground group-hover:text-foreground transition-colors uppercase tracking-widest">Sort by</span>
-                            <div className="bg-muted px-4 py-2 rounded-lg flex items-center gap-2 border border-glass-border">
-                                <span className="text-[10px] font-bold uppercase tracking-widest">Trending</span>
-                                <ChevronDown size={12} className="text-muted-foreground" />
+                        <div className="flex items-center gap-4 cursor-pointer group">
+                            <span className="text-[10px] font-black text-foreground/30 group-hover:text-primary transition-colors uppercase tracking-[0.2em]">Sort by</span>
+                            <div className="bg-white px-6 py-2.5 rounded-xl flex items-center gap-3 border border-border shadow-sm">
+                                <span className="text-[10px] font-black uppercase tracking-widest">Trending</span>
+                                <ChevronDown size={14} className="text-foreground/20" />
                             </div>
                         </div>
                     </div>
@@ -440,14 +440,14 @@ function ExplorerPageContent() {
                                 );
                             })
                         ) : (
-                            <div className="flex flex-col items-center justify-center py-40 text-center space-y-4">
-                                <div className="w-20 h-20 bg-muted border border-glass-border rounded-full flex items-center justify-center text-muted-foreground mb-4">
-                                    <Search size={32} />
+                            <div className="flex flex-col items-center justify-center py-48 text-center space-y-6">
+                                <div className="w-24 h-24 bg-muted border border-border rounded-[2rem] flex items-center justify-center text-foreground/10 mb-2">
+                                    <Search size={40} />
                                 </div>
-                                <h3 className="text-2xl font-black uppercase tracking-tight">Tidak Ada Event</h3>
-                                <p className="text-muted-foreground text-sm max-w-xs font-medium">Cobalah reset filter atau gunakan kata kunci lain untuk menemukan event impianmu.</p>
-                                <button onClick={resetFilters} className="px-8 py-3 bg-neon-pink text-white rounded-full text-xs font-black uppercase tracking-widest hover:brightness-110 transition-all mt-4">
-                                    Reset Filters
+                                <h3 className="text-3xl font-black uppercase tracking-tight">No Events Found</h3>
+                                <p className="text-muted-foreground text-sm max-w-[340px] font-medium leading-relaxed">Try adjusting your filters or use different keywords to find your dream event.</p>
+                                <button onClick={resetFilters} className="px-10 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all mt-4 shadow-xl shadow-primary/20">
+                                    Clear All Filters
                                 </button>
                             </div>
                         )}
@@ -455,10 +455,10 @@ function ExplorerPageContent() {
                 </div>
             </main>
 
-            {/* Background elements to make it "Neon" */}
-            <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden opacity-30">
-                <div className="absolute top-1/4 -left-1/4 w-[50%] h-[50%] bg-neon-pink/20 blur-[150px] rounded-full animate-pulse" />
-                <div className="absolute bottom-1/4 -right-1/4 w-[50%] h-[50%] bg-neon-cyan/20 blur-[150px] rounded-full animate-pulse delay-1000" />
+            {/* Background elements refined for light theme */}
+            <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden opacity-20">
+                <div className="absolute top-1/4 -left-1/4 w-[50%] h-[50%] bg-primary/10 blur-[150px] rounded-full animate-pulse" />
+                <div className="absolute bottom-1/4 -right-1/4 w-[50%] h-[50%] bg-accent/5 blur-[150px] rounded-full animate-pulse delay-1000" />
             </div>
 
             <NeonEventDetailModal
