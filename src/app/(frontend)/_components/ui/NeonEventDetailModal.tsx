@@ -48,7 +48,7 @@ export function NeonEventDetailModal({ isOpen, onClose, event }: NeonEventDetail
 
     if (!event) return null;
 
-    const displayDescription = fullDetail?.description || event.description || "Informasi detail mengenai event ini akan segera diperbarui oleh penyelenggara melalui platform Neonix.";
+    const displayDescription = fullDetail?.description || event.description || "Detailed information for this event will be updated soon by the organizer via the Neonix platform.";
 
     return (
         <AnimatePresence>
@@ -60,7 +60,7 @@ export function NeonEventDetailModal({ isOpen, onClose, event }: NeonEventDetail
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/80 backdrop-blur-2xl"
+                        className="absolute inset-0 bg-slate-900/40 backdrop-blur-xl"
                     />
 
                     {/* Modal */}
@@ -69,21 +69,17 @@ export function NeonEventDetailModal({ isOpen, onClose, event }: NeonEventDetail
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.92, y: 32 }}
                         transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                        className="relative w-full max-w-5xl max-h-[92vh] rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(255,0,128,0.1)] border border-white/8 flex flex-col bg-[#080808]"
+                        className="relative w-full max-w-5xl max-h-[92vh] rounded-[3rem] overflow-hidden shadow-[0_32px_128px_rgba(0,0,0,0.15)] border border-border flex flex-col bg-background shadow-2xl"
                     >
-                        {/* Ambient neon glow bars */}
-                        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-neon-pink/60 to-transparent z-20" />
-                        <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-neon-cyan/40 to-transparent z-20" />
-
                         {/* Close button */}
                         <button
                             onClick={onClose}
-                            className="absolute top-5 right-5 z-110 w-10 h-10 rounded-full bg-white/5 backdrop-blur-md flex items-center justify-center text-white/50 hover:text-white hover:bg-neon-pink/20 hover:border-neon-pink/40 transition-all border border-white/10"
+                            className="absolute top-6 right-6 z-[110] w-12 h-12 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-foreground hover:bg-primary hover:text-white transition-all border border-border shadow-lg"
                         >
-                            <X size={18} />
+                            <X size={20} />
                         </button>
 
-                        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10">
+                        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20">
 
                             {/* ── HERO SECTION ── */}
                             <div className="relative h-[340px] md:h-[420px] overflow-hidden">
@@ -93,9 +89,8 @@ export function NeonEventDetailModal({ isOpen, onClose, event }: NeonEventDetail
                                     className="w-full h-full object-cover"
                                 />
                                 {/* Cinematic gradients */}
-                                <div className="absolute inset-0 bg-linear-to-t from-[#080808] via-[#080808]/40 to-transparent" />
-                                <div className="absolute inset-0 bg-linear-to-r from-[#080808]/80 via-transparent to-transparent" />
-                                <div className="absolute inset-0 bg-linear-to-b from-black/50 via-transparent to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-transparent" />
 
                                 {/* Hero content */}
                                 <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full md:w-3/4">
@@ -103,34 +98,34 @@ export function NeonEventDetailModal({ isOpen, onClose, event }: NeonEventDetail
                                     {event.genres && event.genres.length > 0 && (
                                         <div className="flex flex-wrap gap-2 mb-4">
                                             {event.genres.map((g, i) => (
-                                                <span key={i} className="px-2.5 py-1 rounded-lg bg-neon-pink/15 border border-neon-pink/30 text-neon-pink text-[10px] font-black uppercase tracking-widest">
+                                                <span key={i} className="px-3 py-1 rounded-xl bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">
                                                     {g}
                                                 </span>
                                             ))}
                                         </div>
                                     )}
 
-                                    {/* Title — giant neon pink */}
+                                    {/* Title — high contrast */}
                                     <motion.h2
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.1 }}
-                                        className="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight mb-4 drop-shadow-[0_0_30px_rgba(255,0,128,0.4)]"
+                                        className="text-3xl md:text-6xl font-black text-foreground leading-tight tracking-tighter mb-6"
                                     >
                                         {event.title}
                                     </motion.h2>
 
                                     {/* Status badges */}
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] font-black uppercase tracking-widest">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_6px_#4ade80] animate-pulse" />
-                                            Tersedia
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 text-[10px] font-black uppercase tracking-widest">
+                                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                            Available
                                         </div>
-                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan text-[10px] font-black uppercase tracking-widest">
-                                            <Zap size={9} fill="currentColor" />
-                                            Live Access
+                                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">
+                                            <Zap size={10} fill="currentColor" />
+                                            Live Experience
                                         </div>
-                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-black uppercase tracking-widest">
+                                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-muted border border-border text-foreground/40 text-[10px] font-black uppercase tracking-widest">
                                             Exclusive
                                         </div>
                                     </div>
@@ -138,45 +133,45 @@ export function NeonEventDetailModal({ isOpen, onClose, event }: NeonEventDetail
                             </div>
 
                             {/* ── BODY ── */}
-                            <div className="px-6 md:px-10 py-8 grid md:grid-cols-[1fr_300px] gap-8 md:gap-12">
+                            <div className="px-6 md:px-10 py-10 grid md:grid-cols-[1fr_320px] gap-8 md:gap-16">
 
                                 {/* LEFT: Description + Gallery */}
-                                <div className="space-y-8">
+                                <div className="space-y-10">
                                     {/* Section header */}
                                     <div className="flex items-center gap-3">
-                                        <div className="h-5 w-1 rounded-full bg-neon-pink shadow-[0_0_8px_rgba(255,0,128,0.8)]" />
-                                        <h3 className="text-[11px] font-black text-neon-pink uppercase tracking-[0.3em]">Deskripsi Event</h3>
+                                        <div className="h-6 w-1.5 rounded-full bg-primary shadow-sm" />
+                                        <h3 className="text-[11px] font-black text-primary uppercase tracking-[0.3em]">Event Description</h3>
                                     </div>
 
                                     {/* Description */}
                                     {loading ? (
-                                        <div className="space-y-3">
+                                        <div className="space-y-4">
                                             {[...Array(4)].map((_, i) => (
-                                                <div key={i} className={`h-4 rounded-full bg-white/5 animate-pulse ${i === 3 ? "w-2/3" : "w-full"}`} style={{ animationDelay: `${i * 100}ms` }} />
+                                                <div key={i} className={`h-4 rounded-full bg-muted animate-pulse ${i === 3 ? "w-2/3" : "w-full"}`} style={{ animationDelay: `${i * 100}ms` }} />
                                             ))}
                                         </div>
                                     ) : (
-                                        <p className="text-white/70 leading-relaxed text-sm font-medium">
+                                        <p className="text-foreground/70 leading-relaxed text-sm font-bold">
                                             {displayDescription}
                                         </p>
                                     )}
 
                                     {/* Gallery preview */}
-                                    <div className="space-y-4 pt-6 border-t border-white/5">
+                                    <div className="space-y-6 pt-10 border-t border-border">
                                         <div className="flex items-center gap-3">
-                                            <div className="h-5 w-1 rounded-full bg-neon-cyan shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
-                                            <h3 className="text-[11px] font-black text-neon-cyan uppercase tracking-[0.3em]">Gallery</h3>
+                                            <div className="h-6 w-1.5 rounded-full bg-sky-400 shadow-sm" />
+                                            <h3 className="text-[11px] font-black text-sky-500 uppercase tracking-[0.3em]">Gallery</h3>
                                         </div>
-                                        <div className="grid grid-cols-3 gap-3">
+                                        <div className="grid grid-cols-3 gap-4">
                                             {[
                                                 "1470225620780",
                                                 "1492684223066",
                                                 "1501281668745-f7f57925c3b4",
                                             ].map((id, i) => (
-                                                <div key={i} className="aspect-video rounded-xl overflow-hidden border border-white/5 group/gal cursor-pointer hover:border-neon-pink/40 transition-all duration-300">
+                                                <div key={i} className="aspect-video rounded-2xl overflow-hidden border border-border group/gal cursor-pointer hover:border-primary/40 transition-all duration-300">
                                                     <img
                                                         src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&q=80&w=400`}
-                                                        className="w-full h-full object-cover grayscale opacity-40 group-hover/gal:grayscale-0 group-hover/gal:opacity-100 transition-all duration-500"
+                                                        className="w-full h-full object-cover grayscale opacity-60 group-hover/gal:grayscale-0 group-hover/gal:opacity-100 transition-all duration-500"
                                                         alt="gallery"
                                                     />
                                                 </div>
@@ -186,72 +181,70 @@ export function NeonEventDetailModal({ isOpen, onClose, event }: NeonEventDetail
                                 </div>
 
                                 {/* RIGHT: Metadata sidebar */}
-                                <div className="space-y-6">
+                                <div className="space-y-8">
                                     {/* Info card */}
-                                    <div className="rounded-2xl border border-white/8 bg-white/[0.03] backdrop-blur-sm p-6 space-y-6">
+                                    <div className="rounded-[2.5rem] border border-border bg-muted/30 backdrop-blur-sm p-8 space-y-8 shadow-sm">
                                         {/* Kategori */}
-                                        <div className="space-y-1.5">
-                                            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
-                                                <Star size={10} className="text-neon-yellow" />
-                                                Kategori
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-foreground/30">
+                                                <Star size={12} className="text-amber-500" />
+                                                Category
                                             </div>
-                                            <p className="text-sm font-black text-white uppercase tracking-wide">
-                                                {event.genres?.join(", ") || "Umum"}
+                                            <p className="text-sm font-black text-foreground uppercase tracking-wide">
+                                                {event.genres?.join(", ") || "General"}
                                             </p>
                                         </div>
 
-                                        <div className="h-px bg-linear-to-r from-transparent via-white/8 to-transparent" />
+                                        <div className="h-px bg-border" />
 
                                         {/* Lokasi */}
-                                        <div className="space-y-1.5">
-                                            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
-                                                <MapPin size={10} className="text-neon-pink" />
-                                                Lokasi
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-foreground/30">
+                                                <MapPin size={12} className="text-primary" />
+                                                Location
                                             </div>
-                                            <p className="text-sm font-bold text-white leading-snug">{event.location}</p>
+                                            <p className="text-sm font-black text-foreground leading-snug">{event.location}</p>
                                         </div>
 
-                                        <div className="h-px bg-linear-to-r from-transparent via-white/8 to-transparent" />
+                                        <div className="h-px bg-border" />
 
                                         {/* Tanggal */}
-                                        <div className="space-y-1.5">
-                                            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
-                                                <Clock size={10} className="text-neon-cyan" />
-                                                Tanggal
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-foreground/30">
+                                                <Calendar size={12} className="text-sky-500" />
+                                                Schedule
                                             </div>
-                                            <p className="text-sm font-bold text-white">{event.date}</p>
+                                            <p className="text-sm font-black text-foreground">{event.date}</p>
                                         </div>
 
-                                        <div className="h-px bg-linear-to-r from-transparent via-white/8 to-transparent" />
+                                        <div className="h-px bg-border" />
 
                                         {/* Price */}
-                                        <div className="space-y-1">
-                                            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">Harga Mulai</p>
-                                            <p className="text-4xl font-black text-neon-yellow tabular-nums drop-shadow-[0_0_14px_rgba(255,230,0,0.7)] leading-none">
+                                        <div className="space-y-1.5">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-foreground/30">From</p>
+                                            <p className="text-5xl font-black text-primary tabular-nums leading-none tracking-tighter">
                                                 ${event.price}
                                             </p>
                                         </div>
                                     </div>
 
                                     {/* CTA Buttons */}
-                                    <div className="space-y-3">
+                                    <div className="space-y-4">
                                         <Link
                                             href={`/checkout/${event.id}${(fullDetail as any)?.tenantId ? `?tenantId=${(fullDetail as any).tenantId}` : ""}`}
-                                            className="relative group/cta flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl overflow-hidden font-black text-sm uppercase tracking-widest transition-all duration-300 bg-neon-pink text-white shadow-[0_0_24px_rgba(255,0,128,0.4)] hover:shadow-[0_0_40px_rgba(255,0,128,0.7)]"
+                                            className="relative group/cta flex items-center justify-center gap-3 w-full py-5 rounded-[1.5rem] overflow-hidden font-black text-sm uppercase tracking-widest transition-all duration-300 bg-primary text-white shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95"
                                         >
-                                            <Ticket size={16} />
-                                            <span className="relative z-10">Reservasi Tiket</span>
-                                            <ArrowRight size={14} className="relative z-10 group-hover/cta:translate-x-1 transition-transform duration-300" />
-                                            {/* Shine sweep */}
-                                            <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/cta:translate-x-full transition-transform duration-500" />
+                                            <Ticket size={18} />
+                                            <span className="relative z-10">Reserve Seats</span>
+                                            <ArrowRight size={16} className="relative z-10 group-hover/cta:translate-x-1 transition-transform duration-300" />
                                         </Link>
 
-                                        <div className="flex gap-3">
-                                            <button className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-transparent border border-white/10 text-white/50 hover:text-neon-pink hover:border-neon-pink/40 transition-all text-xs font-black uppercase tracking-widest">
+                                        <div className="flex gap-4">
+                                            <button className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl bg-white border border-border text-foreground/40 hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all text-[10px] font-black uppercase tracking-widest">
                                                 <Heart size={14} />
-                                                Simpan
+                                                Save
                                             </button>
-                                            <button className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-transparent border border-white/10 text-white/50 hover:text-neon-cyan hover:border-neon-cyan/40 transition-all text-xs font-black uppercase tracking-widest">
+                                            <button className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl bg-white border border-border text-foreground/40 hover:text-sky-500 hover:border-sky-500/40 hover:bg-sky-500/5 transition-all text-[10px] font-black uppercase tracking-widest">
                                                 <Plus size={14} />
                                                 Wishlist
                                             </button>
@@ -259,10 +252,10 @@ export function NeonEventDetailModal({ isOpen, onClose, event }: NeonEventDetail
                                     </div>
 
                                     {/* Availability note */}
-                                    <div className="flex items-start gap-2.5 px-4 py-3 rounded-xl bg-green-500/5 border border-green-500/15">
-                                        <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_#4ade80] animate-pulse shrink-0 mt-1" />
-                                        <p className="text-[11px] text-green-400/80 font-medium leading-relaxed">
-                                            Slot tiket masih tersedia. Segera reservasi sebelum habis!
+                                    <div className="flex items-start gap-2.5 px-5 py-4 rounded-2xl bg-green-500/5 border border-green-500/10">
+                                        <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#4ade80] animate-pulse shrink-0 mt-1" />
+                                        <p className="text-[11px] text-green-600 font-bold leading-relaxed">
+                                            Tickets are still available. Reserve now before they run out!
                                         </p>
                                     </div>
                                 </div>

@@ -68,8 +68,8 @@ export function TicketsHistory() {
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <Loader2 className="animate-spin text-neon-pink" size={40} />
-                <p className="text-white/40 font-bold uppercase tracking-widest text-xs">Menyusun Grid Tiket...</p>
+                <Loader2 className="animate-spin text-primary" size={40} />
+                <p className="text-foreground/40 font-bold uppercase tracking-widest text-xs">Menyusun Grid Tiket...</p>
             </div>
         );
     }
@@ -85,19 +85,19 @@ export function TicketsHistory() {
 
     if (transactions.length === 0) {
         return (
-            <div className="bg-white/5 border border-white/10 rounded-[40px] p-20 flex flex-col items-center text-center gap-6">
-                <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-white/10">
-                    <ShoppingBag size={40} />
+            <div className="bg-white border border-border rounded-[40px] p-24 flex flex-col items-center text-center gap-8 shadow-sm">
+                <div className="w-24 h-24 rounded-3xl bg-muted flex items-center justify-center text-foreground/10 group animate-pulse">
+                    <ShoppingBag size={48} />
                 </div>
-                <div className="space-y-2">
-                    <h3 className="text-xl font-bold uppercase">Belum ada tiket</h3>
-                    <p className="text-white/40 text-sm max-w-[300px]">Semua tiket yang Anda beli akan muncul di sini secara otomatis.</p>
+                <div className="space-y-3">
+                    <h3 className="text-2xl font-black uppercase tracking-tight">No Tickets Found</h3>
+                    <p className="text-muted-foreground text-sm max-w-[340px] font-medium leading-relaxed">Your event tickets will automatically appear here once you complete a purchase.</p>
                 </div>
                 <button
                     onClick={() => window.location.href = "/"}
-                    className="mt-4 px-8 py-4 bg-neon-pink text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:brightness-110 transition-all shadow-lg shadow-neon-pink/20"
+                    className="mt-2 px-10 py-4 bg-primary text-white font-black uppercase tracking-widest text-[10px] rounded-2xl hover:brightness-110 transition-all shadow-xl shadow-primary/20 hover:scale-105 active:scale-95"
                 >
-                    Cari Event Baru
+                    Discover Awesome Events
                 </button>
             </div>
         );
@@ -128,50 +128,54 @@ export function TicketsHistory() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="group relative bg-[#0A0A0A] border border-white/5 rounded-[2.5rem] p-3 flex items-center gap-6 hover:border-neon-pink/30 hover:bg-white/[0.02] transition-all cursor-pointer overflow-hidden shadow-2xl"
+                            className="group relative bg-white border border-border rounded-[2.5rem] p-3 flex items-center gap-8 hover:border-primary/30 hover:bg-muted/30 transition-all cursor-pointer overflow-hidden shadow-xl"
                             onClick={() => setSelectedTicket(uiTicket)}
                         >
                             {/* Left: Image with VIP badge */}
-                            <div className="relative w-44 h-28 shrink-0 overflow-hidden rounded-[2rem] border border-white/10">
+                            <div className="relative w-48 h-32 shrink-0 overflow-hidden rounded-[2rem] border border-border">
                                 <img
                                     src={uiTicket.image}
                                     alt={uiTicket.title}
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
-                                <div className="absolute top-3 left-3 px-3 py-1 bg-neon-yellow/10 backdrop-blur-md border border-neon-yellow/30 rounded-lg shadow-[0_0_15px_rgba(255,215,0,0.2)]">
-                                    <span className="text-[9px] font-black italic text-neon-yellow">VIP</span>
+                                <div className="absolute top-3 left-3 px-3 py-1 bg-white/80 backdrop-blur-md border border-border rounded-lg shadow-sm">
+                                    <span className="text-[9px] font-black italic text-primary tracking-wider uppercase">VIP</span>
                                 </div>
                             </div>
 
                             {/* Middle: Info */}
                             <div className="flex-1 flex flex-col justify-center min-w-0">
-                                <h3 className="text-2xl font-black text-neon-pink uppercase tracking-tighter mb-0.5 truncate group-hover:drop-shadow-[0_0_10px_rgba(255,0,255,0.4)] transition-all">
+                                <h3 className="text-2xl font-black text-foreground uppercase tracking-tighter mb-1.5 truncate group-hover:text-primary transition-colors">
                                     {uiTicket.title}
                                 </h3>
-                                <p className="text-[11px] font-medium text-white/40 mb-4 truncate">{uiTicket.location}</p>
+                                <p className="text-[11px] font-bold text-muted-foreground mb-5 truncate uppercase tracking-widest flex items-center gap-2">
+                                    <MapPin size={12} className="text-primary" />
+                                    {uiTicket.location}
+                                </p>
 
-                                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-                                    <div className="flex items-center gap-2">
-                                        <Calendar size={14} className="text-neon-pink" />
-                                        <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">{uiTicket.date}</span>
+                                <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+                                    <div className="flex items-center gap-2.5">
+                                        <Calendar size={14} className="text-primary" />
+                                        <span className="text-[10px] font-black text-foreground/60 uppercase tracking-widest">{uiTicket.date}</span>
                                     </div>
-                                    <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-md border border-white/5">
-                                        <span className="text-[8px] font-black text-white/40 uppercase tracking-widest">{uiTicket.category}</span>
-                                    </div>
-                                    <div className="px-3 py-1 border border-neon-pink/20 rounded-md bg-neon-pink/5">
-                                        <span className="text-[8px] font-black text-neon-pink uppercase tracking-widest">Limited Seats</span>
+                                    <div className="flex items-center gap-2.5 px-4 py-1.5 bg-muted rounded-xl border border-border">
+                                        <Ticket size={12} className="text-primary" />
+                                        <span className="text-[9px] font-black text-foreground/60 uppercase tracking-widest">{uiTicket.category}</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Divider Line */}
-                            <div className="w-px h-16 bg-white/5 ml-4 hidden md:block" />
+                            <div className="w-px h-20 bg-border ml-4 hidden md:block" />
 
                             {/* Right: Price & CTA */}
-                            <div className="px-8 flex flex-col items-end gap-3 min-w-[200px]">
+                            <div className="px-10 flex flex-col items-end gap-4 min-w-[220px]">
                                 <div className="text-right">
-                                    <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.2em] mb-1">Status: Active</p>
-                                    <p className="text-2xl font-black text-neon-yellow drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
+                                    <div className="flex items-center gap-2 mb-1 justify-end">
+                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                        <p className="text-[9px] font-black text-foreground/30 uppercase tracking-[0.2em]">Active Ticket</p>
+                                    </div>
+                                    <p className="text-3xl font-black text-primary tracking-tight">
                                         {uiTicket.price}
                                     </p>
                                 </div>
@@ -180,10 +184,10 @@ export function TicketsHistory() {
                                         e.stopPropagation();
                                         setSelectedTicket(uiTicket);
                                     }}
-                                    className="px-8 py-2.5 bg-neon-cyan text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,255,255,0.4)] transition-all flex items-center gap-2"
+                                    className="px-10 py-3 bg-primary text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:brightness-110 hover:shadow-xl hover:shadow-primary/20 transition-all flex items-center gap-3 group active:scale-95"
                                 >
-                                    View Details
-                                    <ChevronRight size={14} />
+                                    View Ticket
+                                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
                             </div>
                         </motion.div>

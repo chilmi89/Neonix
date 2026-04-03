@@ -21,6 +21,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const pathname = usePathname();
 
     const syncProfile = useCallback(async () => {
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        if (!token) {
+            setLoading(false);
+            return;
+        }
+
         try {
             const response = await getCurrentUser();
             const freshUser = response.data;
