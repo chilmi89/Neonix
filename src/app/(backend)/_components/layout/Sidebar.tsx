@@ -170,12 +170,15 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
         router.push("/");
     };
 
+    const isSuperAdmin = pathname?.startsWith("/dashboard/superadmin");
+
     return (
         <motion.aside
             initial={false}
             animate={{ width: isCollapsed ? 80 : 260 }}
             className={cn(
-                "h-screen sticky top-0 z-40 flex flex-col bg-[#080808] border-r border-white/5 overflow-hidden shadow-2xl transition-all duration-500"
+                "h-screen sticky top-0 z-40 flex flex-col border-r overflow-hidden shadow-2xl transition-all duration-500",
+                isSuperAdmin ? "bg-blue-900 border-blue-800" : "bg-[#080808] border-white/5"
             )}
         >
             {/* Header Area */}

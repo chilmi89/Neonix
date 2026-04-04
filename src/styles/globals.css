@@ -73,6 +73,27 @@
   --accent-foreground: #050505;
 }
 
+.superadmin-theme {
+  --background: #f8fafc;
+  --foreground: #020617;
+  
+  --glass-surface: #ffffff;
+  --glass-border: rgba(15, 23, 42, 0.1);
+  --glass-text: #020617;
+  --glass-radius: 1.5rem;
+  --glass-hover: rgba(59, 130, 246, 0.05);
+
+  --primary: #2563EB;
+  --primary-foreground: #ffffff;
+
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+
+  --accent: #3B82F6;
+  --accent-foreground: #ffffff;
+}
+
+
 @layer base {
   body {
     @apply bg-background text-foreground transition-colors duration-500 font-sans antialiased;
