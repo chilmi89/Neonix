@@ -56,13 +56,13 @@ export function NeonHero() {
                     transition={{ duration: 0.8 }}
                     className="space-y-4"
                 >
-                    <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-[950] leading-[0.85] tracking-tighter uppercase text-white">
+                    <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-[950] leading-[0.85] tracking-tighter uppercase text-black">
                         EXPERIENCE THE<br />
-                        <span className="text-neon-pink drop-shadow-[0_0_30px_rgba(255,0,255,0.4)]">Extraordinary</span>
+                        <span className="text-primary drop-shadow-[0_0_20px_rgba(0,100,210,0.3)]">Extraordinary</span>
                     </h1>
                 </motion.div>
 
-                <p className="max-w-2xl mx-auto text-white/60 text-base md:text-lg font-medium leading-relaxed mt-8">
+                <p className="max-w-2xl mx-auto text-black/60 text-base md:text-lg font-medium leading-relaxed mt-8">
                     Your gateway to the most electrifying live performances, exclusive gatherings, and unforgettable nights.
                 </p>
 
@@ -76,7 +76,7 @@ export function NeonHero() {
                             onChange={(e) => setQuery(e.target.value)}
                             onKeyDown={handleKeyDown}
                             placeholder="Search events, artists..."
-                            className="bg-transparent border-none outline-none text-white w-full text-sm font-bold placeholder:text-white/20"
+                            className="bg-transparent border-none outline-none text-foreground w-full text-sm font-bold placeholder:text-foreground/20"
                         />
                     </div>
 
@@ -86,12 +86,12 @@ export function NeonHero() {
                             onClick={() => setLocationOpen(!locationOpen)}
                             className="w-full md:w-auto px-8 py-3 flex items-center gap-4 cursor-pointer group"
                         >
-                            <MapPin className={cn("transition-colors", locationOpen ? "text-neon-cyan" : "text-white/40 group-hover:text-neon-cyan")} size={20} />
+                            <MapPin className={cn("transition-colors", locationOpen ? "text-primary" : "text-foreground/40 group-hover:text-primary")} size={20} />
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-white/40 font-black uppercase tracking-widest">Location</span>
+                                <span className="text-[10px] text-foreground/40 font-black uppercase tracking-widest">Location</span>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-white text-sm font-black uppercase tracking-wider">{selectedLocation.label}</span>
-                                    <ChevronDown size={10} className={cn("text-white/20 transition-transform duration-300", locationOpen && "rotate-180 text-neon-cyan")} />
+                                    <span className="text-foreground text-sm font-black uppercase tracking-wider">{selectedLocation.label}</span>
+                                    <ChevronDown size={10} className={cn("text-foreground/20 transition-transform duration-300", locationOpen && "rotate-180 text-primary")} />
                                 </div>
                             </div>
                         </div>
@@ -111,8 +111,8 @@ export function NeonHero() {
                                             className={cn(
                                                 "px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer",
                                                 selectedLocation.label === loc.label
-                                                    ? "bg-neon-cyan text-black"
-                                                    : "text-white/60 hover:bg-white/5 hover:text-white"
+                                                    ? "bg-primary text-white"
+                                                    : "text-foreground/60 hover:bg-muted/50 hover:text-foreground"
                                             )}
                                         >
                                             {loc.label}
@@ -126,7 +126,7 @@ export function NeonHero() {
 
                     <button
                         onClick={handleSearch}
-                        className="w-full md:w-auto bg-neon-pink text-white font-black text-sm px-10 h-14 rounded-full shadow-lg shadow-neon-pink/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest"
+                        className="w-full md:w-auto bg-primary text-white font-black text-sm px-10 h-14 rounded-full shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest"
                     >
                         Find Events
                     </button>

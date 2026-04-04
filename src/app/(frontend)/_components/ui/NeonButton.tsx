@@ -17,8 +17,8 @@ export function NeonButton({
     ...props
 }: NeonButtonProps) {
     const variants = {
-        pink: "bg-neon-pink text-white shadow-[0_0_20px_rgba(255,0,204,0.4)] hover:shadow-[0_0_30px_rgba(255,0,204,0.6)] hover:brightness-110",
-        cyan: "bg-neon-cyan text-black font-bold shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] hover:brightness-110",
+        pink: "bg-primary text-primary-foreground shadow-md hover:shadow-lg hover:brightness-105 active:scale-[0.98]",
+        cyan: "bg-accent text-accent-foreground font-bold shadow-md hover:shadow-lg hover:brightness-105 active:scale-[0.98]",
         outline: "bg-transparent border border-glass-border text-foreground hover:bg-muted",
         ghost: "bg-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50",
     };

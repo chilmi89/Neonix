@@ -69,7 +69,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen text-white font-inter flex flex-col relative">
+        <div className="min-h-screen text-foreground font-inter flex flex-col relative bg-background">
             <PlasmaBackground />
 
             <main className="flex-1 flex items-center justify-center py-6 md:py-10 px-4 relative z-50 overflow-hidden">
@@ -78,48 +78,48 @@ export default function RegisterPage() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
-                    className="w-full max-w-[540px] bg-glass-surface border border-glass-border rounded-[2rem] p-7 md:p-10 shadow-2xl relative transition-colors duration-500"
+                    className="w-full max-w-[540px] bg-white/80 backdrop-blur-xl border border-border rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative transition-all duration-500"
                 >
                     {/* Close Button */}
-                    <Link href="/" className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors p-2">
+                    <Link href="/" className="absolute top-8 right-8 text-foreground/20 hover:text-foreground transition-colors p-2">
                         <X size={24} />
                     </Link>
 
                     {/* Tab Switcher */}
-                    <div className="flex gap-8 mb-6 border-b border-white/5">
-                        <Link href="/login" className="pb-4 text-sm font-bold text-white/20 hover:text-white transition-all border-b-2 border-transparent">
+                    <div className="flex gap-8 mb-10 border-b border-border">
+                        <Link href="/login" className="pb-4 text-sm font-bold text-foreground/30 hover:text-foreground transition-all border-b-2 border-transparent">
                             Login
                         </Link>
-                        <Link href="/register" className="pb-4 text-sm font-bold border-b-2 border-[#FFD700] text-white transition-all">
+                        <Link href="/register" className="pb-4 text-sm font-bold border-b-2 border-primary text-primary transition-all">
                             Register
                         </Link>
                     </div>
 
-                    <div className="space-y-2 mb-6 text-left">
-                        <h1 className="text-3xl font-bold tracking-tight text-foreground">Create Account</h1>
-                        <p className="text-muted-foreground text-sm font-medium leading-relaxed">Create your account to get started</p>
+                    <div className="space-y-2 mb-8 text-left">
+                        <h1 className="text-3xl font-black tracking-tight text-foreground uppercase">Create Account</h1>
+                        <p className="text-muted-foreground text-sm font-medium leading-relaxed">Join NEONIX today and access exclusive events</p>
                     </div>
 
                     {error && (
-                        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-2xl text-red-500 text-sm flex items-center gap-2">
+                        <div className="mb-6 p-4 bg-red-50 text-red-600 border border-red-100 rounded-2xl text-sm font-medium flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
                             <X size={18} />
                             {error}
                         </div>
                     )}
 
                     {success && (
-                        <div className="mb-6 p-4 bg-green-500/10 border border-green-500/50 rounded-2xl text-green-500 text-sm flex items-center gap-2">
+                        <div className="mb-6 p-4 bg-green-50 text-green-600 border border-green-100 rounded-2xl text-sm font-medium flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
                             <Check size={18} />
                             {success}
                         </div>
                     )}
 
-                    <form className="space-y-4" onSubmit={handleSubmit}>
+                    <form className="space-y-5" onSubmit={handleSubmit}>
                         {/* Full Name */}
                         <div className="space-y-2 text-left">
-                            <label className="text-xs font-bold uppercase tracking-widest text-white/60 ml-1 font-inter">Full Name</label>
+                            <label className="text-xs font-bold uppercase tracking-widest text-foreground/40 ml-1">Full Name</label>
                             <div className="relative group">
-                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FFD700] transition-colors" size={18} />
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/10 group-focus-within:text-primary transition-colors" size={18} />
                                 <input
                                     type="text"
                                     name="name"
@@ -127,16 +127,16 @@ export default function RegisterPage() {
                                     onChange={handleChange}
                                     required
                                     placeholder="John Doe"
-                                    className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
+                                    className="w-full bg-muted/50 border border-border rounded-2xl py-3.5 pl-12 pr-4 text-sm text-foreground outline-none focus:border-primary/50 focus:bg-white transition-all placeholder:text-muted-foreground/40"
                                 />
                             </div>
                         </div>
 
-                        {/* Email or Phone */}
+                        {/* Email */}
                         <div className="space-y-2 text-left">
-                            <label className="text-xs font-bold uppercase tracking-widest text-white/60 ml-1 font-inter">Email</label>
+                            <label className="text-xs font-bold uppercase tracking-widest text-foreground/40 ml-1">Email Address</label>
                             <div className="relative group">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FFD700] transition-colors" size={18} />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/10 group-focus-within:text-primary transition-colors" size={18} />
                                 <input
                                     type="email"
                                     name="email"
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                                     onChange={handleChange}
                                     required
                                     placeholder="name@example.com"
-                                    className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30"
+                                    className="w-full bg-muted/50 border border-border rounded-2xl py-3.5 pl-12 pr-4 text-sm text-foreground outline-none focus:border-primary/50 focus:bg-white transition-all placeholder:text-muted-foreground/40"
                                 />
                             </div>
                         </div>
@@ -152,9 +152,9 @@ export default function RegisterPage() {
                         {/* Password Grid */}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2 text-left">
-                                <label className="text-xs font-bold uppercase tracking-widest text-white/60 ml-1 font-inter">Password</label>
+                                <label className="text-xs font-bold uppercase tracking-widest text-foreground/40 ml-1">Password</label>
                                 <div className="relative group">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FFD700] transition-colors" size={18} />
+                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/10 group-focus-within:text-primary transition-colors" size={18} />
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         name="password"
@@ -162,21 +162,21 @@ export default function RegisterPage() {
                                         onChange={handleChange}
                                         required
                                         placeholder="••••••••"
-                                        className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30 font-mono"
+                                        className="w-full bg-muted/50 border border-border rounded-2xl py-3.5 pl-12 pr-4 text-sm text-foreground outline-none focus:border-primary/50 focus:bg-white transition-all placeholder:text-muted-foreground/40 font-mono"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors"
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/10 hover:text-foreground transition-colors"
                                     >
                                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                     </button>
                                 </div>
                             </div>
                             <div className="space-y-2 text-left">
-                                <label className="text-xs font-bold uppercase tracking-widest text-white/60 ml-1 font-inter">Confirm</label>
+                                <label className="text-xs font-bold uppercase tracking-widest text-foreground/40 ml-1">Confirm</label>
                                 <div className="relative group">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FFD700] transition-colors" size={18} />
+                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/10 group-focus-within:text-primary transition-colors" size={18} />
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         name="confirmPassword"
@@ -184,7 +184,7 @@ export default function RegisterPage() {
                                         onChange={handleChange}
                                         required
                                         placeholder="••••••••"
-                                        className="w-full bg-muted border border-glass-border rounded-2xl py-3 pl-12 pr-4 text-sm text-foreground outline-none focus:border-[#FFD700]/50 focus:bg-background transition-all placeholder:text-muted-foreground/30 font-mono"
+                                        className="w-full bg-muted/50 border border-border rounded-2xl py-3.5 pl-12 pr-4 text-sm text-foreground outline-none focus:border-primary/50 focus:bg-white transition-all placeholder:text-muted-foreground/40 font-mono"
                                     />
                                 </div>
                             </div>
@@ -192,11 +192,11 @@ export default function RegisterPage() {
 
                         {/* Terms Checkbox */}
                         <div className="flex items-center gap-3 pt-2 group cursor-pointer">
-                            <div className="w-5 h-5 rounded bg-[#FFD700] flex items-center justify-center transition-transform group-active:scale-95 shadow-[0_0_10px_rgba(255,215,0,0.2)]">
-                                <Check size={14} className="text-black stroke-[4]" />
+                            <div className="w-5 h-5 rounded-md bg-primary flex items-center justify-center transition-all group-active:scale-95 shadow-lg shadow-primary/20">
+                                <Check size={14} className="text-white stroke-[3.5]" />
                             </div>
-                            <p className="text-[11px] font-medium text-white/40 leading-none font-inter">
-                                I agree to the <Link href="#" className="text-[#FFD700] hover:underline transition-all">Terms of Service</Link> and <Link href="#" className="text-[#FFD700] hover:underline transition-all">Privacy Policy</Link>
+                            <p className="text-[11px] font-bold text-foreground/40 leading-none uppercase tracking-wider">
+                                I agree to the <Link href="#" className="text-primary hover:underline">Terms</Link> & <Link href="#" className="text-primary hover:underline">Privacy</Link>
                             </p>
                         </div>
 
@@ -204,26 +204,32 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#FFD700] text-black font-bold py-3 rounded-2xl shadow-[0_0_25px_rgba(255,215,0,0.3)] hover:shadow-[0_0_35px_rgba(255,215,0,0.5)] hover:brightness-110 transition-all mt-4 text-sm active:scale-[0.98] font-inter flex items-center justify-center gap-2"
+                            className="w-full bg-primary text-white font-bold py-4 rounded-2xl shadow-xl shadow-primary/20 hover:brightness-110 transition-all mt-4 text-sm active:scale-[0.98] flex items-center justify-center gap-2"
                         >
                             {loading ? (
                                 <>
                                     <Loader2 className="animate-spin" size={18} />
-                                    Processing...
+                                    Creating Account...
                                 </>
                             ) : (
-                                "Register Now"
+                                "Complete Registration"
                             )}
                         </button>
                     </form>
 
                     {/* Footer Link */}
-                    <p className="text-center text-sm text-white/40 mt-6">
-                        Already have an account?{" "}
-                        <Link href="/login" className="text-[#FFD700] font-bold hover:brightness-125 transition-all">
-                            Sign In
-                        </Link>
-                    </p>
+                    <div className="relative my-8">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-border"></div>
+                        </div>
+                        <div className="relative flex justify-center text-[10px] uppercase">
+                            <span className="bg-white/80 backdrop-blur-md px-4 text-foreground/30 font-bold tracking-[0.2em]">Already a member?</span>
+                        </div>
+                    </div>
+
+                    <Link href="/login" className="block w-full text-center text-sm font-black text-primary uppercase tracking-widest hover:brightness-125 transition-all">
+                        Sign In Instead
+                    </Link>
                 </motion.div>
             </main>
 
