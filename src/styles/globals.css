@@ -61,8 +61,7 @@
   /* Slate 200 */
 }
 
-.dark {
-  /* Tiket-inspired Dark Mode (Premium Navy) */
+/* .dark {
   --background: #0B1120;
   --foreground: #F8FAFC;
 
@@ -80,7 +79,7 @@
 
   --accent: #FACC15;
   --accent-foreground: #0B1120;
-}
+} */
 
 .superadmin-theme {
   --background: #f8fafc;
@@ -111,11 +110,11 @@
       radial-gradient(at 100% 0%, hsla(200, 100%, 95%, 1) 0, transparent 50%);
   }
 
-  .dark body {
+  /* .dark body {
     background-image:
       radial-gradient(at 0% 0%, hsla(220, 100%, 10%, 0.5) 0, transparent 50%),
       radial-gradient(at 100% 0%, hsla(210, 100%, 10%, 0.5) 0, transparent 50%);
-  }
+  } */
 }
 
 @layer components {
