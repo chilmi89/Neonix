@@ -1,37 +1,44 @@
 /**
- * Neonix Color Palette Constants
+ * TailAdmin Inspired Color Palette Constants
  * 
- * These constants match the CSS variables defined in src/styles/globals.css.
+ * These constants map to the TailAdmin UI style colors.
  * Use these for inline styles, Framer Motion animations, or canvas rendering.
  */
 
 export const colors = {
     // Core Branding
-    primary: '#0064D2',        // Tiket Blue
-    accent: '#00BAFF',         // Sky Blue
-    yellow: '#FEDD00',         // Tiket Yellow
-    green: '#21D35F',          // Success Green
+    primary: '#3C50E0',        // TailAdmin Primary Blue
+    secondary: '#80CAEE',      // TailAdmin Secondary
+    success: '#219653',        // Success Green
+    danger: '#D34053',         // Danger Red
+    warning: '#FFA70B',        // Warning Yellow
+    info: '#3BA2B8',           // Info Blue
 
-    // Neutral Palette
-    background: '#FFFFFF',     // Main Background
-    foreground: '#0F172A',     // Main Text (Deep Slate)
-    muted: '#F8FAFC',          // Light Secondary Background
-    mutedForeground: '#64748B', // Muted Text
-    border: '#E2E8F0',         // Subtle Borders
-
-    // Glassmorphism (RGBA equivalent)
-    glass: {
-        surface: 'rgba(255, 255, 255, 0.7)',
-        border: 'rgba(15, 23, 42, 0.08)',
-        hover: 'rgba(0, 100, 210, 0.03)',
-        text: '#0F172A',
+    // Light Theme
+    light: {
+        background: '#F1F5F9',     // Main Background (body)
+        surface: '#FFFFFF',        // Card/Box Background
+        text: '#64748b',           // Body text
+        heading: '#1C2434',        // Heading text
+        border: '#E2E8F0',         // Stroke / borders
+        sidebar: '#1C2434',        // Sidebar background
     },
 
-    // Functional Aliases
-    brand: {
-        blue: '#0064D2',
-        sky: '#00BAFF',
-        yellow: '#FEDD00',
+    // Dark Theme
+    dark: {
+        background: '#1A222C',     // Main Background (boxdark-2)
+        surface: '#24303F',        // Card/Box Background (boxdark)
+        text: '#8A99AF',           // Body text (bodydark)
+        heading: '#FFFFFF',        // Heading text
+        border: '#313D4A',         // Stroke dark
+        sidebar: '#1C2434',        // Sidebar background
+    },
+
+    glass: {
+        surface: 'rgba(36, 48, 63, 0.7)',
+        border: 'rgba(255, 255, 255, 0.12)',
+        hover: 'rgba(255, 255, 255, 0.05)',
+        text: '#8A99AF',
     }
 } as const;
 

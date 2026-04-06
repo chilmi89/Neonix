@@ -34,6 +34,7 @@ export default function TenantPage() {
 
     // State untuk Modal
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [editingTenant, setEditingTenant] = useState<Tenant | null>(null);
 
     // State untuk Form
@@ -75,6 +76,7 @@ export default function TenantPage() {
             const response = await createTenant(newTenantData);
             setTenants([...tenants, response.data]);
             setNewTenantData({ name: "", slug: "" });
+            setIsCreateModalOpen(false);
             fetchTenants();
         } catch (err: any) {
             alert(err.message || "Gagal membuat tenant");
@@ -128,7 +130,7 @@ export default function TenantPage() {
             {/* Header & Deskripsi */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-[2rem] bg-linear-to-br from-indigo-600 to-blue-400 flex items-center justify-center text-white shadow-[0_0_30px_-5px_rgba(79,70,229,0.5)]">
+                    <div className="h-16 w-16 rounded-[2rem] bg-linear-to-br from-indigo-600 to-blue-400 flex items-center justify-center text-[var(--foreground)] shadow-[0_0_30px_-5px_rgba(79,70,229,0.5)]">
                         <Building2 size={32} />
                     </div>
                     <div>
@@ -154,112 +156,35 @@ export default function TenantPage() {
             </div>
 
             {/* Layout Utama */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-                {/* Bagian Kiri: Form Input Tenant */}
-                <div className="lg:col-span-4 space-y-4">
-                    <GlassCard className="p-8 border-glass-border shadow-2xl relative overflow-hidden group">
-                        <div className="absolute -top-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none text-glass-text">
-                            <Building2 size={200} />
-                        </div>
-
-                        <div className="flex items-center gap-3 mb-8">
-                            <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
-                                <Plus size={18} />
-                            </div>
-                            <h3 className="text-xl font-bold text-glass-text tracking-tight">Tambah Tenant</h3>
-                        </div>
-
-                        <form onSubmit={handleCreateSubmit} className="space-y-6">
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
-                                    Nama Perusahaan / Organisasi
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="Contoh: PT. Maju Jaya"
-                                        value={newTenantData.name}
-                                        onChange={(e) => {
-                                            const name = e.target.value;
-                                            setNewTenantData({
-                                                ...newTenantData,
-                                                name,
-                                                slug: generateSlug(name)
-                                            });
-                                        }}
-                                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-2xl py-4 px-5 text-glass-text font-bold outline-none focus:border-primary/50 focus:bg-white dark:focus:bg-black/60 transition-all placeholder:text-glass-text/30 shadow-xs text-lg"
-                                        required
-                                    />
-                                    <Building2 className="absolute right-5 top-1/2 -translate-y-1/2 text-primary/60" size={20} />
-                                </div>
-                            </div>
-
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
-                                    Tenant Slug (Domain Identifier)
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="maju-jaya"
-                                        value={newTenantData.slug}
-                                        onChange={(e) => setNewTenantData({ ...newTenantData, slug: e.target.value.toLowerCase() })}
-                                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-2xl py-4 px-5 text-glass-text font-bold outline-none focus:border-primary/50 focus:bg-white dark:focus:bg-black/60 transition-all placeholder:text-glass-text/30 shadow-xs text-lg"
-                                        required
-                                    />
-                                    <Globe className="absolute right-5 top-1/2 -translate-y-1/2 text-primary/60" size={20} />
-                                </div>
-                                <p className="text-[10px] text-glass-text/40 italic leading-relaxed px-1">
-                                    * Slug akan digunakan sebagai identitas unik di URL atau subdomain.
-                                </p>
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={submitting || !newTenantData.name || !newTenantData.slug}
-                                className="w-full bg-primary text-white font-black py-4 rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-base tracking-tight"
-                            >
-                                {submitting ? (
-                                    <Loader2 size={24} className="animate-spin" />
-                                ) : (
-                                    <>Buat Tenant Baru <ArrowRight size={20} /></>
-                                )}
-                            </button>
-                        </form>
-                    </GlassCard>
-
-                    <div className="p-6 bg-muted rounded-[2rem] border border-glass-border flex items-start gap-4 shadow-xl">
-                        <Info size={20} className="text-primary shrink-0 mt-1" />
-                        <div>
-                            <p className="text-sm font-black text-glass-text mb-1">Arsitektur Multi-Tenant</p>
-                            <p className="text-xs text-glass-text/60 leading-relaxed font-bold">
-                                Setiap tenant memiliki ekosistem data yang terisolasi. Tenant slug harus unik dalam sistem.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Bagian Kanan: Pencarian & Tabel Tenant */}
-                <div className="lg:col-span-8 space-y-6">
+            <div className="grid grid-cols-1 gap-8 items-start">
+                
+                {/* Tabel Tenant Full Width */}
+                <div className="space-y-6">
                     {/* Bar Kontrol */}
-                    <div className="flex items-center gap-4 bg-muted border border-glass-border rounded-[1.5rem] p-2 shadow-2xl">
-                        <div className="relative flex-1 group">
-                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30 group-focus-within:text-primary transition-colors" size={18} />
+                    <div className="flex flex-wrap items-center gap-4 bg-[var(--background)] border border-[var(--glass-border)] rounded-2xl p-2 md:p-3 shadow-sm">
+                        <div className="relative flex-1 group min-w-[200px]">
+                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)] group-focus-within:text-[var(--primary)] transition-colors" size={18} />
                             <input
                                 type="text"
                                 placeholder="Cari nama atau slug tenant..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full bg-background/50 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-medium outline-none focus:bg-background/80 transition-all placeholder:text-glass-text/20"
+                                className="w-full bg-[var(--muted)] border border-[var(--glass-border)] rounded-xl py-3 pl-12 pr-4 text-sm text-[var(--foreground)] font-medium outline-none focus:bg-[var(--glass-surface)] transition-all placeholder:text-[var(--muted-foreground)]"
                             />
                         </div>
                         <button
                             onClick={fetchTenants}
-                            className="p-3 bg-glass-surface hover:bg-glass-hover rounded-xl text-primary transition-all border border-glass-border shadow-inner"
+                            className="p-3.5 bg-[var(--muted)] hover:bg-[var(--glass-hover)] rounded-xl text-[var(--primary)] transition-all border border-[var(--glass-border)]"
                             title="Segarkan Data"
                         >
                             <RefreshCw className={cn("transition-transform duration-500", loading && "animate-spin")} size={18} />
+                        </button>
+                        <button
+                            onClick={() => setIsCreateModalOpen(true)}
+                            className="flex items-center gap-2 px-6 py-3.5 bg-[var(--primary)] text-white hover:opacity-90 rounded-xl font-bold shadow-sm transition-all"
+                        >
+                            <Plus size={18} />
+                            <span className="hidden sm:inline">Tambah Tenant</span>
                         </button>
                     </div>
 
@@ -268,7 +193,7 @@ export default function TenantPage() {
                         {loading && tenants.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-[2.5rem] border border-glass-border shadow-2xl">
                                 <Loader2 className="animate-spin mb-6 text-primary" size={48} />
-                                <p className="text-lg font-bold text-glass-text/40 tracking-tight">Sinkronisasi Registri Tenant...</p>
+                                <p className="text-lg font-bold text-[var(--muted-foreground)] tracking-tight">Sinkronisasi Registri Tenant...</p>
                             </div>
                         ) : (
                             <div className="glass-card overflow-hidden border-glass-border rounded-[2.5rem] shadow-2xl">
@@ -280,7 +205,7 @@ export default function TenantPage() {
                                             header: "INDENTITAS TENANT",
                                             accessor: (item) => (
                                                 <div className="flex items-center gap-4 py-2">
-                                                    <div className="h-10 w-10 rounded-xl bg-linear-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center text-indigo-500 border border-white/5 shadow-sm">
+                                                    <div className="h-10 w-10 rounded-xl bg-linear-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center text-indigo-500 border border-[var(--glass-border)] shadow-sm">
                                                         <Building2 size={18} />
                                                     </div>
                                                     <div>
@@ -310,14 +235,14 @@ export default function TenantPage() {
                                                 <div className="flex items-center gap-3">
                                                     <button
                                                         onClick={() => handleEditOpen(item)}
-                                                        className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-glass-text/40 hover:text-primary transition-all border border-glass-border shadow-sm active:scale-90"
+                                                        className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-[var(--muted-foreground)] hover:text-primary transition-all border border-glass-border shadow-sm active:scale-90"
                                                         title="Ubah Tenant"
                                                     >
                                                         <Edit2 size={16} />
                                                     </button>
                                                     <button
                                                         onClick={() => handleDelete(item.id)}
-                                                        className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-glass-text/40 hover:text-rose-500 transition-all border border-glass-border shadow-sm active:scale-90"
+                                                        className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-[var(--muted-foreground)] hover:text-rose-500 transition-all border border-glass-border shadow-sm active:scale-90"
                                                         title="Hapus Tenant"
                                                     >
                                                         <Trash2 size={16} />
@@ -333,101 +258,191 @@ export default function TenantPage() {
                 </div>
             </div>
 
+            <AnimatePresence>
+                {isCreateModalOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsCreateModalOpen(false)}
+                            className="absolute inset-0 bg-[var(--background)]/90 backdrop-blur-[2px]"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-lg bg-[var(--glass-surface)] border border-[var(--glass-border)] rounded-2xl p-8 shadow-2xl overflow-hidden"
+                        >
+                            <button
+                                onClick={() => setIsCreateModalOpen(false)}
+                                className="absolute top-6 right-6 text-[var(--muted-foreground)] hover:text-[var(--foreground)] bg-[var(--muted)] p-2 rounded-full transition-all"
+                            >
+                                <X size={20} />
+                            </button>
+
+                            <div className="mb-6 flex items-center gap-3">
+                                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                                    <Plus size={24} />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold text-[var(--foreground)] tracking-tight">Tambah Tenant</h2>
+                                    <p className="text-[var(--muted-foreground)] text-sm">Registrasi entitas klien baru.</p>
+                                </div>
+                            </div>
+
+                            <form onSubmit={handleCreateSubmit} className="space-y-5">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-[var(--foreground)]">Nama Perusahaan / Organisasi</label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            placeholder="Contoh: PT. Maju Jaya"
+                                            value={newTenantData.name}
+                                            onChange={(e) => {
+                                                const name = e.target.value;
+                                                setNewTenantData({
+                                                    ...newTenantData,
+                                                    name,
+                                                    slug: generateSlug(name)
+                                                });
+                                            }}
+                                            className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] focus:outline-none focus:border-[var(--primary)] transition-all"
+                                            required
+                                        />
+                                        <Building2 className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" size={18} />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-[var(--foreground)]">Tenant Slug (Domain Identifier)</label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            placeholder="maju-jaya"
+                                            value={newTenantData.slug}
+                                            onChange={(e) => setNewTenantData({ ...newTenantData, slug: e.target.value.toLowerCase() })}
+                                            className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] focus:outline-none focus:border-[var(--primary)] transition-all"
+                                            required
+                                        />
+                                        <Globe className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" size={18} />
+                                    </div>
+                                    <p className="text-[11px] text-[var(--muted-foreground)]">* Identitas unik untuk URL sistem.</p>
+                                </div>
+
+                                <div className="flex gap-3 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsCreateModalOpen(false)}
+                                        className="flex-1 bg-[var(--muted)] hover:bg-[var(--glass-hover)] text-[var(--foreground)] font-semibold py-3 rounded-xl transition-all border border-[var(--glass-border)]"
+                                    >
+                                        Batal
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={submitting || !newTenantData.name || !newTenantData.slug}
+                                        className="flex-[1.5] bg-[var(--primary)] text-white font-semibold py-3 rounded-xl shadow-md transition-all hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+                                    >
+                                        {submitting ? <Loader2 size={20} className="animate-spin" /> : "Buat Tenant"}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
             {/* Modal Edit Tenant */}
             <AnimatePresence>
                 {isEditModalOpen && (
-                    <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsEditModalOpen(false)}
-                            className="absolute inset-0 bg-black/90 backdrop-blur-2xl"
+                            className="absolute inset-0 bg-[var(--background)]/90 backdrop-blur-[2px]"
                         />
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                            className="relative w-full max-w-md bg-background border border-glass-border rounded-[3rem] p-10 shadow-2xl overflow-hidden"
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-lg bg-[var(--glass-surface)] border border-[var(--glass-border)] rounded-2xl p-8 shadow-2xl overflow-hidden"
                         >
-                            <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-indigo-600 via-blue-500 to-transparent" />
-
                             <button
                                 onClick={() => setIsEditModalOpen(false)}
-                                className="absolute top-8 right-8 text-glass-text/30 hover:text-white bg-white/5 p-2 rounded-full transition-all"
+                                className="absolute top-6 right-6 text-[var(--muted-foreground)] hover:text-[var(--foreground)] bg-[var(--muted)] p-2 rounded-full transition-all"
                             >
                                 <X size={20} />
                             </button>
 
-                            <div className="mb-8 text-center">
-                                <div className="h-16 w-16 rounded-2xl bg-primary/20 flex items-center justify-center text-primary mx-auto mb-6 shadow-xl border border-primary/10">
-                                    <Building2 size={28} />
+                            <div className="mb-6 flex items-center gap-3">
+                                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                                    <Edit2 size={24} />
                                 </div>
-                                <h2 className="text-3xl font-black text-glass-text mb-2 tracking-tight">Ubah Tenant</h2>
-                                <p className="text-glass-text/40 font-medium">Perbarui identitas dan status tenant.</p>
+                                <div>
+                                    <h2 className="text-2xl font-bold text-[var(--foreground)] tracking-tight">Ubah Tenant</h2>
+                                    <p className="text-[var(--muted-foreground)] text-sm">Perbarui identitas dan status tenant.</p>
+                                </div>
                             </div>
 
-                            <form onSubmit={handleEditSubmit} className="space-y-6">
+                            <form onSubmit={handleEditSubmit} className="space-y-5">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary ml-1">
-                                        Nama Tenant
-                                    </label>
+                                    <label className="text-xs font-bold text-[var(--foreground)]">Nama Tenant</label>
                                     <input
                                         type="text"
                                         value={editFormData.name}
                                         onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
-                                        className="w-full bg-background/80 border border-glass-border rounded-xl py-3 px-4 text-glass-text font-bold outline-none focus:border-primary/50 transition-all shadow-inner"
+                                        className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] focus:outline-none focus:border-[var(--primary)] transition-all"
                                         required
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary ml-1">
-                                        Slug
-                                    </label>
+                                    <label className="text-xs font-bold text-[var(--foreground)]">Slug</label>
                                     <input
                                         type="text"
                                         value={editFormData.slug}
                                         onChange={(e) => setEditFormData({ ...editFormData, slug: e.target.value.toLowerCase() })}
-                                        className="w-full bg-background/80 border border-glass-border rounded-xl py-3 px-4 text-glass-text font-bold outline-none focus:border-primary/50 transition-all shadow-inner"
+                                        className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] focus:outline-none focus:border-[var(--primary)] transition-all"
                                         required
                                     />
                                 </div>
 
-                                <div className="flex items-center justify-between p-4 bg-muted rounded-2xl border border-glass-border">
+                                <div className="flex items-center justify-between p-4 bg-[var(--muted)] rounded-xl border border-[var(--glass-border)]">
                                     <div className="flex flex-col">
-                                        <span className="text-xs font-black text-glass-text uppercase tracking-widest">Status Aktivasi</span>
-                                        <span className="text-[10px] text-glass-text/40">Tentukan apakah tenant aktif</span>
+                                        <span className="text-sm font-bold text-[var(--foreground)]">Status Aktivasi</span>
+                                        <span className="text-xs text-[var(--muted-foreground)]">Tentukan apakah tenant aktif</span>
                                     </div>
                                     <button
                                         type="button"
                                         onClick={() => setEditFormData({ ...editFormData, isActive: !editFormData.isActive })}
                                         className={cn(
-                                            "relative w-14 h-7 rounded-full transition-colors duration-300",
-                                            editFormData.isActive ? "bg-emerald-500" : "bg-glass-surface border border-glass-border"
+                                            "relative w-14 h-7 rounded-full transition-colors duration-300 shadow-inner",
+                                            editFormData.isActive ? "bg-emerald-500" : "bg-[var(--glass-surface)] border border-[var(--glass-border)]"
                                         )}
                                     >
                                         <div className={cn(
-                                            "absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300",
+                                            "absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-300",
                                             editFormData.isActive ? "translate-x-7" : "translate-x-0"
                                         )} />
                                     </button>
                                 </div>
 
-                                <div className="flex gap-4 pt-4">
+                                <div className="flex gap-3 pt-4">
                                     <button
                                         type="button"
                                         onClick={() => setIsEditModalOpen(false)}
-                                        className="flex-1 bg-muted hover:bg-glass-hover text-glass-text font-bold py-4 rounded-2xl transition-all border border-glass-border active:scale-95"
+                                        className="flex-1 bg-[var(--muted)] hover:bg-[var(--glass-hover)] text-[var(--foreground)] font-semibold py-3 rounded-xl transition-all border border-[var(--glass-border)]"
                                     >
                                         Batal
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="flex-[1.5] bg-primary text-white font-black py-4 rounded-2xl shadow-xl shadow-primary/30 transition-all active:scale-95 hover:brightness-110"
+                                        className="flex-[1.5] bg-[var(--primary)] text-white font-semibold py-3 rounded-xl shadow-md transition-all hover:opacity-90 flex items-center justify-center gap-2"
                                     >
-                                        {submitting ? <Loader2 size={24} className="animate-spin mx-auto" /> : "Simpan Perubahan"}
+                                        {submitting ? <Loader2 size={20} className="animate-spin" /> : "Simpan Perubahan"}
                                     </button>
                                 </div>
                             </form>

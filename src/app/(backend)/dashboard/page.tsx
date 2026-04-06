@@ -54,7 +54,7 @@ export default function DashboardPage() {
           </h1>
           <p className="text-glass-text/60">Here&apos;s what&apos;s happening with your projects today.</p>
         </div>
-        <button className="bg-primary text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg shadow-primary/30 flex items-center gap-2 hover:brightness-110 mb-transition">
+        <button className="bg-primary text-[var(--foreground)] px-6 py-2.5 rounded-xl font-semibold shadow-lg shadow-primary/30 flex items-center gap-2 hover:brightness-110 mb-transition">
           Download Report <ArrowUpRight size={18} />
         </button>
       </div>
@@ -101,7 +101,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-glass-text">System update completed</p>
-                  <p className="text-xs text-glass-text/40">2 hours ago</p>
+                  <p className="text-xs text-[var(--muted-foreground)]">2 hours ago</p>
                 </div>
               </div>
             ))}

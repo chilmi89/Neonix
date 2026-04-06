@@ -120,7 +120,7 @@ export default function TicketCategoryPage() {
             {/* Header */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-sky-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_var(--color-primary)]">
+                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-sky-500 flex items-center justify-center text-[var(--foreground)] shadow-[0_0_30px_-5px_var(--color-primary)]">
                         <Tags size={32} />
                     </div>
                     <div>
@@ -140,7 +140,7 @@ export default function TicketCategoryPage() {
                     </div>
                     <button
                         onClick={() => { resetForm(); setIsCreateModalOpen(true); }}
-                        className="bg-primary text-white font-black px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
+                        className="bg-primary text-[var(--foreground)] font-black px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
                     >
                         <Plus size={20} /> Tambah Kategori
                     </button>
@@ -150,13 +150,13 @@ export default function TicketCategoryPage() {
             {/* Controls */}
             <div className="flex items-center gap-4 bg-muted border border-glass-border rounded-3xl p-2 shadow-2xl">
                 <div className="relative flex-1 group">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30" size={18} />
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" size={18} />
                     <input
                         type="text"
                         placeholder="Cari nama atau deskripsi kategori..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none"
+                        className="w-full bg-white/70 dark:bg-[var(--background)]/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none"
                     />
                 </div>
                 <button
@@ -172,7 +172,7 @@ export default function TicketCategoryPage() {
                 {loading && categories.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-4xl border border-glass-border">
                         <Loader2 className="animate-spin mb-6 text-primary" size={48} />
-                        <p className="text-lg font-bold text-glass-text/40">Menarik Data Kategori...</p>
+                        <p className="text-lg font-bold text-[var(--muted-foreground)]">Menarik Data Kategori...</p>
                     </div>
                 ) : (
                     <div className="glass-card overflow-hidden border-glass-border rounded-4xl shadow-2xl">
@@ -189,7 +189,7 @@ export default function TicketCategoryPage() {
                                             </div>
                                             <div>
                                                 <span className="font-black text-glass-text text-base leading-none block uppercase italic tracking-tight">{item.name}</span>
-                                                <span className="text-[10px] font-bold text-glass-text/40 uppercase tracking-widest mt-1 block">ID: #{item.id}</span>
+                                                <span className="text-[10px] font-bold text-[var(--muted-foreground)] uppercase tracking-widest mt-1 block">ID: #{item.id}</span>
                                             </div>
                                         </div>
                                     )
@@ -208,14 +208,14 @@ export default function TicketCategoryPage() {
                                         <div className="flex items-center gap-3">
                                             <button
                                                 onClick={() => handleEditOpen(item)}
-                                                className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-glass-text/40 hover:text-primary transition-all border border-glass-border"
+                                                className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-[var(--muted-foreground)] hover:text-primary transition-all border border-glass-border"
                                                 title="Edit"
                                             >
                                                 <Edit2 size={16} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(item.id)}
-                                                className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-glass-text/40 hover:text-rose-500 transition-all border border-glass-border"
+                                                className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-[var(--muted-foreground)] hover:text-rose-500 transition-all border border-glass-border"
                                                 title="Hapus"
                                             >
                                                 <Trash2 size={16} />
@@ -238,7 +238,7 @@ export default function TicketCategoryPage() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }}
-                            className="fixed inset-0 bg-black/90 backdrop-blur-2xl"
+                            className="fixed inset-0 bg-[var(--background)]/90 backdrop-blur-2xl"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
@@ -249,7 +249,7 @@ export default function TicketCategoryPage() {
                             <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-primary to-sky-500" />
                             <button
                                 onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }}
-                                className="absolute top-8 right-8 text-glass-text/20 hover:text-white transition-all"
+                                className="absolute top-8 right-8 text-glass-text/20 hover:text-[var(--foreground)] transition-all"
                             >
                                 <X size={24} />
                             </button>
@@ -258,7 +258,7 @@ export default function TicketCategoryPage() {
                                 <h2 className="text-3xl font-black text-glass-text tracking-tight uppercase italic">
                                     {isEditModalOpen ? 'Update' : 'Tambah'} <span className="text-primary">Kategori</span>
                                 </h2>
-                                <p className="text-glass-text/40 font-medium tracking-tight">Tentukan identitas dan deskripsi kategori tiket baru.</p>
+                                <p className="text-[var(--muted-foreground)] font-medium tracking-tight">Tentukan identitas dan deskripsi kategori tiket baru.</p>
                             </div>
 
                             <form onSubmit={(e) => handleSubmit(e, isEditModalOpen)} className="space-y-6">
@@ -289,7 +289,7 @@ export default function TicketCategoryPage() {
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="w-full bg-primary text-white font-black py-4 rounded-2xl shadow-xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-all text-lg tracking-tight disabled:opacity-50"
+                                        className="w-full bg-primary text-[var(--foreground)] font-black py-4 rounded-2xl shadow-xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-all text-lg tracking-tight disabled:opacity-50"
                                     >
                                         {submitting ? (
                                             <Loader2 className="animate-spin" size={24} />

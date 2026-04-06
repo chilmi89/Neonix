@@ -41,7 +41,7 @@ export default function AdminDashboardPage() {
                     <h1 className="text-3xl font-bold text-glass-text">Admin Dashboard</h1>
                     <p className="text-glass-text/60">Manage content, users, and approvals.</p>
                 </div>
-                <button className="bg-primary text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg shadow-primary/30 flex items-center gap-2 hover:brightness-110 mb-transition">
+                <button className="bg-primary text-[var(--foreground)] px-6 py-2.5 rounded-xl font-semibold shadow-lg shadow-primary/30 flex items-center gap-2 hover:brightness-110 mb-transition">
                     View All Tasks
                 </button>
             </div>

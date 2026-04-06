@@ -129,7 +129,7 @@ export default function UsersRolePage() {
             {/* Header & Deskripsi */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-amber-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_var(--color-primary)]">
+                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-amber-500 flex items-center justify-center text-[var(--foreground)] shadow-[0_0_30px_-5px_var(--color-primary)]">
                         <UserCircle2 size={32} />
                     </div>
                     <div>
@@ -157,13 +157,13 @@ export default function UsersRolePage() {
                 {/* Bar Kontrol Kompak */}
                 <div className="flex items-center gap-4 bg-muted border border-glass-border rounded-3xl p-2 shadow-2xl">
                     <div className="relative flex-1 group">
-                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30 group-focus-within:text-primary transition-colors" size={18} />
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)] group-focus-within:text-primary transition-colors" size={18} />
                         <input
                             type="text"
                             placeholder="Cari nama atau email pengguna..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none focus:bg-white dark:focus:bg-black/60 transition-all placeholder:text-glass-text/30"
+                            className="w-full bg-white/70 dark:bg-[var(--background)]/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none focus:bg-white dark:focus:bg-[var(--background)]/60 transition-all placeholder:text-[var(--muted-foreground)]"
                         />
                     </div>
                     <button
@@ -179,7 +179,7 @@ export default function UsersRolePage() {
                     {loading && users.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-4xl border border-glass-border shadow-2xl">
                             <Loader2 className="animate-spin mb-6 text-primary" size={48} />
-                            <p className="text-lg font-bold text-glass-text/40 tracking-tight">Menghubungkan ke Pusat Data...</p>
+                            <p className="text-lg font-bold text-[var(--muted-foreground)] tracking-tight">Menghubungkan ke Pusat Data...</p>
                         </div>
                     ) : (
                         <div className="glass-card overflow-hidden border-glass-border rounded-4xl shadow-2xl">
@@ -191,7 +191,7 @@ export default function UsersRolePage() {
                                         header: "PENGGUNA",
                                         accessor: (item) => (
                                             <div className="flex items-center gap-4 py-2">
-                                                <div className="h-10 w-10 rounded-xl bg-linear-to-br from-primary/20 to-amber-500/20 flex items-center justify-center text-primary border border-white/5 shadow-sm">
+                                                <div className="h-10 w-10 rounded-xl bg-linear-to-br from-primary/20 to-amber-500/20 flex items-center justify-center text-primary border border-[var(--glass-border)] shadow-sm">
                                                     <Users size={18} />
                                                 </div>
                                                 <div>
@@ -224,7 +224,7 @@ export default function UsersRolePage() {
                                         accessor: (item) => (
                                             <button
                                                 onClick={() => handleOpenAssignment(item)}
-                                                className="flex items-center gap-3 px-5 py-2.5 bg-white/10 dark:bg-white/5 hover:bg-primary/20 hover:text-primary rounded-2xl text-glass-text/40 transition-all border border-glass-border shadow-sm active:scale-95 group"
+                                                className="flex items-center gap-3 px-5 py-2.5 bg-[var(--glass-hover)] dark:bg-[var(--glass-hover)] hover:bg-primary/20 hover:text-primary rounded-2xl text-[var(--muted-foreground)] transition-all border border-glass-border shadow-sm active:scale-95 group"
                                             >
                                                 <ShieldCheck size={16} className="group-hover:scale-110 transition-transform" />
                                                 <span className="text-xs font-black uppercase tracking-tight">Atur Peran</span>
@@ -261,7 +261,7 @@ export default function UsersRolePage() {
 
                                 <button
                                     onClick={() => setIsAssignmentModalOpen(false)}
-                                    className="absolute top-6 right-6 text-glass-text/30 hover:text-glass-text transition-all"
+                                    className="absolute top-6 right-6 text-[var(--muted-foreground)] hover:text-glass-text transition-all"
                                 >
                                     <X size={18} />
                                 </button>
@@ -272,7 +272,7 @@ export default function UsersRolePage() {
                                     </div>
                                     <div>
                                         <h2 className="text-xl font-black text-glass-text tracking-tight leading-none">Hak Akses</h2>
-                                        <p className="text-[10px] text-glass-text/40 font-bold uppercase tracking-wider mt-1.5">{selectedUser.name}</p>
+                                        <p className="text-[10px] text-[var(--muted-foreground)] font-bold uppercase tracking-wider mt-1.5">{selectedUser.name}</p>
                                     </div>
                                 </div>
                             </div>
@@ -323,7 +323,7 @@ export default function UsersRolePage() {
                                                                 "px-5 py-4 flex items-center justify-between cursor-pointer transition-all border-b border-glass-border last:border-0",
                                                                 isSelected
                                                                     ? "bg-primary/5 text-primary"
-                                                                    : "text-glass-text/40 hover:bg-glass-hover"
+                                                                    : "text-[var(--muted-foreground)] hover:bg-glass-hover"
                                                             )}
                                                         >
                                                             <div className="flex items-center gap-3">
@@ -363,7 +363,7 @@ export default function UsersRolePage() {
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="flex-[1.5] bg-primary text-white font-black py-4 rounded-xl shadow-xl shadow-primary/20 transition-all active:scale-95 hover:scale-[1.02] flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest"
+                                        className="flex-[1.5] bg-primary text-[var(--foreground)] font-black py-4 rounded-xl shadow-xl shadow-primary/20 transition-all active:scale-95 hover:scale-[1.02] flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest"
                                     >
                                         {submitting ? (
                                             <Loader2 size={16} className="animate-spin" />

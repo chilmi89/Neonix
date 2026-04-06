@@ -4,6 +4,8 @@ import { ReactNode, useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Navbar } from "./Navbar";
 import { useUser } from "@/context/UserContext";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface AppLayoutProps {
     children: ReactNode;
@@ -12,9 +14,15 @@ interface AppLayoutProps {
 export function AppLayout({ children }: AppLayoutProps) {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const { user, loading } = useUser();
+    const pathname = usePathname();
+
+    const isSuperAdmin = pathname?.startsWith("/dashboard/superadmin");
 
     return (
-        <div className="dark min-h-screen flex bg-transparent">
+        <div className={cn(
+            "min-h-screen flex transition-colors duration-500",
+            "bg-[var(--background)] text-[var(--foreground)]"
+        )}>
             <Sidebar
                 isCollapsed={isSidebarCollapsed}
                 onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}

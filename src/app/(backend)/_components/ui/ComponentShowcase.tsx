@@ -30,12 +30,12 @@ export function ComponentShowcase({ title, description, code, children }: Compon
                     <h3 className="text-xl font-bold text-glass-text">{title}</h3>
                     <p className="text-sm text-glass-text/60">{description}</p>
                 </div>
-                <div className="flex bg-white/5 p-1 rounded-xl border border-glass-border">
+                <div className="flex bg-[var(--glass-hover)] p-1 rounded-xl border border-glass-border">
                     <button
                         onClick={() => setView("preview")}
                         className={cn(
                             "px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2",
-                            view === "preview" ? "bg-primary text-white shadow-lg" : "text-glass-text/60 hover:text-glass-text"
+                            view === "preview" ? "bg-primary text-[var(--foreground)] shadow-lg" : "text-glass-text/60 hover:text-glass-text"
                         )}
                     >
                         <Eye size={16} /> Preview
@@ -44,7 +44,7 @@ export function ComponentShowcase({ title, description, code, children }: Compon
                         onClick={() => setView("code")}
                         className={cn(
                             "px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2",
-                            view === "code" ? "bg-primary text-white shadow-lg" : "text-glass-text/60 hover:text-glass-text"
+                            view === "code" ? "bg-primary text-[var(--foreground)] shadow-lg" : "text-glass-text/60 hover:text-glass-text"
                         )}
                     >
                         <Code2 size={16} /> Code
@@ -61,7 +61,7 @@ export function ComponentShowcase({ title, description, code, children }: Compon
                     <div className="relative flex-1 flex flex-col">
                         <button
                             onClick={copyToClipboard}
-                            className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-white z-20"
+                            className="absolute top-4 right-4 p-2 bg-[var(--glass-hover)] hover:bg-[var(--glass-hover)] rounded-lg transition-colors text-[var(--foreground)] z-20"
                         >
                             {copied ? <Check size={18} className="text-emerald-400" /> : <Copy size={18} />}
                         </button>

@@ -163,7 +163,7 @@ export default function SuperadminUsersPage() {
             {/* Header & Deskripsi */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-[2rem] bg-linear-to-br from-indigo-600 to-blue-400 flex items-center justify-center text-white shadow-[0_0_30px_-5px_rgba(79,70,229,0.5)]">
+                    <div className="h-16 w-16 rounded-[2rem] bg-linear-to-br from-indigo-600 to-blue-400 flex items-center justify-center text-[var(--foreground)] shadow-[0_0_30px_-5px_rgba(79,70,229,0.5)]">
                         <UserIcon size={32} />
                     </div>
                     <div>
@@ -180,7 +180,7 @@ export default function SuperadminUsersPage() {
                             setFormData({ name: "", email: "", password: "" });
                             setIsAddModalOpen(true);
                         }}
-                        className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-95 transition-all"
+                        className="flex items-center gap-2 px-6 py-3 bg-primary text-[var(--foreground)] font-bold rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-95 transition-all"
                     >
                         <Plus size={20} /> Tambah User
                     </button>
@@ -196,7 +196,7 @@ export default function SuperadminUsersPage() {
                 {/* Bar Kontrol */}
                 <div className="flex items-center gap-4 bg-muted border border-glass-border rounded-[1.5rem] p-2 shadow-2xl">
                     <div className="relative flex-1 group">
-                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30 group-focus-within:text-primary transition-colors" size={18} />
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)] group-focus-within:text-primary transition-colors" size={18} />
                         <input
                             type="text"
                             placeholder="Cari nama atau email user..."
@@ -219,7 +219,7 @@ export default function SuperadminUsersPage() {
                     {loading && users.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-[2.5rem] border border-glass-border shadow-2xl">
                             <Loader2 className="animate-spin mb-6 text-primary" size={48} />
-                            <p className="text-lg font-bold text-glass-text/40 tracking-tight">Sinkronisasi Basis Data User...</p>
+                            <p className="text-lg font-bold text-[var(--muted-foreground)] tracking-tight">Sinkronisasi Basis Data User...</p>
                         </div>
                     ) : (
                         <div className="glass-card overflow-hidden border-glass-border rounded-[2.5rem] shadow-2xl">
@@ -231,7 +231,7 @@ export default function SuperadminUsersPage() {
                                         header: "PENGGUNA",
                                         accessor: (item) => (
                                             <div className="flex items-center gap-4 py-2">
-                                                <div className="h-10 w-10 rounded-xl bg-linear-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center text-indigo-500 border border-white/5 shadow-sm font-bold">
+                                                <div className="h-10 w-10 rounded-xl bg-linear-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center text-indigo-500 border border-[var(--glass-border)] shadow-sm font-bold">
                                                     {item.name[0]?.toUpperCase()}
                                                 </div>
                                                 <div>
@@ -244,7 +244,7 @@ export default function SuperadminUsersPage() {
                                     {
                                         header: "TANGGAL DAFTAR",
                                         accessor: (item) => (
-                                            <span className="text-[10px] font-black text-glass-text/50 uppercase tracking-widest">
+                                            <span className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">
                                                 {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                                             </span>
                                         )
@@ -255,14 +255,14 @@ export default function SuperadminUsersPage() {
                                             <div className="flex items-center gap-3">
                                                 <button
                                                     onClick={() => handleEditOpen(item)}
-                                                    className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-glass-text/40 hover:text-primary transition-all border border-glass-border shadow-sm active:scale-90"
+                                                    className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-[var(--muted-foreground)] hover:text-primary transition-all border border-glass-border shadow-sm active:scale-90"
                                                     title="Ubah User"
                                                 >
                                                     <Edit2 size={16} />
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(item.id)}
-                                                    className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-glass-text/40 hover:text-rose-500 transition-all border border-glass-border shadow-sm active:scale-90"
+                                                    className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-[var(--muted-foreground)] hover:text-rose-500 transition-all border border-glass-border shadow-sm active:scale-90"
                                                     title="Hapus User"
                                                 >
                                                     <Trash2 size={16} />
@@ -276,14 +276,14 @@ export default function SuperadminUsersPage() {
                             {/* Pagination Controls */}
                             {totalPages > 1 && (
                                 <div className="p-6 border-t border-glass-border flex items-center justify-between bg-muted/30">
-                                    <div className="text-xs font-black text-glass-text/40 uppercase tracking-widest">
+                                    <div className="text-xs font-black text-[var(--muted-foreground)] uppercase tracking-widest">
                                         Menampilkan {startIndex + 1} - {Math.min(startIndex + itemsPerPage, filteredUsers.length)} dari {filteredUsers.length} User
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <button
                                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                             disabled={currentPage === 1}
-                                            className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-glass-text/40 hover:text-primary transition-all border border-glass-border disabled:opacity-20 disabled:scale-100 active:scale-90"
+                                            className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-[var(--muted-foreground)] hover:text-primary transition-all border border-glass-border disabled:opacity-20 disabled:scale-100 active:scale-90"
                                         >
                                             <ChevronLeft size={18} />
                                         </button>
@@ -296,8 +296,8 @@ export default function SuperadminUsersPage() {
                                                     className={cn(
                                                         "h-10 w-10 flex items-center justify-center rounded-xl font-black text-xs transition-all border",
                                                         currentPage === i + 1
-                                                            ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
-                                                            : "bg-muted text-glass-text/40 border-glass-border hover:bg-glass-hover"
+                                                            ? "bg-primary text-[var(--foreground)] border-primary shadow-lg shadow-primary/20"
+                                                            : "bg-muted text-[var(--muted-foreground)] border-glass-border hover:bg-glass-hover"
                                                     )}
                                                 >
                                                     {i + 1}
@@ -308,7 +308,7 @@ export default function SuperadminUsersPage() {
                                         <button
                                             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                                             disabled={currentPage === totalPages}
-                                            className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-glass-text/40 hover:text-primary transition-all border border-glass-border disabled:opacity-20 disabled:scale-100 active:scale-90"
+                                            className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-[var(--muted-foreground)] hover:text-primary transition-all border border-glass-border disabled:opacity-20 disabled:scale-100 active:scale-90"
                                         >
                                             <ChevronRight size={18} />
                                         </button>
@@ -332,7 +332,7 @@ export default function SuperadminUsersPage() {
                                 setIsAddModalOpen(false);
                                 setIsEditModalOpen(false);
                             }}
-                            className="absolute inset-0 bg-black/90 backdrop-blur-2xl"
+                            className="absolute inset-0 bg-[var(--background)]/90 backdrop-blur-2xl"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
@@ -347,7 +347,7 @@ export default function SuperadminUsersPage() {
                                     setIsAddModalOpen(false);
                                     setIsEditModalOpen(false);
                                 }}
-                                className="absolute top-8 right-8 text-glass-text/30 hover:text-white bg-white/5 p-2 rounded-full transition-all"
+                                className="absolute top-8 right-8 text-[var(--muted-foreground)] hover:text-[var(--foreground)] bg-[var(--glass-hover)] p-2 rounded-full transition-all"
                             >
                                 <X size={20} />
                             </button>
@@ -359,7 +359,7 @@ export default function SuperadminUsersPage() {
                                 <h2 className="text-3xl font-black text-glass-text mb-2 tracking-tight">
                                     {isAddModalOpen ? "Tambah User" : "Ubah User"}
                                 </h2>
-                                <p className="text-glass-text/40 font-medium">
+                                <p className="text-[var(--muted-foreground)] font-medium">
                                     {isAddModalOpen ? "Buat akun pengguna baru." : "Perbarui identitas dan akses user."}
                                 </p>
                             </div>
@@ -398,7 +398,7 @@ export default function SuperadminUsersPage() {
 
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary ml-1">
-                                        Password {isEditModalOpen && <span className="text-glass-text/30 italic font-normal">(Kosongkan jika tidak diubah)</span>}
+                                        Password {isEditModalOpen && <span className="text-[var(--muted-foreground)] italic font-normal">(Kosongkan jika tidak diubah)</span>}
                                     </label>
                                     <div className="relative">
                                         <input
@@ -427,7 +427,7 @@ export default function SuperadminUsersPage() {
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="flex-[1.5] bg-primary text-white font-black py-4 rounded-2xl shadow-xl shadow-primary/30 transition-all active:scale-95 hover:brightness-110 flex items-center justify-center"
+                                        className="flex-[1.5] bg-primary text-[var(--foreground)] font-black py-4 rounded-2xl shadow-xl shadow-primary/30 transition-all active:scale-95 hover:brightness-110 flex items-center justify-center"
                                     >
                                         {submitting ? <Loader2 size={24} className="animate-spin" /> : (isAddModalOpen ? "Tambah User" : "Simpan Perubahan")}
                                     </button>

@@ -22,14 +22,14 @@ export default function AnalyticsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <motion.div variants={slideUp}>
-                    <GlassCard className="h-[400px] flex flex-col justify-center items-center text-glass-text/40">
+                    <GlassCard className="h-[400px] flex flex-col justify-center items-center text-[var(--muted-foreground)]">
                         <LineChart size={48} className="mb-4 opacity-20" />
                         <p className="font-medium">User Growth Trend</p>
                         <p className="text-xs italic">(Chart placeholder)</p>
                     </GlassCard>
                 </motion.div>
                 <motion.div variants={slideUp}>
-                    <GlassCard className="h-[400px] flex flex-col justify-center items-center text-glass-text/40">
+                    <GlassCard className="h-[400px] flex flex-col justify-center items-center text-[var(--muted-foreground)]">
                         <BarChart3 size={48} className="mb-4 opacity-20" />
                         <p className="font-medium">Monthly Revenue</p>
                         <p className="text-xs italic">(Chart placeholder)</p>

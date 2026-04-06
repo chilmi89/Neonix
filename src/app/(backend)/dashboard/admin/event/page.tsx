@@ -178,7 +178,7 @@ export default function AdminEventPage() {
             {/* Header */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-sky-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_var(--color-primary)]">
+                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-sky-500 flex items-center justify-center text-[var(--foreground)] shadow-[0_0_30px_-5px_var(--color-primary)]">
                         <Calendar size={32} />
                     </div>
                     <div>
@@ -198,7 +198,7 @@ export default function AdminEventPage() {
                     </div>
                     <button
                         onClick={() => { resetForm(); setIsCreateModalOpen(true); }}
-                        className="bg-primary text-white font-black px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
+                        className="bg-primary text-[var(--foreground)] font-black px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
                     >
                         <Plus size={20} /> Event Baru
                     </button>
@@ -208,13 +208,13 @@ export default function AdminEventPage() {
             {/* Controls */}
             <div className="flex items-center gap-4 bg-muted border border-glass-border rounded-3xl p-2 shadow-2xl">
                 <div className="relative flex-1 group">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30" size={18} />
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" size={18} />
                     <input
                         type="text"
                         placeholder="Cari nama event atau lokasi..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none"
+                        className="w-full bg-white/70 dark:bg-[var(--background)]/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none"
                     />
                 </div>
                 <button
@@ -230,7 +230,7 @@ export default function AdminEventPage() {
                 {loading && events.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-4xl border border-glass-border">
                         <Loader2 className="animate-spin mb-6 text-primary" size={48} />
-                        <p className="text-lg font-bold text-glass-text/40">Menyelaraskan Agenda...</p>
+                        <p className="text-lg font-bold text-[var(--muted-foreground)]">Menyelaraskan Agenda...</p>
                     </div>
                 ) : (
                     <div className="glass-card overflow-hidden border-glass-border rounded-4xl shadow-2xl">
@@ -267,7 +267,7 @@ export default function AdminEventPage() {
                                             <div className="flex items-center gap-1.5 text-glass-text/60 font-bold text-xs uppercase tracking-tight">
                                                 <MapPin size={12} className="text-primary" /> {item.city}
                                             </div>
-                                            <div className="flex items-center gap-1.5 text-glass-text/40 font-bold text-[10px]">
+                                            <div className="flex items-center gap-1.5 text-[var(--muted-foreground)] font-bold text-[10px]">
                                                 <Clock size={12} /> {new Date(item.startDate).toLocaleDateString()}
                                             </div>
                                         </div>
@@ -291,10 +291,10 @@ export default function AdminEventPage() {
                                     header: "OPERASI",
                                     accessor: (item) => (
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => handleEditOpen(item)} className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-glass-text/40 hover:text-primary transition-all border border-glass-border">
+                                            <button onClick={() => handleEditOpen(item)} className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-[var(--muted-foreground)] hover:text-primary transition-all border border-glass-border">
                                                 <Edit2 size={16} />
                                             </button>
-                                            <button onClick={() => handleDelete(item.id)} className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-glass-text/40 hover:text-rose-500 transition-all border border-glass-border">
+                                            <button onClick={() => handleDelete(item.id)} className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-[var(--muted-foreground)] hover:text-rose-500 transition-all border border-glass-border">
                                                 <Trash2 size={16} />
                                             </button>
                                         </div>
@@ -310,14 +310,14 @@ export default function AdminEventPage() {
             <AnimatePresence>
                 {(isCreateModalOpen || isEditModalOpen) && (
                     <div className="fixed inset-0 z-100 flex items-center justify-center p-6 overflow-y-auto">
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }} className="fixed inset-0 bg-black/90 backdrop-blur-2xl" />
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }} className="fixed inset-0 bg-[var(--background)]/90 backdrop-blur-2xl" />
                         <motion.div initial={{ opacity: 0, scale: 0.9, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 30 }} className="relative w-full max-w-2xl bg-background border border-glass-border rounded-[3rem] p-10 shadow-2xl my-auto">
                             <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-primary to-sky-500" />
-                            <button onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }} className="absolute top-8 right-8 text-glass-text/20 hover:text-white transition-all"><X size={24} /></button>
+                            <button onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }} className="absolute top-8 right-8 text-glass-text/20 hover:text-[var(--foreground)] transition-all"><X size={24} /></button>
 
                             <div className="mb-8">
                                 <h2 className="text-3xl font-black text-glass-text tracking-tight uppercase italic">{isEditModalOpen ? 'Edit' : 'Create'} <span className="text-primary">Event</span></h2>
-                                <p className="text-glass-text/40 font-medium tracking-tight">Lengkapi detail manifestasi acara sistem.</p>
+                                <p className="text-[var(--muted-foreground)] font-medium tracking-tight">Lengkapi detail manifestasi acara sistem.</p>
                             </div>
 
                             <form onSubmit={(e) => handleSubmit(e, isEditModalOpen)} className="grid grid-cols-2 gap-6">
@@ -347,7 +347,7 @@ export default function AdminEventPage() {
                                     </div>
                                     <div className="flex-1 space-y-3">
                                         <h4 className="text-sm font-black text-glass-text uppercase tracking-tight">Poster Event</h4>
-                                        <p className="text-[10px] text-glass-text/40 font-bold leading-relaxed">Format: JPG, PNG, WEBP. Maks 5MB. Gunakan rasio 16:9 untuk hasil terbaik.</p>
+                                        <p className="text-[10px] text-[var(--muted-foreground)] font-bold leading-relaxed">Format: JPG, PNG, WEBP. Maks 5MB. Gunakan rasio 16:9 untuk hasil terbaik.</p>
                                         <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
                                         <button type="button" onClick={() => fileInputRef.current?.click()} className="bg-glass-surface hover:bg-glass-hover text-primary font-black px-4 py-2 rounded-lg border border-glass-border text-[10px] flex items-center gap-2 uppercase tracking-widest transition-all">
                                             <Upload size={14} /> {selectedFile || previewUrl ? 'Ganti Poster' : 'Upload Poster'}
@@ -377,8 +377,8 @@ export default function AdminEventPage() {
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Status Publikasi</label>
                                         <div className="flex gap-4">
-                                            <button type="button" onClick={() => setFormData({ ...formData, isPublished: true })} className={cn("flex-1 py-3 px-4 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all", formData.isPublished ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted border-glass-border text-glass-text/40")}>Published</button>
-                                            <button type="button" onClick={() => setFormData({ ...formData, isPublished: false })} className={cn("flex-1 py-3 px-4 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all", !formData.isPublished ? "bg-rose-500/10 text-rose-500 border-rose-500/20" : "bg-muted border-glass-border text-glass-text/40")}>Draft</button>
+                                            <button type="button" onClick={() => setFormData({ ...formData, isPublished: true })} className={cn("flex-1 py-3 px-4 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all", formData.isPublished ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted border-glass-border text-[var(--muted-foreground)]")}>Published</button>
+                                            <button type="button" onClick={() => setFormData({ ...formData, isPublished: false })} className={cn("flex-1 py-3 px-4 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all", !formData.isPublished ? "bg-rose-500/10 text-rose-500 border-rose-500/20" : "bg-muted border-glass-border text-[var(--muted-foreground)]")}>Draft</button>
                                         </div>
                                     </div>
                                 </div>
@@ -394,7 +394,7 @@ export default function AdminEventPage() {
                                 </div>
 
                                 <div className="col-span-2 pt-6">
-                                    <button type="submit" disabled={submitting} className="w-full bg-primary text-white font-black py-4 rounded-2xl shadow-xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-all text-base tracking-tight disabled:opacity-50">
+                                    <button type="submit" disabled={submitting} className="w-full bg-primary text-[var(--foreground)] font-black py-4 rounded-2xl shadow-xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-all text-base tracking-tight disabled:opacity-50">
                                         {submitting ? <Loader2 className="animate-spin" size={24} /> : <>{isEditModalOpen ? 'Update' : 'Create'} Event <ArrowRight size={20} /></>}
                                     </button>
                                 </div>

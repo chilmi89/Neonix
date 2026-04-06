@@ -136,7 +136,7 @@ export default function TransactionsPage() {
             {/* ── Header ─────────────────────────────────────────────────────── */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-6">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_#10b981]">
+                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-[var(--foreground)] shadow-[0_0_30px_-5px_#10b981]">
                         <ShoppingBag size={32} />
                     </div>
                     <div>
@@ -194,13 +194,13 @@ export default function TransactionsPage() {
                             className="bg-muted border border-glass-border rounded-3xl p-6 flex items-center gap-6"
                         >
                             <div
-                                className={`h-14 w-14 rounded-2xl bg-linear-to-br ${stat.color} flex items-center justify-center text-white shrink-0`}
+                                className={`h-14 w-14 rounded-2xl bg-linear-to-br ${stat.color} flex items-center justify-center text-[var(--foreground)] shrink-0`}
                                 style={{ boxShadow: `0 0 24px -4px ${stat.glow}` }}
                             >
                                 <stat.icon size={24} />
                             </div>
                             <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-glass-text/40 mb-1">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-[var(--muted-foreground)] mb-1">
                                     {stat.label}
                                 </p>
                                 <p className="text-2xl font-black text-glass-text tracking-tight">
@@ -253,7 +253,7 @@ export default function TransactionsPage() {
                                                     style={{ width: `${pct}%` }}
                                                 />
                                             </div>
-                                            <span className="text-[10px] text-glass-text/40 font-black shrink-0">
+                                            <span className="text-[10px] text-[var(--muted-foreground)] font-black shrink-0">
                                                 {ev.orderCount} order · {ev.ticketsSold} tiket
                                             </span>
                                         </div>
@@ -268,7 +268,7 @@ export default function TransactionsPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-muted border border-glass-border rounded-3xl p-3 shadow-2xl">
                 <div className="md:col-span-2 relative">
                     <Search
-                        className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30"
+                        className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]"
                         size={18}
                     />
                     <input
@@ -276,7 +276,7 @@ export default function TransactionsPage() {
                         placeholder="Cari nama pembeli, email, atau event..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none"
+                        className="w-full bg-white/70 dark:bg-[var(--background)]/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none"
                     />
                 </div>
                 <div className="relative">
@@ -287,7 +287,7 @@ export default function TransactionsPage() {
                     <select
                         value={selectedEvent}
                         onChange={(e) => setSelectedEvent(e.target.value)}
-                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-xl py-3 pl-10 pr-4 text-sm text-glass-text font-bold outline-none appearance-none"
+                        className="w-full bg-white/70 dark:bg-[var(--background)]/40 border border-glass-border rounded-xl py-3 pl-10 pr-4 text-sm text-glass-text font-bold outline-none appearance-none"
                     >
                         <option value="all">Semua Event</option>
                         {events.map((ev) => (
@@ -297,7 +297,7 @@ export default function TransactionsPage() {
                         ))}
                     </select>
                 </div>
-                <div className="flex items-center justify-center bg-glass-surface border border-glass-border rounded-xl px-4 text-[10px] font-black text-glass-text/40 uppercase tracking-widest">
+                <div className="flex items-center justify-center bg-glass-surface border border-glass-border rounded-xl px-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">
                     {filtered.length} transaksi
                 </div>
             </div>
@@ -307,7 +307,7 @@ export default function TransactionsPage() {
                 {loading && transactions.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-16 bg-muted rounded-4xl border border-glass-border">
                         <Loader2 className="animate-spin mb-6 text-emerald-500" size={48} />
-                        <p className="text-lg font-bold text-glass-text/40">
+                        <p className="text-lg font-bold text-[var(--muted-foreground)]">
                             Memuat data transaksi…
                         </p>
                     </div>
@@ -318,7 +318,7 @@ export default function TransactionsPage() {
                 ) : filtered.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-16 bg-muted rounded-4xl border border-glass-border">
                         <ShoppingBag size={48} className="text-glass-text/10 mb-6" />
-                        <p className="text-lg font-bold text-glass-text/40">
+                        <p className="text-lg font-bold text-[var(--muted-foreground)]">
                             Belum ada transaksi ditemukan
                         </p>
                         <p className="text-sm text-glass-text/20 mt-2">
@@ -344,8 +344,8 @@ export default function TransactionsPage() {
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-1.5 pl-10">
-                                                <Mail size={10} className="text-glass-text/30" />
-                                                <span className="text-[10px] text-glass-text/40 font-medium">
+                                                <Mail size={10} className="text-[var(--muted-foreground)]" />
+                                                <span className="text-[10px] text-[var(--muted-foreground)] font-medium">
                                                     {t.buyerEmail}
                                                 </span>
                                             </div>
@@ -363,7 +363,7 @@ export default function TransactionsPage() {
                                                 {t.ticketName}
                                             </span>
                                             {t.categoryName && (
-                                                <span className="ml-1.5 text-[10px] font-bold text-glass-text/30 uppercase tracking-wider">
+                                                <span className="ml-1.5 text-[10px] font-bold text-[var(--muted-foreground)] uppercase tracking-wider">
                                                     · {t.categoryName}
                                                 </span>
                                             )}
@@ -387,7 +387,7 @@ export default function TransactionsPage() {
                                             <p className="font-black text-emerald-500 text-base tracking-tight">
                                                 {formatIDR(Number(t.totalPrice))}
                                             </p>
-                                            <p className="text-[10px] text-glass-text/30 font-medium">
+                                            <p className="text-[10px] text-[var(--muted-foreground)] font-medium">
                                                 @{formatIDR(Number(t.unitPrice))}/tiket
                                             </p>
                                         </div>
