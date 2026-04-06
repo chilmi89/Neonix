@@ -21,7 +21,7 @@ export function AppLayout({ children }: AppLayoutProps) {
     return (
         <div className={cn(
             "min-h-screen flex transition-colors duration-500",
-            isSuperAdmin ? "superadmin-theme bg-[var(--background)] text-[var(--foreground)]" : "dark bg-transparent text-foreground"
+            "bg-[var(--background)] text-[var(--foreground)]"
         )}>
             <Sidebar
                 isCollapsed={isSidebarCollapsed}

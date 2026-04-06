@@ -33,88 +33,55 @@
 }
 
 :root {
-  /* Light Professional Theme */
-  --background: #FFFFFF;
-  --foreground: #0F172A;
-  /* Deep Slate for maximum readability */
+  /* TailAdmin Light Theme */
+  --background: #F1F5F9;
+  --foreground: #64748B;
+  
+  --glass-surface: #FFFFFF;
+  --glass-border: #E2E8F0;
+  --glass-text: #1C2434;
+  --glass-radius: 10px;
+  --glass-hover: rgba(60, 80, 224, 0.05);
 
-  --glass-surface: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(15, 23, 42, 0.08);
-  --glass-text: #0F172A;
-  --glass-radius: 1rem;
-  --glass-hover: rgba(0, 100, 210, 0.03);
-
-  --primary: #0064D2;
-  /* Professional Tiket Blue */
+  --primary: #3C50E0;
   --primary-foreground: #FFFFFF;
 
   --muted: #F8FAFC;
-  /* Slate 50 */
   --muted-foreground: #64748B;
-  /* Slate 500 */
 
-  --accent: #00BAFF;
-  /* Fresh Sky Blue */
+  --accent: #80CAEE;
   --accent-foreground: #FFFFFF;
 
   --border: #E2E8F0;
-  /* Slate 200 */
 }
 
-/* .dark {
-  --background: #0B1120;
-  --foreground: #F8FAFC;
-
-  --glass-surface: rgba(15, 23, 42, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.08);
+.dark {
+  /* TailAdmin Dark Theme */
+  --background: #1A222C;
+  --foreground: #8A99AF;
+  
+  --glass-surface: #24303F;
+  --glass-border: #313D4A;
   --glass-text: #FFFFFF;
-  --glass-radius: 1.25rem;
+  --glass-radius: 10px;
   --glass-hover: rgba(255, 255, 255, 0.05);
 
-  --primary: #3B82F6;
-  --primary-foreground: #FFFFFF;
-
-  --muted: #1E293B;
-  --muted-foreground: #94A3B8;
-
-  --accent: #FACC15;
-  --accent-foreground: #0B1120;
-} */
-
-.superadmin-theme {
-  --background: #f8fafc;
-  --foreground: #020617;
-  
-  --glass-surface: #ffffff;
-  --glass-border: rgba(15, 23, 42, 0.1);
-  --glass-text: #020617;
-  --glass-radius: 1.5rem;
-  --glass-hover: rgba(59, 130, 246, 0.05);
-
-  --primary: #2563EB;
+  --primary: #3C50E0;
   --primary-foreground: #ffffff;
 
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
+  --muted: #24303F;
+  --muted-foreground: #8A99AF;
 
-  --accent: #3B82F6;
+  --accent: #3BA2B8;
   --accent-foreground: #ffffff;
-}
 
+  --border: #313D4A;
+}
 
 @layer base {
   body {
-    @apply bg-background text-foreground transition-colors duration-500 font-sans antialiased;
-    background-image:
-      radial-gradient(at 0% 0%, hsla(210, 100%, 98%, 1) 0, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(200, 100%, 95%, 1) 0, transparent 50%);
+    @apply bg-[var(--background)] text-[var(--foreground)] transition-colors duration-500 font-sans antialiased;
   }
-
-  /* .dark body {
-    background-image:
-      radial-gradient(at 0% 0%, hsla(220, 100%, 10%, 0.5) 0, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(210, 100%, 10%, 0.5) 0, transparent 50%);
-  } */
 }
 
 @layer components {

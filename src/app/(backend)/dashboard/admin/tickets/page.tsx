@@ -177,7 +177,7 @@ export default function TicketManagementPage() {
             {/* Header */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-sky-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_var(--color-primary)]">
+                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-primary to-sky-500 flex items-center justify-center text-[var(--foreground)] shadow-[0_0_30px_-5px_var(--color-primary)]">
                         <TicketIcon size={32} />
                     </div>
                     <div>
@@ -197,7 +197,7 @@ export default function TicketManagementPage() {
                     </div>
                     <button
                         onClick={() => { resetForm(); setIsCreateModalOpen(true); }}
-                        className="bg-primary text-white font-black px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
+                        className="bg-primary text-[var(--foreground)] font-black px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
                     >
                         <Plus size={20} /> Buat Tiket
                     </button>
@@ -207,13 +207,13 @@ export default function TicketManagementPage() {
             {/* Controls */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-muted border border-glass-border rounded-3xl p-3 shadow-2xl">
                 <div className="md:col-span-2 relative group">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30" size={18} />
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" size={18} />
                     <input
                         type="text"
                         placeholder="Cari nama tiket atau kategori..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none"
+                        className="w-full bg-white/70 dark:bg-[var(--background)]/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none"
                     />
                 </div>
                 <div className="relative">
@@ -221,7 +221,7 @@ export default function TicketManagementPage() {
                     <select
                         value={selectedEventFilter}
                         onChange={(e) => setSelectedEventFilter(e.target.value)}
-                        className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-xl py-3 pl-10 pr-4 text-sm text-glass-text font-bold outline-none appearance-none"
+                        className="w-full bg-white/70 dark:bg-[var(--background)]/40 border border-glass-border rounded-xl py-3 pl-10 pr-4 text-sm text-glass-text font-bold outline-none appearance-none"
                     >
                         <option value="all">Semua Event</option>
                         {events.map(event => (
@@ -242,7 +242,7 @@ export default function TicketManagementPage() {
                 {loading && tickets.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-4xl border border-glass-border">
                         <Loader2 className="animate-spin mb-6 text-primary" size={48} />
-                        <p className="text-lg font-bold text-glass-text/40">Menghubungkan ke Pusat Penjualan...</p>
+                        <p className="text-lg font-bold text-[var(--muted-foreground)]">Menghubungkan ke Pusat Penjualan...</p>
                     </div>
                 ) : (
                     <div className="glass-card overflow-hidden border-glass-border rounded-4xl shadow-2xl">
@@ -280,7 +280,7 @@ export default function TicketManagementPage() {
                                         <div className="space-y-1">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xs font-black text-glass-text">{item.sold} / {item.quota}</span>
-                                                <span className="text-[10px] text-glass-text/40 font-bold uppercase tracking-widest">Sisa: {item.quota - item.sold}</span>
+                                                <span className="text-[10px] text-[var(--muted-foreground)] font-bold uppercase tracking-widest">Sisa: {item.quota - item.sold}</span>
                                             </div>
                                             <div className="w-24 h-1.5 bg-muted rounded-full overflow-hidden border border-glass-border">
                                                 <div
@@ -311,13 +311,13 @@ export default function TicketManagementPage() {
                                         <div className="flex items-center gap-3">
                                             <button
                                                 onClick={() => handleEditOpen(item)}
-                                                className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-glass-text/40 hover:text-primary transition-all border border-glass-border"
+                                                className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-glass-hover rounded-xl text-[var(--muted-foreground)] hover:text-primary transition-all border border-glass-border"
                                             >
                                                 <Edit2 size={16} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(item.id)}
-                                                className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-glass-text/40 hover:text-rose-500 transition-all border border-glass-border"
+                                                className="h-10 w-10 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-[var(--muted-foreground)] hover:text-rose-500 transition-all border border-glass-border"
                                             >
                                                 <Trash2 size={16} />
                                             </button>
@@ -334,14 +334,14 @@ export default function TicketManagementPage() {
             <AnimatePresence>
                 {(isCreateModalOpen || isEditModalOpen) && (
                     <div className="fixed inset-0 z-100 flex items-center justify-center p-6 overflow-y-auto">
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }} className="fixed inset-0 bg-black/95 backdrop-blur-2xl" />
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }} className="fixed inset-0 bg-[var(--background)]/95 backdrop-blur-2xl" />
                         <motion.div initial={{ opacity: 0, scale: 0.9, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 30 }} className="relative w-full max-w-2xl bg-background border border-glass-border rounded-[3rem] p-10 shadow-2xl my-auto">
                             <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-primary to-sky-400" />
-                            <button onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }} className="absolute top-8 right-8 text-glass-text/20 hover:text-white transition-all"><X size={24} /></button>
+                            <button onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }} className="absolute top-8 right-8 text-glass-text/20 hover:text-[var(--foreground)] transition-all"><X size={24} /></button>
 
                             <div className="mb-8">
                                 <h2 className="text-3xl font-black text-glass-text tracking-tight uppercase italic">{isEditModalOpen ? 'Edit' : 'Buat'} <span className="text-primary">Tiket</span></h2>
-                                <p className="text-glass-text/40 font-medium tracking-tight">Konfigurasi parameter penjualan dan akses tiket.</p>
+                                <p className="text-[var(--muted-foreground)] font-medium tracking-tight">Konfigurasi parameter penjualan dan akses tiket.</p>
                             </div>
 
                             <form onSubmit={(e) => handleSubmit(e, isEditModalOpen)} className="grid grid-cols-2 gap-6">
@@ -358,8 +358,8 @@ export default function TicketManagementPage() {
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Status</label>
                                             <div className="flex gap-2">
-                                                <button type="button" onClick={() => setFormData({ ...formData, isActive: true })} className={cn("flex-1 py-3 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all", formData.isActive ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted border-glass-border text-glass-text/40")}>Aktif</button>
-                                                <button type="button" onClick={() => setFormData({ ...formData, isActive: false })} className={cn("flex-1 py-3 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all", !formData.isActive ? "bg-rose-500/10 text-rose-500 border-rose-500/20" : "bg-muted border-glass-border text-glass-text/40")}>Mati</button>
+                                                <button type="button" onClick={() => setFormData({ ...formData, isActive: true })} className={cn("flex-1 py-3 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all", formData.isActive ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted border-glass-border text-[var(--muted-foreground)]")}>Aktif</button>
+                                                <button type="button" onClick={() => setFormData({ ...formData, isActive: false })} className={cn("flex-1 py-3 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all", !formData.isActive ? "bg-rose-500/10 text-rose-500 border-rose-500/20" : "bg-muted border-glass-border text-[var(--muted-foreground)]")}>Mati</button>
                                             </div>
                                         </div>
                                     </div>
@@ -424,7 +424,7 @@ export default function TicketManagementPage() {
                                 </div>
 
                                 <div className="col-span-2 pt-6">
-                                    <button type="submit" disabled={submitting} className="w-full bg-primary text-white font-black py-4 rounded-2xl shadow-xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-all text-base tracking-tight disabled:opacity-50 uppercase">
+                                    <button type="submit" disabled={submitting} className="w-full bg-primary text-[var(--foreground)] font-black py-4 rounded-2xl shadow-xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-all text-base tracking-tight disabled:opacity-50 uppercase">
                                         {submitting ? <Loader2 className="animate-spin" size={24} /> : <>{isEditModalOpen ? 'Simpan Perubahan' : 'Terbitkan Tiket'} <ArrowRight size={20} /></>}
                                     </button>
                                 </div>

@@ -49,7 +49,7 @@ export function StatisticCard({
             <div>
                 <p className="text-glass-text/70 text-sm font-bold uppercase tracking-wide">{label}</p>
                 <h3 className="text-3xl font-black text-glass-text mt-1 tracking-tight">{value}</h3>
-                <p className="text-sm font-medium text-glass-text/50 mt-2 leading-relaxed">{description}</p>
+                <p className="text-sm font-medium text-[var(--muted-foreground)] mt-2 leading-relaxed">{description}</p>
             </div>
         </GlassCard>
     );

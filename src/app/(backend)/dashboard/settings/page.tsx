@@ -28,7 +28,7 @@ export default function SettingsPage() {
                     </div>
                     <div>
                         <h3 className="text-xl font-bold">Profile Information</h3>
-                        <p className="text-sm text-glass-text/40">Update your account details and public profile.</p>
+                        <p className="text-sm text-[var(--muted-foreground)]">Update your account details and public profile.</p>
                     </div>
                 </div>
 
@@ -69,7 +69,7 @@ export default function SettingsPage() {
                         <div className="flex items-center justify-between">
                             <span className="text-sm">Email Notifications</span>
                             <div className="h-6 w-11 bg-primary rounded-full relative p-1 cursor-pointer">
-                                <div className="h-4 w-4 bg-white dark:bg-black rounded-full absolute right-1" />
+                                <div className="h-4 w-4 bg-white dark:bg-[var(--background)] rounded-full absolute right-1" />
                             </div>
                         </div>
                         <div className="flex items-center justify-between">

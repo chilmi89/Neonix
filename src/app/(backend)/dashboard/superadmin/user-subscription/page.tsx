@@ -142,7 +142,7 @@ export default function UserSubscriptionAdminPage() {
         >
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
                 <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-[0_0_30px_-5px_var(--color-indigo-500)] overflow-hidden relative group">
+                    <div className="h-16 w-16 rounded-4xl bg-linear-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-[var(--foreground)] shadow-[0_0_30px_-5px_var(--color-indigo-500)] overflow-hidden relative group">
                         <Activity size={32} />
                     </div>
                     <div>
@@ -156,7 +156,7 @@ export default function UserSubscriptionAdminPage() {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => setIsCreateModalOpen(true)}
-                        className="bg-primary text-white px-6 py-3 rounded-2xl font-black shadow-xl shadow-primary/20 flex items-center gap-2 hover:brightness-110 transition-all"
+                        className="bg-primary text-[var(--foreground)] px-6 py-3 rounded-2xl font-black shadow-xl shadow-primary/20 flex items-center gap-2 hover:brightness-110 transition-all"
                     >
                         <Plus size={20} /> Tambah Manual
                     </button>
@@ -172,13 +172,13 @@ export default function UserSubscriptionAdminPage() {
             <div className="space-y-6">
                 <div className="flex items-center gap-4 bg-muted border border-glass-border rounded-3xl p-2 shadow-2xl">
                     <div className="relative flex-1 group">
-                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-glass-text/30 group-focus-within:text-primary transition-colors" size={18} />
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)] group-focus-within:text-primary transition-colors" size={18} />
                         <input
                             type="text"
                             placeholder="Cari user, tenant, atau plan..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/70 dark:bg-black/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none focus:bg-white dark:focus:bg-black/60 transition-all"
+                            className="w-full bg-white/70 dark:bg-[var(--background)]/40 border border-glass-border rounded-xl py-3 pl-12 pr-4 text-sm text-glass-text font-bold outline-none focus:bg-white dark:focus:bg-[var(--background)]/60 transition-all"
                         />
                     </div>
                     <button
@@ -193,7 +193,7 @@ export default function UserSubscriptionAdminPage() {
                     {loading && subscriptions.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-4xl border border-glass-border shadow-2xl">
                             <Loader2 className="animate-spin mb-6 text-primary" size={48} />
-                            <p className="text-lg font-bold text-glass-text/40">Mengambil database langganan...</p>
+                            <p className="text-lg font-bold text-[var(--muted-foreground)]">Mengambil database langganan...</p>
                         </div>
                     ) : (
                         <div className="glass-card overflow-hidden border-glass-border rounded-4xl shadow-2xl">
@@ -210,8 +210,8 @@ export default function UserSubscriptionAdminPage() {
                                                     <span className="font-black text-glass-text text-sm uppercase">{item.userName || `User #${item.userId}`}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <Building2 size={12} className={cn("text-glass-text/40", !item.tenantName && "text-rose-400/40")} />
-                                                    <span className={cn("text-[10px] font-bold", item.tenantName ? "text-glass-text/40 italic" : "text-rose-400 uppercase tracking-widest")}>
+                                                    <Building2 size={12} className={cn("text-[var(--muted-foreground)]", !item.tenantName && "text-rose-400/40")} />
+                                                    <span className={cn("text-[10px] font-bold", item.tenantName ? "text-[var(--muted-foreground)] italic" : "text-rose-400 uppercase tracking-widest")}>
                                                         {item.tenantName || "Waiting for Tenant Registration"}
                                                     </span>
                                                 </div>
@@ -230,7 +230,7 @@ export default function UserSubscriptionAdminPage() {
                                     {
                                         header: "VALIDITY",
                                         accessor: (item) => (
-                                            <div className="flex flex-col text-[10px] font-bold text-glass-text/40">
+                                            <div className="flex flex-col text-[10px] font-bold text-[var(--muted-foreground)]">
                                                 <span className="flex items-center gap-1"><Calendar size={10} /> {formatRelativeDate(item.startDate)}</span>
                                                 <span className="flex items-center gap-1 text-rose-400/60"><Clock size={10} /> {formatRelativeDate(item.endDate)}</span>
                                             </div>
@@ -252,7 +252,7 @@ export default function UserSubscriptionAdminPage() {
                                         accessor: (item) => (
                                             <button
                                                 onClick={() => handleDelete(item.id)}
-                                                className="h-9 w-9 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-glass-text/40 hover:text-rose-500 transition-all border border-glass-border"
+                                                className="h-9 w-9 flex items-center justify-center bg-muted hover:bg-rose-500/10 rounded-xl text-[var(--muted-foreground)] hover:text-rose-500 transition-all border border-glass-border"
                                             >
                                                 <Trash2 size={16} />
                                             </button>
@@ -268,37 +268,37 @@ export default function UserSubscriptionAdminPage() {
             {/* Modal Manual Create */}
             <AnimatePresence>
                 {isCreateModalOpen && (
-                    <div className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl">
+                    <div className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-[var(--background)]/90 backdrop-blur-2xl">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 30 }}
                             className="relative w-full max-w-lg bg-background border border-glass-border rounded-[2.5rem] p-10 shadow-2xl"
                         >
-                            <button onClick={() => setIsCreateModalOpen(false)} className="absolute top-8 right-8 text-white/20 hover:text-white transition-all"><X size={24} /></button>
-                            <h2 className="text-2xl font-black text-white mb-6 uppercase tracking-tight">Manual Subscription</h2>
+                            <button onClick={() => setIsCreateModalOpen(false)} className="absolute top-8 right-8 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all"><X size={24} /></button>
+                            <h2 className="text-2xl font-black text-[var(--foreground)] mb-6 uppercase tracking-tight">Manual Subscription</h2>
                             <form onSubmit={handleCreateSubmit} className="space-y-5">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary">User ID</label>
-                                        <input type="number" onChange={(e)=>setNewSub({...newSub, userId: Number(e.target.value)})} className="w-full bg-muted border border-glass-border rounded-xl px-4 py-3 text-sm font-bold text-white outline-none focus:border-primary/50" required />
+                                        <input type="number" onChange={(e)=>setNewSub({...newSub, userId: Number(e.target.value)})} className="w-full bg-muted border border-glass-border rounded-xl px-4 py-3 text-sm font-bold text-[var(--foreground)] outline-none focus:border-primary/50" required />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary">Tenant ID</label>
-                                        <input type="number" onChange={(e)=>setNewSub({...newSub, tenantId: Number(e.target.value)})} className="w-full bg-muted border border-glass-border rounded-xl px-4 py-3 text-sm font-bold text-white outline-none focus:border-primary/50" required />
+                                        <input type="number" onChange={(e)=>setNewSub({...newSub, tenantId: Number(e.target.value)})} className="w-full bg-muted border border-glass-border rounded-xl px-4 py-3 text-sm font-bold text-[var(--foreground)] outline-none focus:border-primary/50" required />
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Plan ID</label>
-                                        <input type="number" onChange={(e)=>setNewSub({...newSub, planId: Number(e.target.value)})} className="w-full bg-muted border border-glass-border rounded-xl px-4 py-3 text-sm font-bold text-white outline-none focus:border-indigo-500/50" required />
+                                        <input type="number" onChange={(e)=>setNewSub({...newSub, planId: Number(e.target.value)})} className="w-full bg-muted border border-glass-border rounded-xl px-4 py-3 text-sm font-bold text-[var(--foreground)] outline-none focus:border-indigo-500/50" required />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Role ID</label>
-                                        <input type="number" onChange={(e)=>setNewSub({...newSub, roleId: Number(e.target.value)})} className="w-full bg-muted border border-glass-border rounded-xl px-4 py-3 text-sm font-bold text-white outline-none focus:border-indigo-500/50" required />
+                                        <input type="number" onChange={(e)=>setNewSub({...newSub, roleId: Number(e.target.value)})} className="w-full bg-muted border border-glass-border rounded-xl px-4 py-3 text-sm font-bold text-[var(--foreground)] outline-none focus:border-indigo-500/50" required />
                                     </div>
                                 </div>
-                                <button type="submit" disabled={submitting} className="w-full bg-primary text-white font-black py-4 rounded-xl shadow-xl hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+                                <button type="submit" disabled={submitting} className="w-full bg-primary text-[var(--foreground)] font-black py-4 rounded-xl shadow-xl hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
                                     {submitting ? <Loader2 className="animate-spin" /> : <>Buat Langganan <CheckCircle2 size={20} /></>}
                                 </button>
                             </form>
@@ -310,15 +310,15 @@ export default function UserSubscriptionAdminPage() {
             {/* Modal Update Status */}
             <AnimatePresence>
                 {isStatusModalOpen && selectedSub && (
-                    <div className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl">
+                    <div className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-[var(--background)]/90 backdrop-blur-2xl">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 30 }}
                             className="relative w-full max-w-sm bg-background border border-glass-border rounded-[2.5rem] p-10 shadow-2xl text-center"
                         >
-                            <h3 className="text-xl font-black text-white mb-2 uppercase">Update Status</h3>
-                            <p className="text-xs text-white/40 mb-8">Ubah status langganan untuk <span className="text-primary">{selectedSub.userName}</span></p>
+                            <h3 className="text-xl font-black text-[var(--foreground)] mb-2 uppercase">Update Status</h3>
+                            <p className="text-xs text-[var(--muted-foreground)] mb-8">Ubah status langganan untuk <span className="text-primary">{selectedSub.userName}</span></p>
                             <div className="grid grid-cols-1 gap-3">
                                 {["ACTIVE", "CANCELLED", "EXPIRED"].map(status => (
                                     <button
@@ -327,14 +327,14 @@ export default function UserSubscriptionAdminPage() {
                                         disabled={submitting}
                                         className={cn(
                                             "w-full py-4 rounded-2xl font-black transition-all active:scale-[0.98] flex items-center justify-center gap-3 border",
-                                            status === selectedSub.status ? "bg-white/5 border-white/20 text-white/20 pointer-events-none" : "hover:bg-primary hover:text-white border-transparent bg-muted"
+                                            status === selectedSub.status ? "bg-[var(--glass-hover)] border-[var(--glass-border)] text-[var(--muted-foreground)] pointer-events-none" : "hover:bg-primary hover:text-[var(--foreground)] border-transparent bg-muted"
                                         )}
                                     >
                                         {status} {status === "ACTIVE" ? <CheckCircle2 size={16} /> : status === "EXPIRED" ? <AlertCircle size={16} /> : <X size={16} />}
                                     </button>
                                 ))}
                             </div>
-                            <button onClick={()=>setIsStatusModalOpen(false)} className="mt-6 text-[10px] font-black uppercase text-white/30 hover:text-white tracking-widest transition-all">Tutup</button>
+                            <button onClick={()=>setIsStatusModalOpen(false)} className="mt-6 text-[10px] font-black uppercase text-[var(--muted-foreground)] hover:text-[var(--foreground)] tracking-widest transition-all">Tutup</button>
                         </motion.div>
                     </div>
                 )}

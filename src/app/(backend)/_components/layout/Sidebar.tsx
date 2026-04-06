@@ -170,15 +170,13 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
         router.push("/");
     };
 
-    const isSuperAdmin = pathname?.startsWith("/dashboard/superadmin");
-
     return (
         <motion.aside
             initial={false}
-            animate={{ width: isCollapsed ? 80 : 260 }}
+            animate={{ width: isCollapsed ? 80 : 280 }}
             className={cn(
-                "h-screen sticky top-0 z-40 flex flex-col border-r overflow-hidden shadow-2xl transition-all duration-500",
-                isSuperAdmin ? "bg-blue-900 border-blue-800" : "bg-[#080808] border-white/5"
+                "h-screen sticky top-0 z-40 flex flex-col border-r overflow-hidden transition-colors duration-500",
+                "bg-[var(--glass-surface)] border-[var(--glass-border)] drop-shadow-1"
             )}
         >
             {/* Header Area */}
@@ -189,24 +187,23 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                         animate={{ opacity: 1, x: 0 }}
                         className="flex flex-col"
                     >
-                        <span className="text-xl font-black bg-gradient-to-r from-neon-pink via-neon-cyan to-neon-pink bg-clip-text text-transparent tracking-tighter">
-                            NEONIX.
+                        <span className="text-2xl font-black text-[var(--foreground)] tracking-tighter">
+                            TailAdmin
                         </span>
-                        <span className="text-[9px] font-black text-white/10 uppercase tracking-[0.4em] mt-0.5">Control Grid</span>
+                        <span className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.4em] mt-0.5">Control Grid</span>
                     </motion.div>
                 )}
                 <button
                     onClick={onToggle}
-                    className="p-2.5 hover:bg-white/5 rounded-xl transition-all border border-transparent hover:border-white/10 text-white/20 hover:text-white"
+                    className="p-2.5 hover:bg-[var(--glass-hover)] rounded-xl transition-all border border-transparent hover:border-[var(--glass-border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                 >
-                    {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+                    {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                 </button>
             </div>
 
             {/* Main Navigation - Scrollable Area */}
             <nav className={cn(
-                "flex-1 px-4 py-2 space-y-6 overflow-x-hidden transition-all overflow-y-auto custom-scrollbar",
-                isCollapsed && "scrollbar-hide"
+                "flex-1 px-4 py-2 space-y-6 overflow-x-hidden transition-all overflow-y-auto scrollbar-hide",
             )}>
                 {sections.map((section) => {
                     const isExpanded = expandedSections.includes(section.label);
@@ -220,17 +217,17 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                                     className="flex items-center justify-between w-full px-3 mb-1 group"
                                 >
                                     <span className={cn(
-                                        "text-[9px] font-black uppercase tracking-[0.3em] transition-colors",
-                                        hasActiveChild ? "text-neon-pink" : "text-white/15 group-hover:text-white/30"
+                                        "text-sm font-semibold uppercase tracking-wider transition-colors",
+                                        hasActiveChild ? "text-[var(--foreground)]" : "text-[var(--muted-foreground)] group-hover:text-[var(--foreground)]"
                                     )}>
                                         {section.label}
                                     </span>
                                     <ChevronDown
-                                        size={12}
+                                        size={18}
                                         className={cn(
-                                            "text-white/10 transition-transform duration-500",
+                                            "text-[var(--muted-foreground)] transition-transform duration-500 group-hover:text-[var(--foreground)]",
                                             isExpanded ? "rotate-180" : "rotate-0",
-                                            hasActiveChild && "text-neon-pink/40"
+                                            hasActiveChild && "text-[var(--foreground)]"
                                         )}
                                     />
                                 </button>
@@ -252,41 +249,34 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                                             return (
                                                 <Link key={item.href} href={item.href}>
                                                     <div className={cn(
-                                                        "flex items-center p-2 rounded-xl transition-all duration-300 group relative",
+                                                        "flex items-center p-2 rounded transition-colors duration-300 group relative",
                                                         isActive
-                                                            ? "bg-neon-pink/5 text-neon-pink border border-neon-pink/10"
-                                                            : "text-white/30 hover:text-white hover:bg-white/[0.03] border border-transparent"
+                                                            ? "bg-[var(--muted)] text-[var(--primary)]"
+                                                            : "text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--glass-hover)]"
                                                     )}>
                                                         <div className={cn(
-                                                            "p-2 rounded-lg transition-all duration-300",
+                                                            "p-2 rounded transition-colors duration-300 flex items-center justify-center",
                                                             isActive
-                                                                ? "bg-neon-pink text-black scale-105 shadow-[0_0_15px_rgba(255,0,255,0.3)]"
-                                                                : "bg-white/5 group-hover:bg-white/10"
+                                                                ? "text-[var(--primary)]"
+                                                                : "group-hover:text-[var(--foreground)]"
                                                         )}>
-                                                            <Icon size={16} />
+                                                            <Icon size={20} />
                                                         </div>
 
                                                         {!isCollapsed && (
                                                             <motion.span
                                                                 initial={{ opacity: 0, x: -5 }}
                                                                 animate={{ opacity: 1, x: 0 }}
-                                                                className="ml-3 font-bold text-[11px] whitespace-nowrap tracking-tight"
+                                                                className="ml-3 font-medium text-base whitespace-nowrap"
                                                             >
                                                                 {item.label}
                                                             </motion.span>
                                                         )}
 
                                                         {isCollapsed && (
-                                                            <div className="absolute left-full ml-4 px-3 py-1.5 bg-[#0A0A0A] border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl text-[9px] font-black uppercase tracking-widest text-white">
+                                                            <div className="absolute left-full ml-4 px-3 py-1.5 bg-[var(--glass-surface)] border border-[var(--glass-border)] rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 text-xs font-semibold text-[var(--foreground)] shadow-lg">
                                                                 {item.label}
                                                             </div>
-                                                        )}
-
-                                                        {isActive && !isCollapsed && (
-                                                            <motion.div
-                                                                layoutId="active-nav-dot"
-                                                                className="absolute right-3 w-1 h-1 rounded-full bg-neon-pink shadow-[0_0_10px_#ff00ff]"
-                                                            />
                                                         )}
                                                     </div>
                                                 </Link>
@@ -301,7 +291,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
             </nav>
 
             {/* Bottom Account Section with Dropup */}
-            <div className="p-4 mt-auto border-t border-white/5 bg-[#0A0A0A]/50 relative" ref={dropupRef}>
+            <div className="p-4 mt-auto border-t border-[var(--glass-border)] bg-[var(--glass-surface)] relative transition-colors duration-500" ref={dropupRef}>
                 <AnimatePresence>
                     {isProfileOpen && (
                         <motion.div
@@ -309,17 +299,15 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                             animate={{ opacity: 1, y: -8, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
                             className={cn(
-                                "absolute bottom-full left-4 bg-[#0F0F0F] border border-white/10 rounded-2xl shadow-2xl p-2 z-[60] mb-2",
+                                "absolute bottom-full left-4 bg-[var(--glass-surface)] border border-[var(--glass-border)] rounded shadow-2xl p-2 z-[60] mb-2",
                                 isCollapsed ? "min-w-[48px]" : "min-w-[228px]"
                             )}
                         >
                             <Link href="/dashboard/settings" onClick={() => setIsProfileOpen(false)}>
-                                <div className="flex items-center gap-3 p-2.5 hover:bg-white/5 rounded-xl transition-all group">
-                                    <div className="p-2 rounded-lg bg-white/5 group-hover:bg-neon-cyan group-hover:text-black transition-all">
-                                        <Settings size={16} />
-                                    </div>
+                                <div className="flex items-center gap-3 p-2.5 hover:bg-[var(--glass-hover)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] rounded transition-all group">
+                                    <Settings size={20} />
                                     {!isCollapsed && (
-                                        <span className="text-[11px] font-bold text-white/50 group-hover:text-white">Settings</span>
+                                        <span className="text-base font-medium">Settings</span>
                                     )}
                                 </div>
                             </Link>
@@ -328,13 +316,11 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                                     handleLogout();
                                     setIsProfileOpen(false);
                                 }}
-                                className="flex items-center gap-3 p-2.5 hover:bg-rose-500/10 rounded-xl transition-all group w-full"
+                                className="flex items-center gap-3 p-2.5 hover:bg-[var(--glass-hover)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] rounded transition-all group w-full"
                             >
-                                <div className="p-2 rounded-lg bg-rose-500/10 text-rose-500 group-hover:bg-rose-500 group-hover:text-white transition-all">
-                                    <LogOut size={16} />
-                                </div>
+                                <LogOut size={20} />
                                 {!isCollapsed && (
-                                    <span className="text-[11px] font-bold text-white/50 group-hover:text-rose-500">Log Out</span>
+                                    <span className="text-base font-medium">Log Out</span>
                                 )}
                             </button>
                         </motion.div>
@@ -344,29 +330,29 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                 <button
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
                     className={cn(
-                        "w-full flex items-center gap-3 p-2 rounded-2xl transition-all border border-transparent",
-                        isProfileOpen ? "bg-white/5 border-white/10" : "hover:bg-white/5"
+                        "w-full flex items-center gap-3 p-2 rounded transition-all border border-transparent",
+                        isProfileOpen ? "bg-[var(--muted)] text-[var(--foreground)]" : "hover:bg-[var(--glass-hover)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                     )}
                 >
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-neon-pink/20 to-neon-cyan/20 border border-white/10 flex items-center justify-center shrink-0">
-                        <User size={20} className="text-white/40" />
+                    <div className="w-10 h-10 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] flex items-center justify-center shrink-0">
+                        <User size={20} />
                     </div>
 
                     {!isCollapsed && (
                         <div className="flex-1 flex flex-col items-start overflow-hidden">
-                            <span className="text-[11px] font-bold text-white truncate w-full text-left">
+                            <span className="text-base font-medium text-[var(--foreground)] truncate w-full text-left">
                                 {user?.name || user?.username || "Admin User"}
                             </span>
-                            <span className="text-[9px] font-black text-white/20 uppercase tracking-widest leading-none">
+                            <span className="text-sm text-[var(--muted-foreground)] truncate w-full text-left">
                                 {user?.roles?.[0]?.name || "System Core"}
                             </span>
                         </div>
                     )}
 
                     {!isCollapsed && (
-                        <MoreVertical size={14} className={cn(
-                            "text-white/20 transition-transform",
-                            isProfileOpen ? "rotate-90 text-white" : ""
+                        <MoreVertical size={18} className={cn(
+                            "transition-transform",
+                            isProfileOpen ? "rotate-90 text-[var(--foreground)]" : ""
                         )} />
                     )}
                 </button>

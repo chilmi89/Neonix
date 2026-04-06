@@ -60,7 +60,7 @@ export default function SuperAdminDashboardPage() {
                     <button className="flex-1 lg:flex-none bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/20 px-6 py-3 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 active:scale-95 shadow-lg shadow-rose-500/5">
                         <ShieldAlert size={18} /> Kunci Darurat
                     </button>
-                    <button className="flex-1 lg:flex-none bg-primary text-white px-6 py-3 rounded-2xl font-black shadow-xl shadow-primary/20 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+                    <button className="flex-1 lg:flex-none bg-primary text-[var(--foreground)] px-6 py-3 rounded-2xl font-black shadow-xl shadow-primary/20 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
                         <Activity size={18} /> Lihat Status
                     </button>
                 </div>
@@ -96,7 +96,7 @@ export default function SuperAdminDashboardPage() {
                         </button>
                     </div>
 
-                    <div className="glass-card overflow-hidden border-white/10 rounded-3xl shadow-2xl">
+                    <div className="glass-card overflow-hidden border-[var(--glass-border)] rounded-3xl shadow-2xl">
                         <DataTable
                             title="Registri Audit Global"
                             data={systemLogs}
@@ -119,7 +119,7 @@ export default function SuperAdminDashboardPage() {
                                 {
                                     header: "WAKTU",
                                     accessor: (item) => (
-                                        <span className="text-xs text-glass-text/40 font-mono tracking-tight">{item.timestamp}</span>
+                                        <span className="text-xs text-[var(--muted-foreground)] font-mono tracking-tight">{item.timestamp}</span>
                                     )
                                 },
                                 {

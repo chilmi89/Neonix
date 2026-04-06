@@ -60,7 +60,7 @@ export default function UsersPage() {
             {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 bg-muted rounded-4xl border border-glass-border">
                     <Loader2 className="animate-spin mb-6 text-emerald-500" size={48} />
-                    <p className="text-lg font-bold text-glass-text/40">
+                    <p className="text-lg font-bold text-[var(--muted-foreground)]">
                         Memuat data user…
                     </p>
                 </div>
@@ -83,8 +83,8 @@ export default function UsersPage() {
                                     <div>
                                         <p className="font-black text-sm text-glass-text leading-none">{user.name}</p>
                                         <div className="flex items-center gap-1.5 mt-1.5">
-                                            <Mail size={10} className="text-glass-text/30" />
-                                            <p className="text-[10px] text-glass-text/40 font-medium">{user.email}</p>
+                                            <Mail size={10} className="text-[var(--muted-foreground)]" />
+                                            <p className="text-[10px] text-[var(--muted-foreground)] font-medium">{user.email}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +95,7 @@ export default function UsersPage() {
                             accessor: (user: User) => (
                                 <div className="flex flex-wrap gap-1.5">
                                     {(user.roles || []).map((role: any) => (
-                                        <span key={role.id || role} className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-glass-text/60 italic">
+                                        <span key={role.id || role} className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 bg-[var(--glass-hover)] border border-[var(--glass-border)] rounded-lg text-glass-text/60 italic">
                                             {typeof role === 'string' ? role : role.name}
                                         </span>
                                     ))}
@@ -108,7 +108,7 @@ export default function UsersPage() {
                         {
                             header: "Join Date",
                             accessor: (user: User) => (
-                                <span className="text-xs font-bold text-glass-text/40">
+                                <span className="text-xs font-bold text-[var(--muted-foreground)]">
                                     {user.createdAt ? new Date(user.createdAt).toLocaleDateString('id-ID', {
                                         day: 'numeric',
                                         month: 'short',
