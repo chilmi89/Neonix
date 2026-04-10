@@ -28,7 +28,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { getActiveSubscriptionPlans } from "@/services/subscriptionPlanService";
-import { subscribeToPlan, getPublicSubscriptionCount } from "@/services/userSubscriptionService";
+import { subscribeToPlan, getPublicSubscriptionCount, getAllUserSubscriptions } from "@/services/userSubscriptionService";
 import { SubscriptionPlan } from "@/types/auth";
 import { useUser } from "@/context/UserContext";
 
@@ -74,7 +74,7 @@ export default function VipAccessPage() {
                     setPlans(DEFAULT_PLANS as any);
                 }
 
-                setTotalSubs(subsRes.data?.length || 0);
+                setTotalSubs(countRes.data || 0);
             } catch (err) {
                 console.error("Failed to load VIP data:", err);
                 setPlans(DEFAULT_PLANS as any);
