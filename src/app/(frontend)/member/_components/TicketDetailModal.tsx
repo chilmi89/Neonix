@@ -57,7 +57,7 @@ export function TicketDetailModal({ isOpen, onClose, ticket }: TicketDetailModal
                             <X size={20} />
                         </button>
 
-                        <div className="flex-1 p-10 flex flex-col justify-center gap-8">
+                        <div className="flex-1 p-10 flex flex-col justify-center gap-8 overflow-y-auto max-h-[90vh]">
                             <div className="space-y-4">
                                 <div className="flex items-center gap-2 mb-2">
                                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
@@ -94,17 +94,49 @@ export function TicketDetailModal({ isOpen, onClose, ticket }: TicketDetailModal
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-[10px] font-black text-foreground/30 uppercase tracking-widest mb-1">Pass Code</p>
-                                    <p className="font-mono text-xl font-black tracking-[0.2em] text-primary">NX-749-BF2</p>
+                            {/* Attendee Tickets List */}
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-xs font-black uppercase tracking-widest text-foreground/40">Attendee Tickets ({ticket.attendees?.length || 0})</h3>
+                                    <button
+                                        onClick={() => setShowTransfer(true)}
+                                        className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline"
+                                    >
+                                        Transfer Ticket
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={() => setShowTransfer(true)}
-                                    className="px-8 py-4 bg-muted border border-border text-foreground hover:bg-primary hover:text-white hover:border-primary transition-all rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-sm active:scale-95"
-                                >
-                                    Transfer Ticket
-                                </button>
+
+                                <div className="space-y-4">
+                                    {ticket.attendees?.map((att: any, idx: number) => (
+                                        <div key={att.id} className="bg-muted/50 border border-border rounded-3xl p-6 flex items-center gap-6 group hover:bg-muted transition-colors">
+                                            {/* QR Code */}
+                                            <div className="w-24 h-24 bg-white p-2 rounded-2xl border border-border shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                                                <img 
+                                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${att.qrCode}`} 
+                                                    alt={`QR ${att.attendeeName}`}
+                                                    className="w-full h-full object-contain mix-blend-multiply"
+                                                />
+                                            </div>
+                                            
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-[9px] font-black text-primary uppercase tracking-widest mb-1">Ticket #{idx + 1}</p>
+                                                <h4 className="text-sm font-black text-foreground uppercase truncate">{att.attendeeName}</h4>
+                                                <p className="text-[10px] text-foreground/40 font-medium truncate mb-3">{att.attendeeEmail}</p>
+                                                
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`w-1.5 h-1.5 rounded-full ${att.isCheckedIn ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                                                    <span className="text-[8px] font-black uppercase tracking-widest text-foreground/30">
+                                                        {att.isCheckedIn ? `Checked In: ${new Date(att.checkedInAt).toLocaleTimeString()}` : 'Not Checked In'}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <button className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-foreground/20 group-hover:text-primary transition-colors hover:bg-white shadow-sm">
+                                                <Download size={18} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
 

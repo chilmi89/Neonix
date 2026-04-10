@@ -42,6 +42,10 @@ export interface TicketPurchaseRequest {
     buyerName: string;
     buyerEmail: string;
     quantity: number;
+    attendees?: {
+        name: string;
+        email: string;
+    }[];
 }
 
 export interface TicketPurchaseResponse {

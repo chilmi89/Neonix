@@ -117,3 +117,32 @@ export interface UserSubscription {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface AttendeeTicket {
+    id: number;
+    attendeeName: string;
+    attendeeEmail: string;
+    qrCode: string;
+    isCheckedIn: boolean;
+    checkedInAt?: string;
+}
+
+export interface Transaction {
+    id: number;
+    tenantId: number;
+    eventId: number;
+    eventName: string;
+    ticketId: number;
+    ticketName: string;
+    categoryName: string;
+    buyerName: string;
+    buyerEmail: string;
+    quantity: number;
+    unitPrice: number;
+    totalPrice: number;
+    purchasedAt: string;
+    eventPoster?: string;
+    eventLocation?: string;
+    status: string;
+    attendees?: AttendeeTicket[];
+}

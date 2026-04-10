@@ -1,6 +1,15 @@
 import { API, apiGet } from "@/config/api.config";
 import { ApiResponse } from "@/types/auth";
 
+export interface AttendeeTicketDTO {
+    id: number;
+    attendeeName: string;
+    attendeeEmail: string;
+    qrCode: string;
+    isCheckedIn: boolean;
+    checkedInAt?: string;
+}
+
 export interface TransactionDTO {
     id: number;
     tenantId: number;
@@ -17,6 +26,8 @@ export interface TransactionDTO {
     purchasedAt: string;
     eventPoster?: string;
     eventLocation?: string;
+    status: string;
+    attendees?: AttendeeTicketDTO[];
 }
 
 export const getMemberTransactions = async (): Promise<ApiResponse<TransactionDTO[]>> => {

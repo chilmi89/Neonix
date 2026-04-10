@@ -147,6 +147,7 @@ export const API = {
         getByEvent: (eventId: number | string) => `${API_BASE_URL}/admin/transactions?eventId=${eventId}`,
         summary: `${API_BASE_URL}/admin/transactions/summary`,
         getMember: `${API_BASE_URL}/member/transactions`,
+        checkIn: `${API_BASE_URL}/admin/check-in`,
     },
 
     // Subscription Plans

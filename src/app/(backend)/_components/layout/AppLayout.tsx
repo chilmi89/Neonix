@@ -3,6 +3,7 @@
 import { ReactNode, useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Navbar } from "./Navbar";
+import { QrScannerModal } from "../ui/QrScannerModal";
 import { useUser } from "@/context/UserContext";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -13,6 +14,7 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [isQrModalOpen, setIsQrModalOpen] = useState(false);
     const { user, loading } = useUser();
     const pathname = usePathname();
 
@@ -32,12 +34,19 @@ export function AppLayout({ children }: AppLayoutProps) {
                 <Navbar
                     isSidebarCollapsed={isSidebarCollapsed}
                     onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                    onScanOpen={() => setIsQrModalOpen(true)}
                 />
 
                 <main className="flex-1 p-4 md:p-8 overflow-y-auto">
                     {children}
                 </main>
             </div>
+
+            {/* Global UI Components */}
+            <QrScannerModal 
+                isOpen={isQrModalOpen}
+                onClose={() => setIsQrModalOpen(false)}
+            />
         </div>
     );
 }
