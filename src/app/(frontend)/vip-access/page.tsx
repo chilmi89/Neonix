@@ -132,8 +132,8 @@ export default function VipAccessPage() {
                         transition={{ delay: 0.1 }}
                         className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 tracking-tighter leading-[0.9] uppercase"
                     >
-                        UNLOCK THE<br />
-                        <span className="text-neon-pink drop-shadow-[0_0_30px_rgba(255,0,255,0.4)]">VIP EXPERIENCE</span>
+                        JOIN AS<br />
+                        <span className="text-neon-pink drop-shadow-[0_0_30px_rgba(255,0,255,0.4)]">EVENT ORGANIZER</span>
                     </motion.h1>
 
                     <motion.p
