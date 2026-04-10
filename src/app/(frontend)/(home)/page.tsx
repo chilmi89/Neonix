@@ -8,7 +8,6 @@ export const metadata: Metadata = {
 import { NeonNavbar } from "@/app/(frontend)/_components/layout/NeonNavbar";
 import { NeonHero } from "./_components/NeonHero";
 import { TrendingSection } from "./_components/TrendingSection";
-import { VipSection } from "./_components/VipSection";
 import { NeonFooter } from "@/app/(frontend)/_components/layout/NeonFooter";
 import { LiquidBackground } from "@/app/(frontend)/_components/ui/LiquidBackground";
 import { MobileMockupWidget } from "@/app/(frontend)/_components/ui/MobileMockupWidget";
@@ -22,7 +21,6 @@ export default function Homepage() {
             <main>
                 <NeonHero />
                 <TrendingSection />
-                <VipSection />
             </main>
 
             <NeonFooter />

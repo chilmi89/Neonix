@@ -23,6 +23,7 @@ export default function DashboardPage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState<"profile" | "tickets" | "settings">("tickets");
     const [user, setUser] = useState<any>(null);
+    const [selectedTicket, setSelectedTicket] = useState<any>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -47,7 +48,19 @@ export default function DashboardPage() {
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 overflow-x-hidden font-inter relative">
             <PlasmaBackground />
-            <NeonNavbar />
+
+            <AnimatePresence>
+                {!selectedTicket && (
+                    <motion.div
+                        initial={{ y: -100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -100, opacity: 0 }}
+                        className="fixed top-0 left-0 right-0 z-[60]"
+                    >
+                        <NeonNavbar />
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
                 <div className="grid lg:grid-cols-[280px_1fr] gap-12">
@@ -137,7 +150,10 @@ export default function DashboardPage() {
                                 {activeTab === "profile" ? (
                                     <ProfileSection />
                                 ) : activeTab === "tickets" ? (
-                                    <TicketsHistory />
+                                    <TicketsHistory
+                                        selectedTicket={selectedTicket}
+                                        setSelectedTicket={setSelectedTicket}
+                                    />
                                 ) : (
                                     <SettingsSection />
                                 )}
@@ -147,7 +163,6 @@ export default function DashboardPage() {
                 </div>
             </main>
 
-            <NeonFooter />
         </div>
     );
 }
