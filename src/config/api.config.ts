@@ -180,6 +180,7 @@ export const API = {
             return url + params.join("&");
         },
         myActiveSubscription: (userId: number | string) => `${API_BASE_URL}/subscriptions/my-active-subscription?userId=${userId}`,
+        publicCount: `${API_BASE_URL}/subscriptions/public/count`,
     },
 
 };

@@ -172,31 +172,45 @@ export default function AttendeesMonitoringPage() {
             className="space-y-6 pb-20"
         >
             {/* ── Header ─────────────────────────────────────────────────────── */}
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-glass-border pb-8">
-                <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-3xl bg-linear-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-2xl shadow-primary/30">
-                        <Users size={32} />
-                    </div>
-                    <div>
-                        <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic leading-none">
-                            Monitoring <span className="text-primary">Kehadiran</span>
-                        </h1>
-                        <p className="text-sm text-slate-400 mt-2 font-black uppercase tracking-[0.2em]">
-                            Event Intelligence Center
-                        </p>
-                    </div>
-                </div>
+            <div className="relative overflow-hidden rounded-[2.5rem] bg-linear-to-r from-[#3C50E0] to-[#6366F1] p-8 md:p-12 shadow-2xl shadow-primary/20">
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-48 h-48 bg-black/10 rounded-full blur-2xl pointer-events-none" />
                 
-                <div className="flex items-center gap-3">
-                    <button
-                        onClick={fetchData}
-                        className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-2xl text-slate-600 dark:text-slate-400 hover:text-primary transition-all hover:shadow-xl"
-                    >
-                        <RefreshCw className={cn(loading && "animate-spin")} size={20} />
-                    </button>
-                    <button className="bg-primary text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-primary/30 active:scale-95 transition-all">
-                        <Download size={16} /> Export Data
-                    </button>
+                <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                    <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+                        <div className="h-20 w-20 rounded-3xl bg-white/20 backdrop-blur-xl flex items-center justify-center text-white border border-white/30 shadow-xl">
+                            <Users size={40} />
+                        </div>
+                        <div>
+                            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase italic leading-tight">
+                                Monitoring <span className="opacity-80">Kehadiran</span>
+                            </h1>
+                            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-3">
+                                <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-white/80 text-[10px] font-black uppercase tracking-[0.2em] border border-white/10">
+                                    Event Intelligence Center
+                                </span>
+                                {selectedEvent !== "all" && (
+                                    <span className="px-3 py-1 rounded-full bg-emerald-500/20 backdrop-blur-md text-emerald-300 text-[10px] font-black uppercase tracking-[0.2em] border border-emerald-500/30">
+                                        Active Tracking
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 bg-black/10 p-2 rounded-[2rem] backdrop-blur-sm border border-white/5">
+                        <button
+                            onClick={fetchData}
+                            className="bg-white/10 hover:bg-white/20 text-white p-4 rounded-2xl transition-all active:scale-95 border border-white/10"
+                            title="Refresh Data"
+                        >
+                            <RefreshCw className={cn(loading && "animate-spin")} size={24} />
+                        </button>
+                        <button className="bg-white text-primary px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-3 transition-all hover:bg-slate-50 active:scale-95 shadow-lg">
+                            <Download size={18} /> Export Data
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -327,7 +341,7 @@ export default function AttendeesMonitoringPage() {
                                         header: "PESERTA",
                                         accessor: (a: AttendeeRow) => (
                                             <div className="flex items-center gap-4 py-3">
-                                                <div className="h-10 w-10 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-black text-primary text-sm shadow-inner transition-colors duration-500">
+                                                <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center font-black text-primary text-sm shadow-inner transition-colors duration-500">
                                                     {a.attendeeName?.[0]}
                                                 </div>
                                                 <div className="flex flex-col">
