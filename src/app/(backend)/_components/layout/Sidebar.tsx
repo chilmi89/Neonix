@@ -142,7 +142,8 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                         { icon: Tags, label: "Ticket Types", href: "/dashboard/admin/ticket-category" },
                         { icon: Database, label: "Inventory", href: "/dashboard/admin/tickets" },
                         { icon: ShoppingBag, label: "Transaksi", href: "/dashboard/admin/transactions" },
-                        { icon: Users, label: "Users", href: "/dashboard/users" },
+                        { icon: Users, label: "Monitoring Peserta", href: "/dashboard/admin/attendees" },
+                        { icon: User, label: "Users", href: "/dashboard/users" },
                     ]
                 }
             ];

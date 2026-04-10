@@ -127,6 +127,8 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
     const [buyerName, setBuyerName] = useState("");
     const [buyerEmail, setBuyerEmail] = useState("");
     const [purchasing, setPurchasing] = useState(false);
+    // Tambahkan state untuk data pengunjung per tiket
+    const [attendeesData, setAttendeesData] = useState<Record<number, { name: string; email: string }[]>>({});
 
     // ── Auto-fill dari user login ──────────────────────────────────────────────
     useEffect(() => {
@@ -179,6 +181,23 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
         fetchData();
     }, [eventId, tenantIdFromUrl]);
 
+    // ── Update Attendees Data when cart changes ────────────────────────────────
+    useEffect(() => {
+        setAttendeesData(prev => {
+            const next = { ...prev };
+            cartLines.forEach(({ ticket, qty }) => {
+                if (!next[ticket.id] || next[ticket.id].length !== qty) {
+                    const current = next[ticket.id] || [];
+                    const updated = Array.from({ length: qty }, (_, i) => 
+                        current[i] || { name: i === 0 ? buyerName : "", email: i === 0 ? buyerEmail : "" }
+                    );
+                    next[ticket.id] = updated;
+                }
+            });
+            return next;
+        });
+    }, [cart, buyerName, buyerEmail]);
+
     // ── Cart helpers ──────────────────────────────────────────────────────────
     const getQty = (ticketId: number) =>
         cart.find((c) => c.ticketId === ticketId)?.quantity ?? 0;
@@ -211,6 +230,10 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
                     buyerName: buyerName.trim(),
                     buyerEmail: buyerEmail.trim(),
                     quantity: qty,
+                    attendees: attendeesData[ticket.id]?.map(a => ({
+                        name: a.name.trim() || buyerName.trim(),
+                        email: a.email.trim() || buyerEmail.trim()
+                    }))
                 };
                 await purchaseTicket(ticket.id, req);
             }
@@ -225,7 +248,15 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
     const displayName = publicEvent?.name ?? publicEvent?.title ?? `Event #${eventId}`;
     const displayPoster = publicEvent?.posterUrl;
     const isFormValid = subtotal > 0 && buyerName.trim() && buyerEmail.trim();
+    // Validasi apakah semua nama attendee sudah diisi jika QTY > 1 (Opsional, tapi bagus untuk UX)
+    const isAttendeesValid = cartLines.every(({ ticket }) => 
+        attendeesData[ticket.id]?.every(a => a.name.trim() !== "" && a.email.trim() !== "")
+    );
+
     const isLoggedIn = !!localUser;
+
+    // ── Loading / Error states ─────────────────────────────────────────────────
+// ... rest of code (I'll keep skipping irrelevant parts for brevity in my thought, but use correct lines in the call)
 
     // ── Loading / Error states ─────────────────────────────────────────────────
     if (loading) {
@@ -265,7 +296,7 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
 
     // ── Main render ───────────────────────────────────────────────────────────
     return (
-        <div className="min-h-screen bg-[#080808] text-white overflow-x-hidden font-inter relative">
+        <div className="min-h-screen bg-[#F1F5F9] text-[#1C2434] overflow-x-hidden font-inter relative selection:bg-neon-cyan/20">
             <PlasmaBackground />
             <NeonNavbar />
 
@@ -274,7 +305,7 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
                 <div className="mb-12">
                     <Link
                         href="/"
-                        className="inline-flex items-center gap-2 text-white/40 hover:text-neon-cyan transition-colors group"
+                        className="inline-flex items-center gap-2 text-slate-400 hover:text-primary transition-colors group"
                     >
                         <ChevronLeft
                             size={18}
@@ -284,100 +315,30 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
                     </Link>
                 </div>
 
-                <div className="grid lg:grid-cols-[1.1fr_1fr] gap-16 items-start">
-                    {/* ── Left Column: Order Summary & Info ────────────────── */}
-                    <div className="lg:sticky lg:top-32 space-y-12">
-                        <div>
-                            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4">
-                                {displayName}
-                            </h1>
-                            <div className="flex flex-wrap gap-4 text-white/40 text-xs font-bold uppercase tracking-wider">
-                                {publicEvent?.city && (
-                                    <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                                        <MapPin size={14} className="text-neon-cyan" />
-                                        {publicEvent.locationName ?? publicEvent.location} · {publicEvent.city}
-                                    </div>
-                                )}
-                                {publicEvent?.startDate && (
-                                    <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                                        <Calendar size={14} className="text-neon-cyan" />
-                                        {formatDate(publicEvent.startDate)}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Summary Box */}
-                        <div className="bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-8 md:p-10">
-                            <h2 className="text-xl font-black uppercase tracking-tight mb-8">Order Summary</h2>
-
-                            <div className="space-y-6 mb-10">
-                                {cartLines.length === 0 ? (
-                                    <div className="py-12 text-center border-2 border-dashed border-white/5 rounded-2xl">
-                                        <p className="text-white/20 text-xs font-bold uppercase tracking-[0.2em]">
-                                            No tickets selected
-                                        </p>
-                                    </div>
-                                ) : (
-                                    cartLines.map(({ ticket, qty }) => (
-                                        <div key={ticket.id} className="flex justify-between items-start group">
-                                            <div className="space-y-1">
-                                                <p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors">
-                                                    {ticket.name}
-                                                </p>
-                                                <p className="text-[10px] text-white/30 font-black uppercase tracking-widest">
-                                                    QTY: {qty} × {formatIDR(ticket.price)}
-                                                </p>
-                                            </div>
-                                            <p className="text-sm font-black">
-                                                {formatIDR(ticket.price * qty)}
-                                            </p>
-                                        </div>
-                                    ))
-                                )}
-                            </div>
-
-                            <div className="border-t border-white/10 pt-8 flex items-end justify-between">
-                                <div>
-                                    <p className="text-[10px] font-black text-neon-cyan uppercase tracking-[0.2em] mb-1">Total Amount</p>
-                                    <p className="text-white/20 text-[10px] font-bold">Inc. all applicable taxes</p>
-                                </div>
-                                <p className="text-4xl font-black tracking-tighter">
-                                    {formatIDR(subtotal)}
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Security Hint */}
-                        <div className="flex items-center gap-3 px-6 py-4 bg-white/[0.02] border border-white/5 rounded-2xl">
-                            <CheckCircle2 size={16} className="text-neon-cyan/50" />
-                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] leading-relaxed">
-                                Guaranteed safe checkout with 256-bit SSL encryption
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* ── Right Column: Ticket Selection & Payment ─────────── */}
-                    <div className="space-y-12">
+                <div className="grid lg:grid-cols-[1fr_0.8fr] gap-12 items-start">
+                    {/* ── Left Column: Ticket Selection & Attendee Info ─────────── */}
+                    <div className="space-y-12 order-2 lg:order-1">
                         {/* Select Tickets */}
-                        <section>
+                        <section className="bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm">
                             <div className="flex items-center gap-3 mb-8">
-                                <div className="p-2 bg-neon-cyan/10 rounded-lg">
-                                    <Ticket className="text-neon-cyan" size={20} />
+                                <div className="p-2.5 bg-primary/10 rounded-xl">
+                                    <Ticket className="text-primary" size={24} />
                                 </div>
-                                <h2 className="text-lg font-black uppercase tracking-widest">Selection</h2>
+                                <div>
+                                    <h2 className="text-xl font-black uppercase tracking-widest leading-none text-slate-900">Select Tickets</h2>
+                                    <p className="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-widest">Pick your experience</p>
+                                </div>
                             </div>
 
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 {ticketGroups.map((group, gi) => {
-                                    const accent = CATEGORY_COLORS[gi % CATEGORY_COLORS.length];
                                     return (
-                                        <div key={group.categoryId} className="space-y-3">
-                                            <div className="flex items-center gap-3 px-2">
-                                                <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${accent}`}>
+                                        <div key={group.categoryId} className="space-y-4">
+                                            <div className="flex items-center gap-3 px-2 pt-4">
+                                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
                                                     {group.categoryName}
                                                 </span>
-                                                <div className="flex-1 h-px bg-white/5" />
+                                                <div className="flex-1 h-px bg-slate-100" />
                                             </div>
                                             {group.tickets.map((ticket) => {
                                                 const qty = getQty(ticket.id);
@@ -386,40 +347,43 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
                                                     <div
                                                         key={ticket.id}
                                                         className={cn(
-                                                            "flex items-center justify-between p-6 rounded-2xl border transition-all duration-300",
+                                                            "flex flex-col md:flex-row md:items-center justify-between p-6 rounded-3xl border transition-all duration-300 group/item",
                                                             qty > 0
-                                                                ? "bg-white/[0.04] border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.02)]"
-                                                                : "bg-white/[0.02] border-white/5 hover:border-white/10"
+                                                                ? "bg-primary/[0.02] border-primary/20 shadow-[0_10px_30px_rgba(60,80,224,0.05)]"
+                                                                : "bg-white border-slate-100 hover:border-slate-200 hover:bg-slate-50/50"
                                                         )}
                                                     >
-                                                        <div className="flex-1 mr-6">
-                                                            <p className="font-bold text-base mb-1">{ticket.name}</p>
-                                                            <p className="text-lg font-black text-white/90">
+                                                        <div className="flex-1 mb-4 md:mb-0">
+                                                            <p className="font-bold text-lg text-slate-900 mb-1 group-hover/item:text-primary transition-colors">{ticket.name}</p>
+                                                            <p className="text-xl font-black text-slate-900">
                                                                 {formatIDR(ticket.price)}
                                                             </p>
+                                                            {remaining < 10 && remaining > 0 && (
+                                                                <p className="text-[10px] font-bold text-amber-600 mt-1 uppercase">Only {remaining} left!</p>
+                                                            )}
                                                         </div>
                                                         {remaining > 0 ? (
-                                                            <div className="flex items-center gap-4 bg-black/40 p-1.5 rounded-xl border border-white/10">
+                                                            <div className="flex items-center gap-5 bg-[#F8FAFC] p-2 rounded-2xl border border-slate-200">
                                                                 <button
                                                                     onClick={() => changeQty(ticket.id, -1)}
-                                                                    className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors disabled:opacity-20"
+                                                                    className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-200 transition-colors disabled:opacity-20 active:scale-90 text-slate-600"
                                                                     disabled={qty === 0}
                                                                 >
-                                                                    <Minus size={14} />
+                                                                    <Minus size={16} />
                                                                 </button>
-                                                                <span className="text-sm font-black w-4 text-center">
+                                                                <span className="text-lg font-black w-6 text-center tabular-nums text-slate-900">
                                                                     {qty}
                                                                 </span>
                                                                 <button
                                                                     onClick={() => qty < remaining && changeQty(ticket.id, 1)}
                                                                     disabled={qty >= remaining}
-                                                                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-20"
+                                                                    className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-slate-200 hover:bg-slate-100 transition-colors disabled:opacity-20 active:scale-90 text-slate-600"
                                                                 >
-                                                                    <Plus size={14} />
+                                                                    <Plus size={16} />
                                                                 </button>
                                                             </div>
                                                         ) : (
-                                                            <span className="text-[10px] font-black uppercase tracking-widest text-red-400/50 border border-red-400/10 px-4 py-2 rounded-xl">
+                                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-500 bg-red-50 border border-red-100 px-6 py-3 rounded-2xl">
                                                                 Sold Out
                                                             </span>
                                                         )}
@@ -432,73 +396,223 @@ function CheckoutInner({ paramsPromise }: { paramsPromise: Promise<{ id: string 
                             </div>
                         </section>
 
-                        {/* Customer Information & Payment */}
-                        <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 bg-neon-cyan/10 rounded-lg">
-                                    <ShoppingBag className="text-neon-cyan" size={20} />
-                                </div>
-                                <h2 className="text-lg font-black uppercase tracking-widest">Buyer Details</h2>
-                            </div>
-
-                            <div className="bg-[#111] border border-white/5 rounded-3xl p-8 space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">
-                                        CONTACT NAME
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={buyerName}
-                                        onChange={(e) => setBuyerName(e.target.value)}
-                                        placeholder="Full Name"
-                                        className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-neon-cyan/50 focus:bg-neon-cyan/5 transition-all"
-                                    />
+                        {/* Customer Information & Attendee details */}
+                        {subtotal > 0 && (
+                            <section className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2.5 bg-primary/10 rounded-xl">
+                                        <ShoppingBag className="text-primary" size={24} />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-black uppercase tracking-widest leading-none text-slate-900">Checkout Details</h2>
+                                        <p className="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-widest">Complete your order</p>
+                                    </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">
-                                        EMAIL ADDRESS
-                                    </label>
-                                    <input
-                                        type="email"
-                                        value={buyerEmail}
-                                        onChange={(e) => setBuyerEmail(e.target.value)}
-                                        placeholder="email@example.com"
-                                        className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-sm font-bold focus:outline-none focus:border-neon-cyan/50 focus:bg-neon-cyan/5 transition-all"
-                                    />
+                                <div className="bg-white border border-slate-200 rounded-[2.5rem] p-10 space-y-10 shadow-sm">
+                                    <div className="grid md:grid-cols-2 gap-8">
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">
+                                                Buyer Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={buyerName}
+                                                onChange={(e) => setBuyerName(e.target.value)}
+                                                placeholder="Full Name"
+                                                className="w-full bg-[#F8FAFC] border border-slate-200 rounded-2xl px-6 py-5 text-sm font-bold focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all placeholder:text-slate-300 text-slate-900"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">
+                                                Email Address
+                                            </label>
+                                            <input
+                                                type="email"
+                                                value={buyerEmail}
+                                                onChange={(e) => setBuyerEmail(e.target.value)}
+                                                placeholder="email@example.com"
+                                                className="w-full bg-[#F8FAFC] border border-slate-200 rounded-2xl px-6 py-5 text-sm font-bold focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all placeholder:text-slate-300 text-slate-900"
+                                            />
+                                        </div>
+                                    </div>
+
                                     {isLoggedIn && (
-                                        <p className="text-[9px] font-black uppercase tracking-widest text-neon-cyan/40 px-1 pt-1">
-                                            ✓ Automatically filled from account
+                                        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-100 px-4 py-2 rounded-xl w-fit">
+                                            <CheckCircle2 size={12} className="text-emerald-600" />
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-emerald-700/80">
+                                                Automatically filled from account
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {/* Dynamic Attendee Forms */}
+                                    {cartLines.map(({ ticket, qty }) => (
+                                        <div key={`att-section-${ticket.id}`} className="space-y-8 pt-10 border-t border-slate-100">
+                                            <div className="flex items-center justify-between">
+                                                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">
+                                                    Attendee Info: <span className="text-primary">{ticket.name}</span>
+                                                </h3>
+                                                <span className="text-[10px] font-bold text-slate-300 uppercase">{qty} Ticket{qty > 1 ? 's' : ''}</span>
+                                            </div>
+                                            
+                                            <div className="grid gap-6">
+                                                {attendeesData[ticket.id]?.map((attendee, idx) => (
+                                                    <div key={`att-${ticket.id}-${idx}`} className="group/att relative bg-[#F8FAFC] hover:bg-slate-50 p-6 rounded-3xl border border-slate-100 hover:border-slate-200 transition-all">
+                                                        <div className="absolute -top-3 left-6 px-3 py-1 bg-white border border-slate-200 rounded-lg text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                                                            P{idx + 1}
+                                                        </div>
+                                                        <div className="grid md:grid-cols-2 gap-4">
+                                                            <input
+                                                                type="text"
+                                                                value={attendee.name}
+                                                                onChange={(e) => {
+                                                                    const next = [...(attendeesData[ticket.id] || [])];
+                                                                    next[idx] = { ...next[idx], name: e.target.value };
+                                                                    setAttendeesData({ ...attendeesData, [ticket.id]: next });
+                                                                }}
+                                                                placeholder="Full Name"
+                                                                className="w-full bg-white border border-slate-100 rounded-xl px-5 py-3 text-xs font-bold focus:outline-none focus:border-primary/40 transition-all text-slate-900"
+                                                            />
+                                                            <input
+                                                                type="email"
+                                                                value={attendee.email}
+                                                                onChange={(e) => {
+                                                                    const next = [...(attendeesData[ticket.id] || [])];
+                                                                    next[idx] = { ...next[idx], email: e.target.value };
+                                                                    setAttendeesData({ ...attendeesData, [ticket.id]: next });
+                                                                }}
+                                                                placeholder="Email"
+                                                                className="w-full bg-white border border-slate-100 rounded-xl px-5 py-3 text-xs font-bold focus:outline-none focus:border-primary/40 transition-all text-slate-900"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    <motion.button
+                                        whileHover={{ scale: 1.01 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleCheckout}
+                                        disabled={!isFormValid || !isAttendeesValid || purchasing}
+                                        className="w-full bg-primary text-white font-black py-6 rounded-3xl flex items-center justify-center gap-4 hover:brightness-110 transition-all shadow-[0_20px_60px_rgba(60,80,224,0.1)] uppercase tracking-[0.3em] text-sm mt-6 disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none relative overflow-hidden group"
+                                    >
+                                        <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 rounded-3xl" />
+                                        <span className="relative z-10">
+                                            {purchasing ? (
+                                                <div className="flex items-center gap-3">
+                                                    <Loader2 className="animate-spin" size={20} />
+                                                    Processing...
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center gap-3">
+                                                    Confirm Purchase
+                                                    <ArrowRight size={18} />
+                                                </div>
+                                            )}
+                                        </span>
+                                    </motion.button>
+
+                                    {!isFormValid && subtotal > 0 && (
+                                        <p className="text-[10px] text-slate-400 text-center uppercase tracking-widest font-black flex items-center justify-center gap-2">
+                                            <AlertCircle size={12} />
+                                            Please provide details to unlock purchase
                                         </p>
                                     )}
                                 </div>
+                            </section>
+                        )}
+                    </div>
 
-                                <motion.button
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={handleCheckout}
-                                    disabled={!isFormValid || purchasing}
-                                    className="w-full bg-neon-cyan text-black font-black py-5 rounded-2xl flex items-center justify-center gap-3 hover:brightness-110 transition-all shadow-[0_20px_40px_rgba(0,255,255,0.15)] uppercase tracking-[0.2em] text-xs mt-10 disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none"
-                                >
-                                    {purchasing ? (
-                                        <>
-                                            <Loader2 className="animate-spin" size={18} />
-                                            Processing...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Complete Purchase — {formatIDR(subtotal)}
-                                            <ArrowRight size={16} />
-                                        </>
-                                    )}
-                                </motion.button>
-
-                                {!isFormValid && subtotal > 0 && (
-                                    <p className="text-[9px] text-white/20 text-center uppercase tracking-widest font-black">
-                                        Please provide contact details to continue
-                                    </p>
+                    {/* ── Right Column: Order Summary ────────────────── */}
+                    <div className="lg:sticky lg:top-32 space-y-8 order-1 lg:order-2">
+                        <div>
+                            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-6 leading-none text-slate-900">
+                                {displayName}
+                            </h1>
+                            <div className="flex flex-wrap gap-3">
+                                {publicEvent?.city && (
+                                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-slate-100 shadow-sm">
+                                        <MapPin size={14} className="text-primary" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                            {publicEvent.locationName ?? publicEvent.location} · {publicEvent.city}
+                                        </span>
+                                    </div>
+                                )}
+                                {publicEvent?.startDate && (
+                                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-slate-100 shadow-sm">
+                                        <Calendar size={14} className="text-primary" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                            {formatDate(publicEvent.startDate)}
+                                        </span>
+                                    </div>
                                 )}
                             </div>
-                        </section>
+                        </div>
+
+                        {/* Summary Box */}
+                        <div className="bg-white border border-slate-200 rounded-[2.5rem] p-10 relative overflow-hidden group shadow-md">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[60px] rounded-full -mr-10 -mt-10" />
+                            
+                            <h2 className="text-xl font-black uppercase tracking-widest mb-10 text-slate-900 flex items-center gap-3">
+                                <ShoppingBag size={20} className="text-primary" />
+                                Summary
+                            </h2>
+
+                            <div className="space-y-8 mb-12 min-h-[100px]">
+                                {cartLines.length === 0 ? (
+                                    <div className="py-16 text-center border-2 border-dashed border-slate-100 rounded-3xl flex flex-col items-center gap-4">
+                                        <Ticket className="text-slate-200" size={32} />
+                                        <p className="text-slate-300 text-[10px] font-black uppercase tracking-[0.3em]">
+                                            No tickets selected
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-6">
+                                        {cartLines.map(({ ticket, qty }) => (
+                                            <div key={ticket.id} className="flex justify-between items-start animate-in fade-in slide-in-from-right-4 duration-300">
+                                                <div className="space-y-1.5">
+                                                    <p className="text-sm font-black text-slate-700 uppercase tracking-wider">
+                                                        {ticket.name}
+                                                    </p>
+                                                    <p className="text-[10px] text-primary font-black uppercase tracking-widest">
+                                                        {qty} × {formatIDR(ticket.price)}
+                                                    </p>
+                                                </div>
+                                                <p className="text-sm font-black text-slate-900 tabular-nums">
+                                                    {formatIDR(ticket.price * qty)}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="border-t border-slate-100 pt-10">
+                                <div className="flex items-end justify-between">
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Total Payment</p>
+                                        <p className="text-slate-400 text-[8px] font-bold uppercase tracking-widest">Inc. all applicable taxes</p>
+                                    </div>
+                                    <p className="text-4xl font-black tracking-tighter text-slate-900 tabular-nums">
+                                        {formatIDR(subtotal)}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Security Hint */}
+                        <div className="flex items-center gap-4 px-8 py-5 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                            <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
+                                <CheckCircle2 size={16} className="text-emerald-500" />
+                            </div>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] leading-relaxed">
+                                Guaranteed safe checkout secured with <span className="text-slate-600">256-bit SSL</span> encryption
+                            </p>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -516,8 +630,11 @@ export default function CheckoutPage({
     return (
         <Suspense
             fallback={
-                <div className="min-h-screen bg-black flex items-center justify-center">
-                    <Loader2 className="animate-spin text-neon-cyan" size={48} />
+                <div className="min-h-screen bg-[#F1F5F9] flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-6">
+                        <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                        <p className="text-xs font-black uppercase tracking-[0.3em] text-primary animate-pulse">Initializing Checkout</p>
+                    </div>
                 </div>
             }
         >
@@ -525,3 +642,4 @@ export default function CheckoutPage({
         </Suspense>
     );
 }
+

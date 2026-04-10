@@ -116,10 +116,11 @@ export function TicketsHistory() {
                         time: formatTime(t.purchasedAt),
                         location: t.eventLocation || "Venue TBD",
                         category: t.categoryName,
-                        status: "Active",
+                        status: t.status === "PAID" ? "Active" : t.status,
                         type: t.ticketName,
                         price: formatCurrency(t.totalPrice),
-                        quantity: t.quantity
+                        quantity: t.quantity,
+                        attendees: t.attendees // Pass the attendees data
                     };
 
                     return (
