@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { 
-    Check, 
-    X, 
-    BarChart3, 
-    PlusCircle, 
-    Settings2, 
-    Map as MapIcon, 
-    ArrowUpRight, 
-    TrendingUp, 
-    Users, 
-    DollarSign, 
-    Zap, 
+import {
+    Check,
+    X,
+    BarChart3,
+    PlusCircle,
+    Settings2,
+    Map as MapIcon,
+    ArrowUpRight,
+    TrendingUp,
+    Users,
+    DollarSign,
+    Zap,
     Shield,
     Loader2,
     CheckCircle2,
@@ -67,13 +67,13 @@ export default function VipAccessPage() {
                     getActiveSubscriptionPlans(),
                     getAllUserSubscriptions()
                 ]);
-                
+
                 if (plansRes.data && plansRes.data.length > 0) {
                     setPlans(plansRes.data);
                 } else {
                     setPlans(DEFAULT_PLANS as any);
                 }
-                
+
                 setTotalSubs(subsRes.data?.length || 0);
             } catch (err) {
                 console.error("Failed to load VIP data:", err);
@@ -87,12 +87,12 @@ export default function VipAccessPage() {
 
     const handleUpgrade = async (plan: SubscriptionPlan) => {
         if (plan.price === 0) return;
-        
+
         setSubmitting(true);
         try {
             // Using the actual user ID from context
             const userId = user?.id || 1; // Fallback to 1 if session lost
-            await subscribeToPlan(userId, plan.id); 
+            await subscribeToPlan(userId, plan.id);
             setShowSuccess(true);
             const subsRes = await getAllUserSubscriptions();
             setTotalSubs(subsRes.data?.length || 0);
@@ -158,7 +158,7 @@ export default function VipAccessPage() {
                             {plans.map((plan, idx) => {
                                 const isVip = plan.price > 0;
                                 const features = parseFeatures(plan.description);
-                                
+
                                 return (
                                     <motion.div
                                         key={plan.id}
@@ -179,12 +179,12 @@ export default function VipAccessPage() {
                                         )}
 
                                         <div className="mb-10">
-                                            <h3 className={cn("text-xl font-black mb-4", isVip ? "text-neon-pink" : "text-white")}>{plan.name}</h3>
+                                            <h3 className={cn("text-xl font-black mb-4", isVip ? "text-neon-pink" : "text-foreground")}>{plan.name}</h3>
                                             <div className="flex items-baseline gap-2">
-                                                <span className={cn("text-5xl font-black tracking-tighter", isVip ? "text-neon-yellow" : "text-white")}>
+                                                <span className={cn("text-5xl font-black tracking-tighter", isVip ? "text-neon-yellow" : "text-foreground")}>
                                                     {plan.price === 0 ? "Free" : `$${plan.price}`}
                                                 </span>
-                                                <span className="text-white/30 text-sm font-bold">
+                                                <span className={cn("text-sm font-bold", isVip ? "text-white/30" : "text-muted-foreground/60")}>
                                                     {plan.durationDays > 0 ? `/ ${plan.durationDays} days` : "/ forever"}
                                                 </span>
                                             </div>
@@ -196,18 +196,23 @@ export default function VipAccessPage() {
                                                     <div className={cn(
                                                         "w-5 h-5 rounded-full flex items-center justify-center shrink-0",
                                                         feature.included
-                                                            ? (isVip ? "bg-neon-pink text-white" : "bg-white/10 text-white/40")
-                                                            : "bg-white/5 text-transparent border border-white/10"
+                                                            ? (isVip ? "bg-neon-pink text-white" : "bg-primary/20 text-primary")
+                                                            : (isVip ? "bg-white/5 text-transparent border border-white/10" : "bg-muted text-transparent border border-border")
                                                     )}>
                                                         {feature.included ? <Check size={12} strokeWidth={4} /> : <X size={12} />}
                                                     </div>
-                                                    <span className={cn("text-xs font-bold", feature.included ? "text-white/80" : "text-white/20")}>
+                                                    <span className={cn(
+                                                        "text-xs font-bold",
+                                                        feature.included
+                                                            ? (isVip ? "text-white/80" : "text-foreground")
+                                                            : (isVip ? "text-white/20" : "text-muted-foreground/30")
+                                                    )}>
                                                         {feature.text}
                                                     </span>
                                                 </div>
                                             ))}
                                             {features.length === 0 && (
-                                                <div className="text-[10px] italic text-white/20">Check dashboard for feature details</div>
+                                                <div className={cn("text-[10px] italic", isVip ? "text-white/20" : "text-muted-foreground/40")}>Check dashboard for feature details</div>
                                             )}
                                         </div>
 
@@ -220,7 +225,7 @@ export default function VipAccessPage() {
                                                 {submitting ? "Processing..." : "Upgrade to VIP"}
                                             </button>
                                         ) : (
-                                            <button className="w-full py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all bg-white/5 text-white/20 cursor-default">
+                                            <button className="w-full py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all bg-foreground/5 text-foreground/20 cursor-default border border-border">
                                                 Current Plan
                                             </button>
                                         )}
