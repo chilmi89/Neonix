@@ -12,7 +12,7 @@ export const getAllSubscriptionPlans = async (): Promise<ApiResponse<Subscriptio
  * Get all active subscription plans (public)
  */
 export const getActiveSubscriptionPlans = async (): Promise<ApiResponse<SubscriptionPlan[]>> => {
-    return apiGet<ApiResponse<SubscriptionPlan[]>>(API.subscriptionPlans.getActive);
+    return apiGet<ApiResponse<SubscriptionPlan[]>>(API.subscriptionPlans.getActive, false);
 };
 
 /**

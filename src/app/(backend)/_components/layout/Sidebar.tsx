@@ -176,8 +176,8 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
             initial={false}
             animate={{ width: isCollapsed ? 80 : 280 }}
             className={cn(
-                "h-screen sticky top-0 z-40 flex flex-col border-r overflow-hidden transition-colors duration-500",
-                "bg-[var(--glass-surface)] border-[var(--glass-border)] drop-shadow-1"
+                "h-screen sticky top-0 z-40 flex flex-col border-r overflow-hidden transition-all duration-500",
+                "bg-[var(--glass-surface)] border-[var(--glass-border)] backdrop-blur-xl shadow-2xl"
             )}
         >
             {/* Header Area */}
@@ -189,7 +189,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                         className="flex flex-col"
                     >
                         <span className="text-2xl font-black text-[var(--foreground)] tracking-tighter">
-                            TailAdmin
+                            Dashboard
                         </span>
                         <span className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.4em] mt-0.5">Control Grid</span>
                     </motion.div>
@@ -250,15 +250,15 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                                             return (
                                                 <Link key={item.href} href={item.href}>
                                                     <div className={cn(
-                                                        "flex items-center p-2 rounded transition-colors duration-300 group relative",
+                                                        "flex items-center p-2 rounded-xl transition-all duration-300 group relative",
                                                         isActive
-                                                            ? "bg-[var(--muted)] text-[var(--primary)]"
+                                                            ? "bg-linear-to-r from-primary to-[#7C3AED] text-white shadow-xl shadow-primary/30 scale-[1.02]"
                                                             : "text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--glass-hover)]"
                                                     )}>
                                                         <div className={cn(
                                                             "p-2 rounded transition-colors duration-300 flex items-center justify-center",
                                                             isActive
-                                                                ? "text-[var(--primary)]"
+                                                                ? "text-white"
                                                                 : "group-hover:text-[var(--foreground)]"
                                                         )}>
                                                             <Icon size={20} />

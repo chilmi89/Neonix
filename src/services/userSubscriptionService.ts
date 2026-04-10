@@ -58,3 +58,9 @@ export const getMySubscriptions = async (userId?: number | string, tenantId?: nu
 export const getMyActiveSubscription = async (userId: number | string): Promise<ApiResponse<UserSubscription>> => {
     return apiGet<ApiResponse<UserSubscription>>(API.userSubscriptions.myActiveSubscription(userId));
 };
+/**
+ * Get public subscription count (Total creators)
+ */
+export const getPublicSubscriptionCount = async (): Promise<ApiResponse<number>> => {
+    return apiGet<ApiResponse<number>>(API.userSubscriptions.publicCount, false);
+};

@@ -28,7 +28,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { getActiveSubscriptionPlans } from "@/services/subscriptionPlanService";
-import { subscribeToPlan, getAllUserSubscriptions } from "@/services/userSubscriptionService";
+import { subscribeToPlan, getPublicSubscriptionCount } from "@/services/userSubscriptionService";
 import { SubscriptionPlan } from "@/types/auth";
 import { useUser } from "@/context/UserContext";
 
@@ -63,9 +63,9 @@ export default function VipAccessPage() {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const [plansRes, subsRes] = await Promise.all([
+                const [plansRes, countRes] = await Promise.all([
                     getActiveSubscriptionPlans(),
-                    getAllUserSubscriptions()
+                    getPublicSubscriptionCount()
                 ]);
 
                 if (plansRes.data && plansRes.data.length > 0) {

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -33,49 +35,49 @@
 }
 
 :root {
-  /* TailAdmin Light Theme */
+  /* Neonix Premium Light Theme */
   --background: #F1F5F9;
-  --foreground: #64748B;
+  --foreground: #1E293B;
   
-  --glass-surface: #FFFFFF;
-  --glass-border: #E2E8F0;
-  --glass-text: #1C2434;
-  --glass-radius: 10px;
-  --glass-hover: rgba(60, 80, 224, 0.05);
+  --glass-surface: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(203, 213, 225, 0.5);
+  --glass-text: #0F172A;
+  --glass-radius: 20px;
+  --glass-hover: rgba(79, 70, 229, 0.08);
 
-  --primary: #3C50E0;
+  --primary: #4F46E5; /* Indigo 600 */
   --primary-foreground: #FFFFFF;
 
   --muted: #F8FAFC;
   --muted-foreground: #64748B;
 
-  --accent: #80CAEE;
+  --accent: #2563EB;
   --accent-foreground: #FFFFFF;
 
   --border: #E2E8F0;
 }
 
 .dark {
-  /* TailAdmin Dark Theme */
-  --background: #1A222C;
-  --foreground: #8A99AF;
+  /* Neonix Premium Dark Theme */
+  --background: #0F172A; /* Slate 950 */
+  --foreground: #94A3B8;
   
-  --glass-surface: #24303F;
-  --glass-border: #313D4A;
-  --glass-text: #FFFFFF;
-  --glass-radius: 10px;
-  --glass-hover: rgba(255, 255, 255, 0.05);
+  --glass-surface: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-text: #F8FAFC;
+  --glass-radius: 20px;
+  --glass-hover: rgba(99, 102, 241, 0.15);
 
-  --primary: #3C50E0;
-  --primary-foreground: #ffffff;
+  --primary: #6366F1; /* Indigo 500 */
+  --primary-foreground: #FFFFFF;
 
-  --muted: #24303F;
-  --muted-foreground: #8A99AF;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
 
-  --accent: #3BA2B8;
-  --accent-foreground: #ffffff;
+  --accent: #38BDF8;
+  --accent-foreground: #FFFFFF;
 
-  --border: #313D4A;
+  --border: #334155;
 }
 
 @layer base {
@@ -86,15 +88,15 @@
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-glass border border-glass-border bg-glass-surface shadow-lg transition-all duration-300;
+    @apply backdrop-blur-[16px] border border-glass-border bg-glass-surface shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] transition-all duration-500 hover:shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] hover:border-primary/20;
   }
 
-  .neon-glow-pink {
-    box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+  .neon-glow-primary {
+    @apply shadow-[0_0_20px_rgba(99,102,241,0.3)];
   }
 
-  .neon-glow-cyan {
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  .neon-glow-accent {
+    @apply shadow-[0_0_20px_rgba(14,165,233,0.3)];
   }
 
   /* Utility to hide scrollbar but keep functionality */
