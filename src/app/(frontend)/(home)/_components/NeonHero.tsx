@@ -76,7 +76,7 @@ export function NeonHero() {
                             onChange={(e) => setQuery(e.target.value)}
                             onKeyDown={handleKeyDown}
                             placeholder="Search events, artists..."
-                            className="bg-transparent border-none outline-none text-foreground w-full text-sm font-bold placeholder:text-foreground/20"
+                            className="bg-transparent border-none outline-none text-white w-full text-sm font-bold placeholder:text-white/40"
                         />
                     </div>
 
@@ -86,12 +86,12 @@ export function NeonHero() {
                             onClick={() => setLocationOpen(!locationOpen)}
                             className="w-full md:w-auto px-8 py-3 flex items-center gap-4 cursor-pointer group"
                         >
-                            <MapPin className={cn("transition-colors", locationOpen ? "text-primary" : "text-foreground/40 group-hover:text-primary")} size={20} />
+                            <MapPin className={cn("transition-colors", locationOpen ? "text-primary" : "text-white/40 group-hover:text-primary")} size={20} />
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-foreground/40 font-black uppercase tracking-widest">Location</span>
+                                <span className="text-[10px] text-white/40 font-black uppercase tracking-widest">Location</span>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-foreground text-sm font-black uppercase tracking-wider">{selectedLocation.label}</span>
-                                    <ChevronDown size={10} className={cn("text-foreground/20 transition-transform duration-300", locationOpen && "rotate-180 text-primary")} />
+                                    <span className="text-white text-sm font-black uppercase tracking-wider">{selectedLocation.label}</span>
+                                    <ChevronDown size={10} className={cn("text-white/20 transition-transform duration-300", locationOpen && "rotate-180 text-primary")} />
                                 </div>
                             </div>
                         </div>
@@ -102,7 +102,7 @@ export function NeonHero() {
                                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    className="absolute top-[calc(100%+12px)] left-0 w-64 bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl z-[100]"
+                                    className="absolute top-[calc(100%+12px)] left-0 w-64 bg-white/95 backdrop-blur-xl border border-black/5 rounded-2xl p-2 shadow-2xl z-[100]"
                                 >
                                     {locationOptions.map((loc) => (
                                         <div
