@@ -94,8 +94,8 @@ export default function VipAccessPage() {
             const userId = user?.id || 1; // Fallback to 1 if session lost
             await subscribeToPlan(userId, plan.id);
             setShowSuccess(true);
-            const subsRes = await getAllUserSubscriptions();
-            setTotalSubs(subsRes.data?.length || 0);
+            const countRes = await getPublicSubscriptionCount();
+            setTotalSubs(countRes.data || 0);
         } catch (err: any) {
             alert(err.message || "Gagal melakukan upgrade.");
         } finally {
