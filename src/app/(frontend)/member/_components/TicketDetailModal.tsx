@@ -13,6 +13,7 @@ interface TicketDetailModalProps {
 export function TicketDetailModal({ isOpen, onClose, ticket }: TicketDetailModalProps) {
     const [showTransfer, setShowTransfer] = useState(false);
     const [isTransferring, setIsTransferring] = useState(false);
+    const [zoomedQR, setZoomedQR] = useState<string | null>(null);
 
     // Lock body scroll when modal is open
     useEffect(() => {
@@ -21,6 +22,7 @@ export function TicketDetailModal({ isOpen, onClose, ticket }: TicketDetailModal
         } else {
             document.body.style.overflow = "";
             setIsTransferring(false);
+            setZoomedQR(null);
         }
         return () => {
             document.body.style.overflow = "";
@@ -108,37 +110,81 @@ export function TicketDetailModal({ isOpen, onClose, ticket }: TicketDetailModal
 
                                 <div className="space-y-4">
                                     {ticket.attendees?.map((att: any, idx: number) => (
-                                        <div key={att.id} className="bg-muted/50 border border-border rounded-3xl p-6 flex items-center gap-6 group hover:bg-muted transition-colors">
-                                            {/* QR Code */}
-                                            <div className="w-24 h-24 bg-white p-2 rounded-2xl border border-border shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                                                <img 
-                                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${att.qrCode}`} 
-                                                    alt={`QR ${att.attendeeName}`}
-                                                    className="w-full h-full object-contain mix-blend-multiply"
-                                                />
-                                            </div>
-                                            
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-[9px] font-black text-primary uppercase tracking-widest mb-1">Ticket #{idx + 1}</p>
-                                                <h4 className="text-sm font-black text-foreground uppercase truncate">{att.attendeeName}</h4>
-                                                <p className="text-[10px] text-foreground/40 font-medium truncate mb-3">{att.attendeeEmail}</p>
-                                                
-                                                <div className="flex items-center gap-2">
-                                                    <div className={`w-1.5 h-1.5 rounded-full ${att.isCheckedIn ? 'bg-green-500' : 'bg-yellow-500'}`} />
-                                                    <span className="text-[8px] font-black uppercase tracking-widest text-foreground/30">
-                                                        {att.isCheckedIn ? `Checked In: ${new Date(att.checkedInAt).toLocaleTimeString()}` : 'Not Checked In'}
-                                                    </span>
+                                        <div key={att.id} className="group relative bg-white border border-border rounded-[2rem] p-5 flex items-center gap-6 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all overflow-hidden">
+                                            {/* QR Code Section */}
+                                            <div
+                                                className="relative shrink-0 cursor-zoom-in"
+                                                onClick={() => setZoomedQR(att.qrCode)}
+                                            >
+                                                <div className="w-24 h-24 bg-white p-2 rounded-2xl border border-border shadow-sm group-hover:scale-105 transition-transform duration-500">
+                                                    <img
+                                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${att.qrCode}`}
+                                                        alt={`QR ${att.attendeeName}`}
+                                                        className="w-full h-full object-contain mix-blend-multiply"
+                                                    />
+                                                </div>
+                                                <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center">
+                                                    <div className="bg-white/80 backdrop-blur-sm p-1.5 rounded-lg border border-primary/20">
+                                                        <Share2 size={12} className="text-primary" />
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <button className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-foreground/20 group-hover:text-primary transition-colors hover:bg-white shadow-sm">
+                                            {/* Ticket Info Section */}
+                                            <div className="flex-1 min-w-0 flex flex-col gap-1">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className="px-2 py-0.5 bg-primary/10 text-primary text-[8px] font-black uppercase tracking-widest rounded-md">Ticket #{idx + 1}</span>
+                                                    <div className={`w-1.5 h-1.5 rounded-full ${att.isCheckedIn ? 'bg-green-500' : 'bg-amber-400'}`} />
+                                                    <span className="text-[8px] font-black uppercase tracking-widest text-foreground/30">
+                                                        {att.isCheckedIn ? 'Checked In' : 'Not Checked In'}
+                                                    </span>
+                                                </div>
+                                                <h4 className="text-sm font-black text-foreground uppercase truncate tracking-tight">{att.attendeeName}</h4>
+                                                <p className="text-[10px] text-foreground/40 font-bold truncate uppercase tracking-wider">{att.attendeeEmail}</p>
+                                            </div>
+
+                                            {/* Decorative Vertical Dash Line */}
+                                            <div className="h-12 border-l border-dashed border-border/60 mx-2" />
+
+                                            {/* Action Section */}
+                                            <button className="w-12 h-12 rounded-2xl bg-muted border border-border flex items-center justify-center text-foreground/40 group-hover:text-primary transition-all hover:bg-white hover:shadow-lg hover:shadow-primary/10 shrink-0">
                                                 <Download size={18} />
                                             </button>
+
+                                            {/* Subtle Side Notch Decor */}
+                                            <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 bg-muted rounded-full border border-border" />
+                                            <div className="absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-6 bg-muted rounded-full border border-border" />
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         </div>
+
+                        {/* QR Zoom Overlay */}
+                        <AnimatePresence>
+                            {zoomedQR && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute inset-0 z-50 flex items-center justify-center p-8 bg-black/20 backdrop-blur-xl cursor-zoom-out"
+                                    onClick={() => setZoomedQR(null)}
+                                >
+                                    <motion.div
+                                        initial={{ scale: 0.5, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0.5, opacity: 0 }}
+                                        className="bg-white p-8 rounded-[3rem] shadow-2xl border border-white/20 aspect-square w-full max-w-[400px]"
+                                    >
+                                        <img
+                                            src={`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${zoomedQR}`}
+                                            alt="Zoomed QR"
+                                            className="w-full h-full object-contain mix-blend-multiply"
+                                        />
+                                    </motion.div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         {/* Transfer Modal Overlay */}
                         <AnimatePresence>
